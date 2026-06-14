@@ -10,19 +10,28 @@ exports.handler = async (event) => {
       return { statusCode: 200, body: JSON.stringify({ translations: texts || [] }) };
     }
 
-    const { translate } = await import('@vitalets/google-translate-api');
+    // Join with unique separator, translate as one batch
+    const SEP = '\n===\n';
+    const batch = texts.map((t) => t || ' ').join(SEP);
+    const encoded = encodeURIComponent(batch);
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=uk&tl=${to}&dt=t&q=${encoded}`;
 
-    // Batch: join with separator, translate, split
-    const separator = '\n---\n';
-    const batch = texts.join(separator);
-    const result = await translate(batch, { to });
-    const translations = result.text.split(separator).map((t: string) => t.trim());
+    const res = await fetch(url);
+    const raw = await res.json();
 
+    // Google returns sentences in raw[0] as [[text, orig], ...]
+    // Rejoin all parts and split by our separator
+    const fullText = (raw[0] || []).map((p) => (p[0] || '')).join('');
+    const translations = fullText.split(SEP).map((t) => t.trim());
+
+    // Ensure we have same count
+    while (translations.length < texts.length) translations.push('');
     return {
       statusCode: 200,
-      body: JSON.stringify({ translations }),
+      body: JSON.stringify({ translations: translations.slice(0, texts.length) }),
     };
   } catch (error) {
-    return { statusCode: 200, body: JSON.stringify({ translations: [] }) };
+    console.error('Translate error:', error);
+    return { statusCode: 200, body: JSON.stringify({ translations: [], error: error.message }) };
   }
 };
