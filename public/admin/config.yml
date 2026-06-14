@@ -2,7 +2,10 @@ backend:
   name: git-gateway
   branch: main
 
-local_backend: true
+# Для локальної розробки адмінки:
+# 1. Розкоментуй рядок нижче
+# 2. Запусти `npm run cms` в окремому терміналі
+# local_backend: true
 
 media_folder: public/uploads
 public_folder: /uploads
