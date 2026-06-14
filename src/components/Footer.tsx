@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Instagram, Twitter, Youtube, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { Instagram, Twitter, Youtube } from 'lucide-react';
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -24,17 +23,6 @@ const legalLinks = [
 ];
 
 export function Footer() {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      setSubscribed(true);
-      setEmail('');
-    }
-  };
-
   return (
     <footer className="bg-ash border-t border-white/5">
       {/* Newsletter Section */}
@@ -52,38 +40,6 @@ export function Footer() {
                 Subscribe for exclusive drops, early access, and 10% off your first order.
               </p>
             </div>
-            {subscribed ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex items-center gap-2 text-blood"
-              >
-                <span className="font-body">You're in. Welcome.</span>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="w-full lg:w-auto">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    required
-                    className="px-6 py-4 bg-noir border border-white/10 text-white placeholder:text-white/40
-                             focus:outline-none focus:border-blood/50 transition-colors duration-300 w-full sm:w-80 font-body"
-                  />
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    type="submit"
-                    className="btn-primary flex items-center justify-center gap-2"
-                  >
-                    Subscribe
-                    <ArrowRight size={18} />
-                  </motion.button>
-                </div>
-              </form>
-            )}
           </div>
         </div>
       </div>
@@ -94,7 +50,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10">
+              <div className="w-14 h-14">
                 <img src="/logo.png" alt="BUKSY" className="w-full h-full object-contain" />
               </div>
               <span className="font-heading text-xl tracking-[0.2em]">BUKSY</span>

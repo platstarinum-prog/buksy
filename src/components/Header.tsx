@@ -49,7 +49,7 @@ export function Header() {
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center gap-2"
               >
-                <div className="w-10 h-10 relative">
+                <div className="w-14 h-14 relative">
                   <img src="/logo.png" alt="BUKSY" className="w-full h-full object-contain" />
                 </div>
                 <span className="font-heading text-2xl tracking-[0.2em] text-white">

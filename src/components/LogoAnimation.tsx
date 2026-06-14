@@ -72,13 +72,7 @@ export function LogoAnimation({ onComplete }: LogoAnimationProps) {
                 />
               </div>
 
-              {/* Glow effect */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 0.8, 0] }}
-                transition={{ duration: 0.6, delay: 0.8 }}
-                className="absolute inset-0 bg-blood/20 blur-xl"
-              />
+
             </motion.div>
 
             {/* Brand name */}
