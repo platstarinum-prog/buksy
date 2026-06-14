@@ -41,9 +41,10 @@ export function Footer() {
                   href="https://t.me/+OQrO3Aya1NQ4YmZi"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 border border-white/20 flex items-center justify-center text-white/60 hover:border-blood hover:text-blood transition-all duration-300 rounded-full"
+                  className="btn-primary inline-flex items-center gap-2"
                 >
-                  <Send size={18} />
+                  <Send size={20} />
+                  TG
                 </a>
               </div>
               <p className="text-white/60 font-body">
