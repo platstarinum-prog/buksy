@@ -14,9 +14,9 @@ const products = files.map(f => {
   let raw = readFileSync(join(prodDir, f), 'utf-8');
   if (raw.charCodeAt(0) === 0xFEFF) raw = raw.slice(1);
   const p = JSON.parse(raw);
-  // normalize images: [{url: "..."}] -> ["..."]
+  // normalize images: [{src: "..."}] or [{url: "..."}] -> ["..."]
   if (p.images && p.images[0] && typeof p.images[0] === 'object') {
-    p.images = p.images.map(img => img.url || img.image || '');
+    p.images = p.images.map(img => img.src || img.url || img.image || '');
   }
   return p;
 });
