@@ -120,6 +120,19 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      <div className="border-t border-white/5 bg-noir">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-center">
+          <a
+            href="https://krvt.sv"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-heading text-xs tracking-[0.4em] text-[#c7004c] hover:text-[#ff1a6c] transition-colors duration-300"
+          >
+            KRVTSCVCORP
+          </a>
+        </div>
+      </div>
     </footer>
   );
 }

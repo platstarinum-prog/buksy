@@ -34,6 +34,10 @@ function PageWrapper({ children }: { children: React.ReactNode }) {
 function AppRoutes() {
   const location = useLocation();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, [location.pathname]);
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
