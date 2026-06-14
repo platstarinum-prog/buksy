@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
@@ -117,21 +116,17 @@ function AppRoutes() {
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
-  const [introComplete, setIntroComplete] = useState(false);
 
-  // Check if we've already shown the intro this session
   useEffect(() => {
     const hasSeenIntro = sessionStorage.getItem('buksy_intro_seen');
     if (hasSeenIntro) {
       setShowIntro(false);
-      setIntroComplete(true);
     }
   }, []);
 
   const handleIntroComplete = () => {
     sessionStorage.setItem('buksy_intro_seen', 'true');
     setShowIntro(false);
-    setIntroComplete(true);
   };
 
   if (showIntro) {

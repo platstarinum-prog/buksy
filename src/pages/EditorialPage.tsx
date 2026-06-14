@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { editorialImage } from '../data/products';
 
 const lookbookImages = [
   'https://images.pexels.com/photos/2062587/pexels-photo-2062587.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -41,7 +40,7 @@ export function EditorialPage() {
         </div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <span className="text-white/40 text-xs tracking-[0.2em] font-body">SCROLL</span>
+          <span className="text-white/40 text-xs tracking-[0.2em] font-body">{t('home.scroll')}</span>
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
             <ChevronDown size={20} className="text-blood" />
           </motion.div>

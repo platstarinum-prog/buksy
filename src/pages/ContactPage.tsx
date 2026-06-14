@@ -152,9 +152,10 @@ export function ContactPage() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="btn-primary w-full flex items-center justify-center gap-3"
+                    disabled={isSubmitting}
+                    className="btn-primary w-full flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {t('contact.sendMessageBtn')}
+                    {isSubmitting ? '...' : t('contact.sendMessageBtn')}
                     <Send size={18} />
                   </motion.button>
                 </form>

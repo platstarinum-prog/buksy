@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, ShoppingBag, Heart } from 'lucide-react';
+import { Eye, ShoppingBag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Product } from '../types';
 import { useCart } from '../store/CartContext';
@@ -67,7 +67,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             )}
             {product.isBestseller && (
               <span className="px-2 py-1 bg-white/90 text-noir text-xs font-heading tracking-wider">
-                BESTSELLER
+                {t('home.bestsellers').toUpperCase()}
               </span>
             )}
             {product.originalPrice && (
@@ -86,7 +86,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
               className="flex-1 flex items-center justify-center gap-2 py-3 bg-blood text-white font-heading text-xs tracking-wider transition-all duration-300 hover:shadow-blood"
             >
               <ShoppingBag size={16} />
-              ADD TO CART
+              {t('product.addToCart')}
             </motion.button>
 
             <motion.button

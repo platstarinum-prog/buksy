@@ -163,7 +163,7 @@ export function CartPage() {
                 </div>
                 {totalPrice < 150 && (
                   <p className="text-white/40 text-xs font-body">
-                    Add ${(150 - totalPrice).toFixed(2)} more for free shipping
+                    {t('cart.freeShippingHint').replace('{{amount}}', (150 - totalPrice).toFixed(2))}
                   </p>
                 )}
                 <div className="border-t border-white/5 pt-4">
@@ -177,25 +177,25 @@ export function CartPage() {
               {/* Promo Code */}
               <div className="pt-4">
                 <label className="block text-white/40 text-xs font-body mb-2">
-                  PROMO CODE
+                  {t('cart.promoCode')}
                 </label>
                 <div className="flex gap-3">
                   <input
                     type="text"
-                    placeholder="Enter code"
+                    placeholder={t('cart.promoPlaceholder')}
                     className="flex-1 px-4 py-3 bg-noir border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-blood/50 transition-colors duration-300"
                   />
                   <button
                     onClick={(e) => {
                       const input = (e.currentTarget as HTMLElement).previousElementSibling as HTMLInputElement;
                       if (input.value.trim()) {
-                        alert('Promo code "' + input.value + '" is not valid.');
+                        alert(t('cart.promoInvalid') + ' "' + input.value + '"');
                         input.value = '';
                       }
                     }}
                     className="px-4 py-3 border border-white/10 text-white/70 hover:border-blood hover:text-blood transition-colors duration-300 font-body text-sm"
                   >
-                    APPLY
+                    {t('cart.apply')}
                   </button>
                 </div>
               </div>

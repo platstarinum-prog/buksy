@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   CreditCard,
   Lock,
   Check,
   ArrowLeft,
-  ShoppingBag,
   Truck,
   Shield,
 } from 'lucide-react';
@@ -17,8 +16,7 @@ type CheckoutStep = 'information' | 'shipping' | 'payment';
 
 export function CheckoutPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { items, totalPrice, totalItems, clearCart } = useCart();
+  const { items, totalPrice, clearCart } = useCart();
   const [step, setStep] = useState<CheckoutStep>('information');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -50,10 +48,11 @@ export function CheckoutPage() {
 
   const handlePlaceOrder = async () => {
     setIsProcessing(true);
-    // Simulate processing
+    // Simulate processing — replace with real payment API
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsProcessing(false);
     setIsComplete(true);
+    clearCart();
   };
 
   if (items.length === 0 && !isComplete) {

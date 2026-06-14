@@ -6,6 +6,29 @@ media_folder: public/uploads
 public_folder: /uploads
 
 collections:
+  - name: "translations"
+    label: "Translations"
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: "ukrainian"
+        label: "Ukrainian (base)"
+        file: "src/i18n/uk.json"
+        fields:
+          - label: "All Translation Strings (UA)"
+            name: "uk"
+            widget: "object"
+            collapsed: true
+            summary: "{{common.buksy}}"
+            fields:
+              - { label: "Common", name: "common", widget: "object", collapsed: true, fields: [ { label: "BUKSY", name: "buksy", widget: "string" }, { label: "Shop", name: "shop", widget: "string" }, { label: "Home", name: "home", widget: "string" }, { label: "About", name: "about", widget: "string" }, { label: "Contact", name: "contact", widget: "string" }, { label: "Editorial", name: "editorial", widget: "string" }, { label: "Search", name: "search", widget: "string" }, { label: "Cart", name: "cart", widget: "string" }, { label: "Checkout", name: "checkout", widget: "string" }, { label: "Continue Shopping", name: "continueShopping", widget: "string" }, { label: "View All", name: "viewAll", widget: "string" }, { label: "New", name: "new", widget: "string" }, { label: "Sale", name: "sale", widget: "string" }, { label: "Free", name: "free", widget: "string" } ] }
+              - { label: "Header", name: "header", widget: "object", collapsed: true, fields: [ { label: "Home", name: "home", widget: "string" }, { label: "Shop", name: "shop", widget: "string" }, { label: "About", name: "about", widget: "string" }, { label: "Contact", name: "contact", widget: "string" }, { label: "Editorial", name: "editorial", widget: "string" }, { label: "Search Products", name: "searchProducts", widget: "string" }, { label: "Press Enter", name: "pressEnter", widget: "string" } ] }
+              - { label: "Footer", name: "footer", widget: "object", collapsed: true, fields: [ { label: "Join Dark Side", name: "joinDarkSide", widget: "string" }, { label: "TG", name: "tg", widget: "string" }, { label: "Description", name: "premiumStreetwear", widget: "text" }, { label: "Navigation", name: "navigation", widget: "string" }, { label: "Support", name: "support", widget: "string" }, { label: "Legal", name: "legal", widget: "string" } ] }
+              - { label: "Home", name: "home", widget: "object", collapsed: true, fields: [ { label: "Hero Tagline", name: "heroTagline", widget: "string" }, { label: "Hero Title 1", name: "heroTitle1", widget: "string" }, { label: "Hero Title 2", name: "heroTitle2", widget: "string" }, { label: "Hero Description", name: "heroDesc", widget: "text" }, { label: "Shop Now", name: "shopNow", widget: "string" }, { label: "Our Story", name: "ourStory", widget: "string" }, { label: "Selected For You", name: "selectedForYou", widget: "string" }, { label: "Featured", name: "featured", widget: "string" }, { label: "Our Philosophy", name: "ourPhilosophy", widget: "string" }, { label: "Born From", name: "bornFrom", widget: "string" }, { label: "Darkness", name: "darkness", widget: "string" }, { label: "Explore Story", name: "exploreStory", widget: "string" }, { label: "Most Wanted", name: "mostWanted", widget: "string" }, { label: "Bestsellers", name: "bestsellers", widget: "string" }, { label: "Shop By Category", name: "shopByCategory", widget: "string" }, { label: "Collections", name: "collections", widget: "string" } ] }
+              - { label: "Shop", name: "shop", widget: "object", collapsed: true, fields: [ { label: "The Collection", name: "theCollection", widget: "string" }, { label: "The Shop", name: "theShop", widget: "string" }, { label: "Filters", name: "filters", widget: "string" }, { label: "Sort Featured", name: "sortFeatured", widget: "string" }, { label: "Sort Newest", name: "sortNewest", widget: "string" }, { label: "Sort Price Low", name: "sortPriceLow", widget: "string" }, { label: "Sort Price High", name: "sortPriceHigh", widget: "string" }, { label: "Sort Rating", name: "sortRating", widget: "string" } ] }
+              - { label: "Contact", name: "contact", widget: "object", collapsed: true, fields: [ { label: "Get In Touch", name: "getInTouch", widget: "string" }, { label: "Contact Us", name: "contactUs", widget: "string" }, { label: "Send Message", name: "sendMessage", widget: "string" }, { label: "Message Sent", name: "messageSent", widget: "string" }, { label: "Name", name: "name", widget: "string" }, { label: "Email", name: "email", widget: "string" }, { label: "Subject", name: "subject", widget: "string" }, { label: "Message", name: "message", widget: "string" }, { label: "Send Message Btn", name: "sendMessageBtn", widget: "string" }, { label: "Connect With Us", name: "connectWithUs", widget: "string" } ] }
+
   - name: "products"
     label: "Products"
     folder: "content/products"

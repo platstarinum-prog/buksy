@@ -137,7 +137,12 @@
     "total": "Total",
     "shippingTaxes": "Shipping and taxes calculated at checkout",
     "size": "Size",
-    "continueShopping": "Continue Shopping"
+    "continueShopping": "Continue Shopping",
+    "promoCode": "PROMO CODE",
+    "promoPlaceholder": "Enter code",
+    "apply": "APPLY",
+    "promoInvalid": "Invalid promo code",
+    "freeShippingHint": "Add ${{amount}} more for free shipping"
   },
   "checkout": {
     "yourCartEmpty": "Your cart is empty",
