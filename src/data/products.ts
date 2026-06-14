@@ -8,7 +8,7 @@ export const products: Product[] = [
     "price": 209,
     "category": "pants",
     "images": [
-      "https://images.pexels.com/photos/52519/jeans-pants-pocket-fashion-52519.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/12982896/pexels-photo-12982896.jpeg?auto=compress&cs=tinysrgb&w=800",
       "https://images.pexels.com/photos/1598503/pexels-photo-1598503.jpeg?auto=compress&cs=tinysrgb&w=800",
       "https://images.pexels.com/photos/1082529/pexels-photo-1082529.jpeg?auto=compress&cs=tinysrgb&w=800"
     ],
@@ -104,7 +104,7 @@ export const products: Product[] = [
     "category": "footwear",
     "images": [
       "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/19090/pexels-photo-19090.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/16196537/pexels-photo-16196537.jpeg?auto=compress&cs=tinysrgb&w=800",
       "https://images.pexels.com/photos/267301/pexels-photo-267301.jpeg?auto=compress&cs=tinysrgb&w=800"
     ],
     "sizes": [
@@ -274,7 +274,7 @@ export const products: Product[] = [
     "category": "t-shirts",
     "images": [
       "https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/7691143/pexels-photo-7691143.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/17854971/pexels-photo-17854971.jpeg?auto=compress&cs=tinysrgb&w=800",
       "https://images.pexels.com/photos/1043473/pexels-photo-1043473.jpeg?auto=compress&cs=tinysrgb&w=800"
     ],
     "sizes": [
@@ -336,7 +336,7 @@ export const products: Product[] = [
     "category": "pants",
     "images": [
       "https://images.pexels.com/photos/1598503/pexels-photo-1598503.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/52519/jeans-pants-pocket-fashion-52519.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/10409446/pexels-photo-10409446.jpeg?auto=compress&cs=tinysrgb&w=800",
       "https://images.pexels.com/photos/1082529/pexels-photo-1082529.jpeg?auto=compress&cs=tinysrgb&w=800"
     ],
     "sizes": [
@@ -455,4 +455,4 @@ export const getCategoryName = (category: string): string => {
 export const categories = [{"id":"all","name":"All"},{"id":"pants","name":"Pants"},{"id":"accessories","name":"Accessories"},{"id":"footwear","name":"Footwear"},{"id":"jackets","name":"Jackets"},{"id":"hoodies","name":"Hoodies"},{"id":"t-shirts","name":"T-Shirts"}];
 
 export const heroImage = 'https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=1200';
-export const editorialImage = 'https://images.pexels.com/photos/2062587/pexels-photo-2062587.jpeg?auto=compress&cs=tinysrgb&w=800';
+export const editorialImage = 'https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800';

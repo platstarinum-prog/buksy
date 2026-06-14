@@ -39,7 +39,7 @@ export const aboutPage = {
     "tagline": "НАША ІСТОРІЯ",
     "title1": "Народжені темрявою,",
     "title2": "Створені з метою",
-    "image": "https://images.pexels.com/photos/2062587/pexels-photo-2062587.jpeg?auto=compress&cs=tinysrgb&w=800"
+    "image": "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800"
   },
   "philosophy": {
     "quote": "BUKSY існує на перетині розкоші та бунту. Ми віримо, що справжній стиль не вимагає уваги — він командує нею через тонкість, якість і намір.",
@@ -73,7 +73,7 @@ export const editorialPage = {
     "subtitle": "ЛУКБУК",
     "title": "Редакція",
     "description": "Де темрява зустрічається з дизайном. Кожен кадр розповідає історію бунту, майстерності та безкомпромісного бачення.",
-    "image": "https://images.pexels.com/photos/2062587/pexels-photo-2062587.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "image": "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=1200",
     "button": "Дослідити колекцію",
     "scroll": "ГОРТАЙ"
   },
