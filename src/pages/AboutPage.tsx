@@ -217,25 +217,27 @@ export function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className={`flex flex-col md:flex-row items-center gap-6 ${
-                    index % 2 === 0 ? 'md:flex-row-reverse' : ''
-                  }`}
+                  className="flex flex-col md:flex-row items-center gap-6"
                 >
-                  <div className="flex-1 text-center md:text-right">
-                    {index % 2 === 0 && (
+                  <div className={`flex-1 text-center ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                    {index % 2 === 0 ? (
                       <>
                         <span className="font-mono text-blood text-3xl">{item.year}</span>
                         <h4 className="font-heading text-lg mt-2">{item.event}</h4>
                       </>
+                    ) : (
+                      <div className="hidden md:block" />
                     )}
                   </div>
-                  <div className="w-4 h-4 bg-blood rounded-full relative z-10 hidden md:block" />
-                  <div className="flex-1 text-center md:text-left">
-                    {index % 2 === 1 && (
+                  <div className="w-4 h-4 bg-blood rounded-full relative z-10 hidden md:block flex-shrink-0" />
+                  <div className={`flex-1 text-center ${index % 2 === 1 ? 'md:text-left' : 'md:text-right'}`}>
+                    {index % 2 === 1 ? (
                       <>
                         <span className="font-mono text-blood text-3xl">{item.year}</span>
                         <h4 className="font-heading text-lg mt-2">{item.event}</h4>
                       </>
+                    ) : (
+                      <div className="hidden md:block" />
                     )}
                   </div>
                   {/* Mobile view */}
