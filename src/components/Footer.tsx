@@ -130,9 +130,8 @@ export function Footer() {
                 {t('footer.made_by')}
               </a>
             </div>
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full text-sm text-white/40 font-body">
+            <div className="text-center text-sm text-white/40 font-body">
               <p>&copy; {new Date().getFullYear()} BUKSY. {t('footer.allRightsReserved')}</p>
-              <p className="flex items-center gap-2">{t('footer.designedFor')} <span className="text-blood">{t('footer.dark')}</span></p>
             </div>
           </div>
         </div>
