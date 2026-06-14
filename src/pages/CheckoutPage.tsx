@@ -96,6 +96,50 @@ export function CheckoutPage() {
     }
   };
 
+  const handleLiqPay = async () => {
+    if (!validateInformation()) { setStep('information'); return; }
+    setIsProcessing(true);
+    setSubmitError('');
+    try {
+      const orderId = 'BUK-' + Date.now().toString().slice(-6);
+      const res = await fetch('/.netlify/functions/liqpay-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items, shippingInfo, total, orderId }),
+      });
+      const lp = await res.json();
+      if (lp.mode === 'test') {
+        // No LiqPay keys — fallback to test order
+        const orderRes = await fetch('/.netlify/functions/order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items, shippingInfo, total }),
+        });
+        if (!orderRes.ok) throw new Error('Order failed');
+        setIsComplete(true);
+        clearCart();
+      } else if (lp.data && lp.signature) {
+        // Submit form to LiqPay
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'https://www.liqpay.ua/api/3/checkout';
+        form.style.display = 'none';
+        ['data', 'signature'].forEach((name) => {
+          const input = document.createElement('input');
+          input.name = name;
+          input.value = lp[name];
+          form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
+      }
+    } catch {
+      setSubmitError('Payment failed. Try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   if (items.length === 0 && !isComplete) {
     return (
       <div className="min-h-screen bg-noir pt-24">
@@ -522,7 +566,14 @@ export function CheckoutPage() {
                   </div>
 
                   {/* Test: skip card & place order instantly */}
-                  <div className="mt-4 pt-4 border-t border-dashed border-amber-500/30">
+                  <div className="mt-4 pt-4 border-t border-dashed border-amber-500/30 space-y-3">
+                    <button
+                      onClick={handleLiqPay}
+                      disabled={isProcessing}
+                      className="w-full py-4 bg-blood text-white font-heading text-sm tracking-wider hover:bg-blood/80 transition-colors duration-300 disabled:opacity-50"
+                    >
+                      {isProcessing ? '...' : '💳 ОПЛАТИТИ ЧЕРЕЗ LiqPay'}
+                    </button>
                     <button
                       onClick={async () => {
                         setIsProcessing(true);
