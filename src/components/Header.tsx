@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Menu, X, User, Search } from 'lucide-react';
+import { ShoppingBag, Menu, X } from 'lucide-react';
 import { useCart } from '../store/CartContext';
 
 const navLinks = [
@@ -86,12 +86,6 @@ export function Header() {
 
             {/* Right Icons */}
             <div className="flex items-center gap-4">
-              <button className="p-2 text-white/70 hover:text-white transition-colors duration-300 hidden md:block">
-                <Search size={20} />
-              </button>
-              <button className="p-2 text-white/70 hover:text-white transition-colors duration-300 hidden md:block">
-                <User size={20} />
-              </button>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleCart}
@@ -147,19 +141,7 @@ export function Header() {
                   </Link>
                 </motion.div>
               ))}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex gap-6 mt-8"
-              >
-                <button className="p-3 text-white/70">
-                  <Search size={24} />
-                </button>
-                <button className="p-3 text-white/70">
-                  <User size={24} />
-                </button>
-              </motion.div>
+
             </div>
           </motion.div>
         )}

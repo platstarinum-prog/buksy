@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Instagram, Twitter, Youtube, Send } from 'lucide-react';
 
 const navLinks = [
@@ -9,18 +8,7 @@ const navLinks = [
   { name: 'Contact', href: '/contact' },
 ];
 
-const supportLinks = [
-  { name: 'Shipping & Returns', href: '/shipping' },
-  { name: 'Size Guide', href: '/size-guide' },
-  { name: 'FAQ', href: '/faq' },
-  { name: 'Track Order', href: '/track' },
-];
 
-const legalLinks = [
-  { name: 'Privacy Policy', href: '/privacy' },
-  { name: 'Terms of Service', href: '/terms' },
-  { name: 'Cookie Policy', href: '/cookies' },
-];
 
 export function Footer() {
   return (
@@ -121,43 +109,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Support */}
-          <div>
-            <h4 className="font-heading text-sm tracking-[0.3em] mb-6 text-white/40">
-              SUPPORT
-            </h4>
-            <ul className="space-y-3">
-              {supportLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className="text-white/70 hover:text-blood transition-colors duration-300 font-body"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
 
-          {/* Legal */}
-          <div>
-            <h4 className="font-heading text-sm tracking-[0.3em] mb-6 text-white/40">
-              LEGAL
-            </h4>
-            <ul className="space-y-3">
-              {legalLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className="text-white/70 hover:text-blood transition-colors duration-300 font-body"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
       </div>
 
