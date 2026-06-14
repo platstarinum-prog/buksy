@@ -14,12 +14,10 @@ const products = files.map(f => {
   let raw = readFileSync(join(prodDir, f), 'utf-8');
   if (raw.charCodeAt(0) === 0xFEFF) raw = raw.slice(1);
   const p = JSON.parse(raw);
-  // merge image1/image2/image3 into images array
-  if (!p.images) {
-    p.images = [p.image1, p.image2, p.image3].filter(Boolean);
-  } else if (p.images[0] && typeof p.images[0] === 'object') {
-    p.images = p.images.map(img => img.src || img.url || img.image || '');
-  }
+  if (!p.images) p.images = [p.image1, p.image2, p.image3].filter(Boolean);
+  else if (p.images[0] && typeof p.images[0] === 'object') p.images = p.images.map(img => img.src || img.url || img.image || '');
+  if (Array.isArray(p.details)) p.details = p.details.map(d => typeof d === 'object' ? (d.detail || '') : d);
+  if (Array.isArray(p.care)) p.care = p.care.map(c => typeof c === 'object' ? (c.instruction || '') : c);
   return p;
 });
 
