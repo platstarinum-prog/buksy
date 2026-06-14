@@ -168,6 +168,16 @@ export function CheckoutPage() {
           </div>
         </div>
 
+        {/* Test Mode Banner */}
+        <div className="mb-8 p-4 border border-amber-500/30 bg-amber-500/5 text-center">
+          <p className="text-amber-400 font-heading text-sm tracking-wider">
+            🧪 ТЕСТОВИЙ РЕЖИМ — ОПЛАТА НЕ СПИСУЄТЬСЯ
+          </p>
+          <p className="text-amber-400/60 font-body text-xs mt-1">
+            Будь-які дані картки приймаються • Замовлення обробляється без реального платежу
+          </p>
+        </div>
+
         {/* Progress Steps */}
         <div className="flex items-center justify-center mb-12">
           {steps.map((s, index) => (
@@ -508,6 +518,34 @@ export function CheckoutPage() {
                           {t('checkout.placeOrder')}
                         </>
                       )}
+                    </button>
+                  </div>
+
+                  {/* Test: skip card & place order instantly */}
+                  <div className="mt-4 pt-4 border-t border-dashed border-amber-500/30">
+                    <button
+                      onClick={async () => {
+                        setIsProcessing(true);
+                        setSubmitError('');
+                        try {
+                          const response = await fetch('/.netlify/functions/order', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ items, shippingInfo, total }),
+                          });
+                          if (!response.ok) throw new Error('Order failed');
+                          setIsComplete(true);
+                          clearCart();
+                        } catch {
+                          setSubmitError(t('checkout.orderError') || 'Failed. Try again.');
+                        } finally {
+                          setIsProcessing(false);
+                        }
+                      }}
+                      disabled={isProcessing}
+                      className="w-full py-3 border border-amber-500/50 text-amber-400 font-heading text-sm tracking-wider hover:bg-amber-500/10 transition-colors duration-300 disabled:opacity-50"
+                    >
+                      {isProcessing ? '...' : '🧪 ПРОПУСТИТИ ОПЛАТУ (ТЕСТ)'}
                     </button>
                   </div>
 
