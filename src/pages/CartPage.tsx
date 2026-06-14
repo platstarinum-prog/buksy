@@ -183,7 +183,16 @@ export function CartPage() {
                     placeholder="Enter code"
                     className="flex-1 px-4 py-3 bg-noir border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-blood/50 transition-colors duration-300"
                   />
-                  <button className="px-4 py-3 border border-white/10 text-white/70 hover:border-blood hover:text-blood transition-colors duration-300 font-body text-sm">
+                  <button
+                    onClick={(e) => {
+                      const input = (e.currentTarget as HTMLElement).previousElementSibling as HTMLInputElement;
+                      if (input.value.trim()) {
+                        alert('Promo code "' + input.value + '" is not valid.');
+                        input.value = '';
+                      }
+                    }}
+                    className="px-4 py-3 border border-white/10 text-white/70 hover:border-blood hover:text-blood transition-colors duration-300 font-body text-sm"
+                  >
                     APPLY
                   </button>
                 </div>

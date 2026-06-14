@@ -1,0 +1,30 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: "products"
+    label: "Products"
+    folder: "content/products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Product ID", name: "id", widget: "string" }
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "Price", name: "price", widget: "number", value_type: "float" }
+      - { label: "Original Price", name: "originalPrice", widget: "number", value_type: "float", required: false }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Short Description", name: "shortDescription", widget: "text" }
+      - { label: "Category", name: "category", widget: "select", options: ["hoodies", "t-shirts", "jackets", "pants", "accessories", "footwear"] }
+      - { label: "Images", name: "images", widget: "list", field: { label: "Image URL", name: "url", widget: "string" } }
+      - { label: "In Stock", name: "inStock", widget: "boolean", default: true }
+      - { label: "Is New", name: "isNew", widget: "boolean", default: false, required: false }
+      - { label: "Is Featured", name: "isFeatured", widget: "boolean", default: false, required: false }
+      - { label: "Is Bestseller", name: "isBestseller", widget: "boolean", default: false, required: false }
+      - { label: "Rating", name: "rating", widget: "number", value_type: "float", default: 0 }
+      - { label: "Details", name: "details", widget: "list", field: { label: "Detail", name: "detail", widget: "string" }, required: false }
+      - { label: "Care Instructions", name: "care", widget: "list", field: { label: "Instruction", name: "instruction", widget: "string" }, required: false }

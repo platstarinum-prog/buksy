@@ -3,15 +3,22 @@ import { Product, Review } from '../types';
 const pexelsImages = {
   hoodie1: 'https://images.pexels.com/photos/6311387/pexels-photo-6311387.jpeg?auto=compress&cs=tinysrgb&w=800',
   hoodie2: 'https://images.pexels.com/photos/6311390/pexels-photo-6311390.jpeg?auto=compress&cs=tinysrgb&w=800',
+  hoodie3: 'https://images.pexels.com/photos/17854971/pexels-photo-17854971.jpeg?auto=compress&cs=tinysrgb&w=800',
   jacket1: 'https://images.pexels.com/photos/1126964/pexels-photo-1126964.jpeg?auto=compress&cs=tinysrgb&w=800',
   jacket2: 'https://images.pexels.com/photos/10409446/pexels-photo-10409446.jpeg?auto=compress&cs=tinysrgb&w=800',
+  jacket3: 'https://images.pexels.com/photos/16196537/pexels-photo-16196537.jpeg?auto=compress&cs=tinysrgb&w=800',
   tshirt1: 'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800',
   tshirt2: 'https://images.pexels.com/photos/7691143/pexels-photo-7691143.jpeg?auto=compress&cs=tinysrgb&w=800',
+  tshirt3: 'https://images.pexels.com/photos/1043473/pexels-photo-1043473.jpeg?auto=compress&cs=tinysrgb&w=800',
   pants1: 'https://images.pexels.com/photos/52519/jeans-pants-pocket-fashion-52519.jpeg?auto=compress&cs=tinysrgb&w=800',
   pants2: 'https://images.pexels.com/photos/1598503/pexels-photo-1598503.jpeg?auto=compress&cs=tinysrgb&w=800',
+  pants3: 'https://images.pexels.com/photos/1082529/pexels-photo-1082529.jpeg?auto=compress&cs=tinysrgb&w=800',
   accessory1: 'https://images.pexels.com/photos/11229341/pexels-photo-11229341.jpeg?auto=compress&cs=tinysrgb&w=800',
   accessory2: 'https://images.pexels.com/photos/12982896/pexels-photo-12982896.jpeg?auto=compress&cs=tinysrgb&w=800',
+  accessory3: 'https://images.pexels.com/photos/723509/pexels-photo-723509.jpeg?auto=compress&cs=tinysrgb&w=800',
   footwear1: 'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=800',
+  footwear2: 'https://images.pexels.com/photos/19090/pexels-photo-19090.jpeg?auto=compress&cs=tinysrgb&w=800',
+  footwear3: 'https://images.pexels.com/photos/267301/pexels-photo-267301.jpeg?auto=compress&cs=tinysrgb&w=800',
   hero: 'https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=1200',
   editorial: 'https://images.pexels.com/photos/2062587/pexels-photo-2062587.jpeg?auto=compress&cs=tinysrgb&w=1200',
 };
@@ -25,7 +32,7 @@ export const products: Product[] = [
     description: 'Crafted from premium heavyweight cotton, the Void Oversized Hoodie embodies the essence of minimalist darkness. Featuring an exaggerated silhouette, reinforced seams, and our signature embroidered logo, this piece represents the pinnacle of luxury streetwear. The dropped shoulders and extended length create a dramatic, flowing silhouette that moves with intention.',
     shortDescription: 'Premium heavyweight cotton oversized hoodie with embroidered logo',
     category: 'hoodies',
-    images: [pexelsImages.hoodie1, pexelsImages.hoodie2, pexelsImages.hoodie1],
+    images: [pexelsImages.hoodie1, pexelsImages.hoodie2, pexelsImages.hoodie3],
     sizes: [
       { name: 'XS', available: true },
       { name: 'S', available: true },
@@ -61,7 +68,7 @@ export const products: Product[] = [
     description: 'The Sacrifice Tee features our iconic hand-stitched graphic on premium Japanese cotton. Each piece undergoes a unique washing process, resulting in subtle variations that make every tee one of a kind. The relaxed fit and reinforced neck ensure lasting comfort and durability.',
     shortDescription: 'Japanese cotton tee with hand-stitched graphic detail',
     category: 't-shirts',
-    images: [pexelsImages.tshirt1, pexelsImages.tshirt2, pexelsImages.tshirt1],
+    images: [pexelsImages.tshirt1, pexelsImages.tshirt2, pexelsImages.tshirt3],
     sizes: [
       { name: 'XS', available: true },
       { name: 'S', available: true },
@@ -92,7 +99,7 @@ export const products: Product[] = [
     description: 'The Obscura Leather Jacket is a testament to refined craftsmanship. Made from full-grain Italian leather with a matte finish, this jacket features asymmetric zippers, a hidden inner pocket, and our signature blood-red lining. Each jacket develops a unique patina over time, making it truly yours.',
     shortDescription: 'Full-grain Italian leather with matte finish',
     category: 'jackets',
-    images: [pexelsImages.jacket1, pexelsImages.jacket2, pexelsImages.jacket1],
+    images: [pexelsImages.jacket1, pexelsImages.jacket2, pexelsImages.jacket3],
     sizes: [
       { name: 'S', available: true },
       { name: 'M', available: true },
@@ -125,7 +132,7 @@ export const products: Product[] = [
     description: 'The Abyss Cargo Pants redefine utilitarian luxury. Crafted from technical Japanese fabric with a slight sheen, these pants feature exaggerated cargo pockets, adjustable straps, and a relaxed fit through the thigh that tapers at the ankle.',
     shortDescription: 'Technical Japanese fabric with exaggerated cargo pockets',
     category: 'pants',
-    images: [pexelsImages.pants1, pexelsImages.pants2, pexelsImages.pants1],
+    images: [pexelsImages.pants1, pexelsImages.pants2, pexelsImages.pants3],
     sizes: [
       { name: '28', available: true },
       { name: '30', available: true },
@@ -153,7 +160,7 @@ export const products: Product[] = [
     description: 'The Blood Moon Chain is a statement piece that bridges the gap between streetwear and fine jewelry. Handcrafted from oxidized sterling silver with a 24k blood-red enamel accent, this substantial chain sits heavy on the neck, commanding attention without demanding it.',
     shortDescription: 'Oxidized sterling silver with 24k blood-red enamel',
     category: 'accessories',
-    images: [pexelsImages.accessory1, pexelsImages.accessory2, pexelsImages.accessory1],
+    images: [pexelsImages.accessory1, pexelsImages.accessory2, pexelsImages.accessory3],
     sizes: [
       { name: '18"', available: true },
       { name: '20"', available: true },
@@ -185,7 +192,7 @@ export const products: Product[] = [
     description: 'The Fallen Angel Boots are hand-stitched by Italian artisans using premium calf leather. Featuring a chunky lug sole, hidden platform, and speed lace system, these boots combine the aesthetic of archival fashion with modern comfort technology.',
     shortDescription: 'Italian calf leather with chunky lug sole',
     category: 'footwear',
-    images: [pexelsImages.footwear1, pexelsImages.footwear1, pexelsImages.footwear1],
+    images: [pexelsImages.footwear1, pexelsImages.footwear2, pexelsImages.footwear3],
     sizes: [
       { name: '39', available: true },
       { name: '40', available: true },
@@ -221,7 +228,7 @@ export const products: Product[] = [
     description: 'The Ritual Zip Hoodie is constructed from double-knit heavyweight cotton with a structured hood and matte black hardware. The elongated silhouette and thumb holes create a seamless flow from shoulder to hand.',
     shortDescription: 'Double-knit heavyweight cotton with matte black hardware',
     category: 'hoodies',
-    images: [pexelsImages.hoodie2, pexelsImages.hoodie1, pexelsImages.hoodie2],
+    images: [pexelsImages.hoodie2, pexelsImages.hoodie1, pexelsImages.hoodie3],
     sizes: [
       { name: 'S', available: true },
       { name: 'M', available: true },
@@ -247,7 +254,7 @@ export const products: Product[] = [
     description: 'The Shadow Tech Pants feature our proprietary shadow-tech fabric that appears solid black in direct light but reveals a subtle pattern in shadows. Engineered for movement with articulated knees and breathable panels.',
     shortDescription: 'Proprietary shadow-tech fabric with articulated knees',
     category: 'pants',
-    images: [pexelsImages.pants2, pexelsImages.pants1, pexelsImages.pants2],
+    images: [pexelsImages.pants2, pexelsImages.pants1, pexelsImages.pants3],
     sizes: [
       { name: '28', available: false },
       { name: '30', available: true },

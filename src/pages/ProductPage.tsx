@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useWishlist } from '../store/WishlistContext';
+
 import {
   ChevronLeft,
   ChevronRight,
@@ -23,7 +23,6 @@ export function ProductPage() {
   const { slug } = useParams();
   const product = products.find((p) => p.slug === slug);
   const { addItem } = useCart();
-  const { isWishlisted, toggleWishlist } = useWishlist();
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -264,16 +263,7 @@ export function ProductPage() {
                   'ADD TO CART'
                 )}
               </motion.button>
-              <button
-                onClick={() => toggleWishlist(product)}
-                className={`p-4 border transition-all duration-300 ${
-                  isWishlisted(product.id)
-                    ? 'border-blood text-blood bg-blood/10'
-                    : 'border-white/10 text-white/60 hover:border-blood hover:text-blood'
-                }`}
-              >
-                <Heart size={20} fill={isWishlisted(product.id) ? 'currentColor' : 'none'} />
-              </button>
+
               <button
                 onClick={async () => {
                   const url = window.location.href;
@@ -368,7 +358,13 @@ export function ProductPage() {
             <h2 className="font-heading text-2xl tracking-wider">
               Customer Reviews <span className="text-blood">.</span>
             </h2>
-            <button className="btn-secondary text-sm px-4 py-2">
+            <button
+              onClick={() => {
+                const reviewSection = document.getElementById('reviews');
+                reviewSection?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="btn-secondary text-sm px-4 py-2"
+            >
               WRITE A REVIEW
             </button>
           </div>

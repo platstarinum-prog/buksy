@@ -65,7 +65,7 @@ export function LogoAnimation({ onComplete }: LogoAnimationProps) {
                 <motion.img
                   src="/logo.png"
                   alt="BUKSY"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain brightness-0 invert"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.3 }}

@@ -62,7 +62,7 @@ export function Header() {
                 className="flex items-center gap-2"
               >
                 <div className="w-14 h-14 relative">
-                  <img src="/logo.png" alt="BUKSY" className="w-full h-full object-contain" />
+                  <img src="/logo.png" alt="BUKSY" className="w-full h-full object-contain brightness-0 invert" />
                 </div>
                 <span className="font-heading text-2xl tracking-[0.2em] text-white">
                   BUKSY

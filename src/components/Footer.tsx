@@ -47,7 +47,7 @@ export function Footer() {
                 </a>
               </div>
               <p className="text-white/60 font-body">
-                Subscribe for exclusive drops, early access, and 10% off your first order.
+                Join our Telegram for exclusive drops, early access, and community.
               </p>
             </div>
           </div>
@@ -61,7 +61,7 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-6">
               <div className="w-14 h-14">
-                <img src="/logo.png" alt="BUKSY" className="w-full h-full object-contain" />
+                <img src="/logo.png" alt="BUKSY" className="w-full h-full object-contain brightness-0 invert" />
               </div>
               <span className="font-heading text-xl tracking-[0.2em]">BUKSY</span>
             </Link>
@@ -164,7 +164,7 @@ export function Footer() {
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/40 font-body">
-            <p>&copy; 2024 BUKSY. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} BUKSY. All rights reserved.</p>
             <p className="flex items-center gap-2">
               Designed for the <span className="text-blood">dark</span>
             </p>
