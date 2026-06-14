@@ -6,6 +6,361 @@
   <title>BUKSY — Admin</title>
 </head>
 <body>
+  <script type="application/yaml" id="cms-config">
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+
+# v27 — simple image fields, no list
+collections:
+  - name: "homepage"
+    label: "🏠 Головна"
+    delete: false
+    editor: { preview: false }
+    files:
+      - file: "content/pages/homepage.json"
+        label: "Налаштування головної"
+        name: "homepage"
+        fields:
+          - label: "Hero секція"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Теглайн", name: tagline, widget: string }
+              - { label: "Заголовок 1", name: title1, widget: string }
+              - { label: "Заголовок 2", name: title2, widget: string }
+              - { label: "Опис", name: description, widget: text }
+              - { label: "Кнопка 1", name: shopNow, widget: string }
+              - { label: "Кнопка 2", name: ourStory, widget: string }
+              - { label: "Фонове зображення", name: image, widget: image }
+              - { label: "Текст SCROLL", name: scroll, widget: string }
+          - label: "Featured секція"
+            name: featured
+            widget: object
+            fields:
+              - { label: "Теглайн", name: tagline, widget: string }
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Кнопка Все", name: viewAll, widget: string }
+          - label: "Філософія"
+            name: philosophy
+            widget: object
+            fields:
+              - { label: "Теглайн", name: tagline, widget: string }
+              - { label: "Заголовок 1", name: title1, widget: string }
+              - { label: "Заголовок 2", name: title2, widget: string }
+              - { label: "Текст 1", name: text1, widget: text }
+              - { label: "Текст 2", name: text2, widget: text }
+              - { label: "Текст 3", name: text3, widget: text }
+              - { label: "Кнопка", name: button, widget: string }
+              - { label: "Зображення", name: image, widget: image }
+          - label: "Бестселери"
+            name: bestsellers
+            widget: object
+            fields:
+              - { label: "Теглайн", name: tagline, widget: string }
+              - { label: "Заголовок", name: title, widget: string }
+          - label: "Колекції"
+            name: collections
+            widget: object
+            fields:
+              - { label: "Теглайн", name: tagline, widget: string }
+              - { label: "Заголовок", name: title, widget: string }
+
+  - name: "products"
+    label: "🛒 Магазин"
+    folder: "content/products"
+    create: true
+    slug: "{{slug}}"
+    editor: { preview: false }
+    fields:
+      - { label: "ID", name: id, widget: string }
+      - { label: "Назва", name: name, widget: string }
+      - { label: "Slug (URL)", name: slug, widget: string }
+      - { label: "Ціна $", name: price, widget: number, value_type: float }
+      - { label: "Ціна без знижки", name: originalPrice, widget: number, value_type: float, required: false }
+      - { label: "Категорія", name: category, widget: select, options: ["hoodies", "t-shirts", "jackets", "pants", "accessories", "footwear"] }
+      - { label: "Зображення 1", name: image1, widget: string }
+      - { label: "Зображення 2", name: image2, widget: string }
+      - { label: "Зображення 3", name: image3, widget: string }
+      - label: "Розміри"
+        name: sizes
+        widget: list
+        fields:
+          - { label: "Розмір", name: name, widget: string }
+          - { label: "В наявності", name: available, widget: boolean, default: true }
+      - { label: "В наявності", name: inStock, widget: boolean, default: true }
+      - { label: "Новинка", name: isNew, widget: boolean, default: false, required: false }
+      - { label: "В обраному", name: isFeatured, widget: boolean, default: false, required: false }
+      - { label: "Бестселер", name: isBestseller, widget: boolean, default: false, required: false }
+      - { label: "Рейтинг", name: rating, widget: number, value_type: float, default: 0, min: 0, max: 5, step: 0.1 }
+      - { label: "Короткий опис", name: shortDescription, widget: text }
+      - { label: "Повний опис", name: description, widget: text }
+      - label: "Деталі"
+        name: details
+        widget: list
+        required: false
+        field: { label: "Деталь", name: detail, widget: string }
+      - label: "Догляд"
+        name: care
+        widget: list
+        required: false
+        field: { label: "Інструкція", name: instruction, widget: string }
+      - label: "Відгуки"
+        name: reviews
+        widget: list
+        required: false
+        fields:
+          - { label: "ID", name: id, widget: string }
+          - { label: "Автор", name: author, widget: string }
+          - { label: "Рейтинг", name: rating, widget: number, value_type: float, min: 1, max: 5, step: 1, default: 5 }
+          - { label: "Заголовок", name: title, widget: string }
+          - { label: "Текст", name: content, widget: text }
+          - { label: "Дата", name: date, widget: date }
+          - { label: "Перевірений покупець", name: verified, widget: boolean, default: true }
+
+  - name: "about"
+    label: "ℹ️ Про нас"
+    delete: false
+    editor: { preview: false }
+    files:
+      - file: "content/pages/about.json"
+        label: "Налаштування сторінки"
+        name: "about"
+        fields:
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Теглайн", name: tagline, widget: string }
+              - { label: "Заголовок 1", name: title1, widget: string }
+              - { label: "Заголовок 2", name: title2, widget: string }
+              - { label: "Зображення", name: image, widget: image }
+          - label: "Цитата"
+            name: philosophy
+            widget: object
+            fields:
+              - { label: "Цитата", name: quote, widget: text }
+              - { label: "Автор", name: author, widget: string }
+              - { label: "Зображення", name: image, widget: image }
+          - label: "Цінності"
+            name: values
+            widget: object
+            fields:
+              - { label: "Теглайн секції", name: tagline, widget: string }
+              - { label: "Заголовок секції", name: title, widget: string }
+              - label: "Перелік цінностей"
+                name: items
+                widget: list
+                fields:
+                  - { label: "Заголовок", name: title, widget: string }
+                  - { label: "Опис", name: description, widget: text }
+          - label: "Ательє"
+            name: atelier
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Опис 1", name: description1, widget: text }
+              - { label: "Опис 2", name: description2, widget: text }
+              - { label: "Зображення", name: image, widget: image }
+          - label: "Таймлайн"
+            name: timeline
+            widget: object
+            fields:
+              - { label: "Теглайн секції", name: tagline, widget: string }
+              - { label: "Заголовок секції", name: title, widget: string }
+              - label: "Події"
+                name: events
+                widget: list
+                fields:
+                  - { label: "Рік", name: year, widget: string }
+                  - { label: "Подія", name: event, widget: string }
+          - label: "CTA"
+            name: cta
+            widget: object
+            fields:
+              - { label: "Заголовок 1", name: title1, widget: string }
+              - { label: "Заголовок 2", name: title2, widget: string }
+              - { label: "Опис", name: description, widget: text }
+              - { label: "Кнопка", name: button, widget: string }
+
+  - name: "editorial"
+    label: "📸 Редакція"
+    delete: false
+    editor: { preview: false }
+    files:
+      - file: "content/pages/editorial.json"
+        label: "Налаштування сторінки"
+        name: "editorial"
+        fields:
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Підзаголовок", name: subtitle, widget: string }
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Опис", name: description, widget: text }
+              - { label: "Зображення", name: image, widget: image }
+              - { label: "Кнопка", name: button, widget: string }
+              - { label: "SCROLL текст", name: scroll, widget: string }
+          - label: "Лукбук"
+            name: lookbook
+            widget: list
+            fields:
+              - { label: "Зображення", name: image, widget: image }
+              - { label: "Підпис", name: caption, widget: string }
+          - label: "Behind the Scenes"
+            name: behindScenes
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Опис", name: description, widget: text }
+              - { label: "Зображення", name: image, widget: image }
+              - { label: "Кнопка", name: button, widget: string }
+          - label: "Фінальна секція"
+            name: finale
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Зображення", name: image, widget: image }
+              - { label: "Кнопка", name: button, widget: string }
+
+  - name: "contact"
+    label: "✉️ Контакти"
+    delete: false
+    editor: { preview: false }
+    files:
+      - file: "content/pages/contact.json"
+        label: "Налаштування сторінки"
+        name: "contact"
+        fields:
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Теглайн", name: tagline, widget: string }
+              - { label: "Заголовок", name: title, widget: string }
+          - label: "Форма"
+            name: form
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Ім'я — лейбл", name: nameLabel, widget: string }
+              - { label: "Ім'я — placeholder", name: namePlaceholder, widget: string }
+              - { label: "Email — лейбл", name: emailLabel, widget: string }
+              - { label: "Email — placeholder", name: emailPlaceholder, widget: string }
+              - { label: "Тема — лейбл", name: subjectLabel, widget: string }
+              - { label: "Тема — placeholder", name: subjectPlaceholder, widget: string }
+              - { label: "Повідомлення — лейбл", name: messageLabel, widget: string }
+              - { label: "Повідомлення — placeholder", name: messagePlaceholder, widget: string }
+              - { label: "Кнопка", name: submitButton, widget: string }
+              - { label: "Успіх — заголовок", name: successTitle, widget: string }
+              - { label: "Успіх — текст", name: successText, widget: string }
+          - label: "Контакти"
+            name: info
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Email", name: email, widget: string }
+              - { label: "Телефон", name: phone, widget: string }
+              - { label: "Адреса", name: studio, widget: text }
+              - { label: "Email лейбл", name: emailLabel, widget: string }
+              - { label: "Телефон лейбл", name: phoneLabel, widget: string }
+              - { label: "Студія лейбл", name: studioLabel, widget: string }
+          - label: "Соцмережі"
+            name: social
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Instagram URL", name: instagram, widget: string }
+              - { label: "Twitter URL", name: twitter, widget: string }
+              - { label: "YouTube URL", name: youtube, widget: string }
+          - label: "FAQ"
+            name: faq
+            widget: object
+            fields:
+              - { label: "Теглайн секції", name: tagline, widget: string }
+              - { label: "Заголовок секції", name: title, widget: string }
+              - label: "Питання"
+                name: items
+                widget: list
+                fields:
+                  - { label: "Питання", name: question, widget: string }
+                  - { label: "Відповідь", name: answer, widget: text }
+
+  - name: "footer"
+    label: "⬇️ Футер"
+    delete: false
+    editor: { preview: false }
+    files:
+      - file: "content/pages/footer.json"
+        label: "Налаштування футера"
+        name: "footer"
+        fields:
+          - label: "Розсилка (TG)"
+            name: newsletter
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - { label: "Кнопка", name: tg, widget: string }
+              - { label: "Опис", name: description, widget: text }
+              - { label: "Telegram URL", name: telegramUrl, widget: string }
+          - label: "Бренд"
+            name: brand
+            widget: object
+            fields:
+              - { label: "Опис", name: description, widget: text }
+          - label: "Соцмережі"
+            name: social
+            widget: object
+            fields:
+              - { label: "Instagram", name: instagram, widget: string }
+              - { label: "Twitter", name: twitter, widget: string }
+              - { label: "YouTube", name: youtube, widget: string }
+          - label: "Навігація"
+            name: navigation
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - label: "Посилання"
+                name: links
+                widget: list
+                fields:
+                  - { label: "Назва", name: name, widget: string }
+                  - { label: "URL", name: href, widget: string }
+          - label: "Підтримка"
+            name: support
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - label: "Посилання"
+                name: links
+                widget: list
+                fields:
+                  - { label: "Назва", name: name, widget: string }
+                  - { label: "URL", name: href, widget: string }
+          - label: "Правова"
+            name: legal
+            widget: object
+            fields:
+              - { label: "Заголовок", name: title, widget: string }
+              - label: "Посилання"
+                name: links
+                widget: list
+                fields:
+                  - { label: "Назва", name: name, widget: string }
+                  - { label: "URL", name: href, widget: string }
+          - label: "Копірайт"
+            name: copyright
+            widget: object
+            fields:
+              - { label: "Текст прав", name: allRights, widget: string }
+              - { label: "Створено для", name: designedFor, widget: string }
+              - { label: "Слово темрява", name: dark, widget: string }
+
+  </script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
