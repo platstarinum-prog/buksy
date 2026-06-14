@@ -355,5 +355,3 @@ collections:
             widget: object
             fields:
               - { label: "Текст прав", name: allRights, widget: string }
-              - { label: "Створено для", name: designedFor, widget: string }
-              - { label: "Слово темрява", name: dark, widget: string }
