@@ -1,5 +1,5 @@
 [build]
-  command = "node scripts/translate.mjs && node scripts/transform-products.mjs && node scripts/transform-content.mjs && npm run build"
+  command = "node scripts/transform-products.mjs && node scripts/transform-content.mjs && npm run build"
   publish = "dist"
   functions = "netlify/functions"
 

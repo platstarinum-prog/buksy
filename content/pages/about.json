@@ -3,22 +3,12 @@
     "tagline": "НАША ІСТОРІЯ",
     "title1": "Народжені темрявою,",
     "title2": "Створені з метою",
-    "image": "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "tagline_ru": "НАША ИСТОРИЯ",
-    "tagline_en": "OUR HISTORY",
-    "title1_ru": "Рожденные тьмой,",
-    "title1_en": "Born of darkness",
-    "title2_ru": "Созданы с целью",
-    "title2_en": "Created with a purpose"
+    "image": "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800"
   },
   "philosophy": {
     "quote": "BUKSY існує на перетині розкоші та бунту. Ми віримо, що справжній стиль не вимагає уваги — він командує нею через тонкість, якість і намір.",
     "author": "Засновники",
-    "image": "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "quote_ru": "BUKSY существует на пересечении роскоши и бунта. Мы верим, что настоящий стиль не требует внимания — он командует им из-за тонкости, качества и намерения.",
-    "quote_en": "BUKSY exists at the intersection of luxury and rebellion. We believe that true style doesn't demand attention—it commands it through subtlety, quality, and intent.",
-    "author_ru": "Основатели",
-    "author_en": "The founders"
+    "image": "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800"
   },
   "values": {
     "tagline": "НАШІ ЦІННОСТІ",
@@ -26,53 +16,27 @@
     "items": [
       {
         "title": "Навмисність",
-        "description": "Кожен шов, кожен стібок, кожна деталь служать меті. Ми відкидаємо надлишок на користь осмисленого дизайну.",
-        "title_ru": "Намеренность",
-        "title_en": "Aforethought",
-        "description_ru": "Каждый шов, каждый стежок, каждая деталь служат цели. Мы отбрасываем излишек в пользу осмысленного дизайна.",
-        "description_en": "Every seam, every stitch, every detail serves a purpose. We reject excess in favor of meaningful design."
+        "description": "Кожен шов, кожен стібок, кожна деталь служать меті. Ми відкидаємо надлишок на користь осмисленого дизайну."
       },
       {
         "title": "Одержимість якістю",
-        "description": "Японська бавовна, італійська шкіра, швейцарська фурнітура. Ми обираємо лише найкращі матеріали з найкращих мануфактур світу.",
-        "title_ru": "Одержимость качеством",
-        "title_en": "Obsession with quality",
-        "description_ru": "Японский хлопок, итальянская кожа, швейцарская фурнитура. Мы выбираем только самые лучшие материалы из лучших мануфактур мира.",
-        "description_en": "Japanese cotton, Italian leather, Swiss hardware. We choose only the best materials from the best manufacturers in the world."
+        "description": "Японська бавовна, італійська шкіра, швейцарська фурнітура. Ми обираємо лише найкращі матеріали з найкращих мануфактур світу."
       },
       {
         "title": "Вічний бунт",
-        "description": "Ми створюємо речі, які переживають тренди. Наш дизайн сучасний, але призначений стати майбутньою класикою.",
-        "title_ru": "Вечный бунт",
-        "title_en": "Eternal rebellion",
-        "description_ru": "Мы создаем вещи, переживающие тренды. Наш дизайн современен, но предназначен стать будущей классикой.",
-        "description_en": "We create things that survive trends. Our design is modern yet destined to become a future classic."
+        "description": "Ми створюємо речі, які переживають тренди. Наш дизайн сучасний, але призначений стати майбутньою класикою."
       },
       {
         "title": "Стале майбутнє",
-        "description": "Повільна мода — єдина мода. Ми виробляємо обмеженими партіями, щоб уникнути відходів.",
-        "title_ru": "Устойчивое будущее",
-        "title_en": "Sustainable future",
-        "description_ru": "Медленная мода – единственная мода. Мы производим ограниченными партиями во избежание отходов.",
-        "description_en": "Slow fashion is the only fashion. We produce in limited batches to avoid waste."
+        "description": "Повільна мода — єдина мода. Ми виробляємо обмеженими партіями, щоб уникнути відходів."
       }
-    ],
-    "tagline_ru": "НАШИ ЦЕННОСТИ",
-    "tagline_en": "OUR VALUES",
-    "title_ru": "За что мы стоим",
-    "title_en": "What we stand for"
+    ]
   },
   "atelier": {
     "title": "Ательє BUKSY",
     "description1": "Розташоване в самому серці креативного району Берліна, наше ательє служить одночасно дизайн-студією та простором для спільноти. Тут традиційна майстерність зустрічається з сучасною дизайн-філософією.",
     "description2": "Кожен виріб починає свій шлях у цьому просторі, де наша команда дизайнерів, конструкторів і майстрів співпрацює, щоб втілити наше бачення в життя.",
-    "image": "https://images.pexels.com/photos/1126964/pexels-photo-1126964.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "title_ru": "Ателье BUKSY",
-    "title_en": "Atelier BUKSY",
-    "description1_ru": "Расположенный в самом сердце креативного района Берлина, наше ателье служит одновременно дизайн-студией и пространством для сообщества. Здесь традиционное мастерство встречается с современной дизайн-философией.",
-    "description1_en": "Located in the heart of Berlin's creative district, our atelier serves as both a design studio and a community space. Here, traditional craftsmanship meets modern design philosophy.",
-    "description2_ru": "Каждое изделие начинает свой путь в этом пространстве, где наша команда дизайнеров, конструкторов и мастеров сотрудничает, чтобы воплотить наше видение в жизнь.",
-    "description2_en": "Each product begins its journey in this space, where our team of designers, engineers and craftsmen collaborate to bring our vision to life."
+    "image": "https://images.pexels.com/photos/1126964/pexels-photo-1126964.jpeg?auto=compress&cs=tinysrgb&w=800"
   },
   "timeline": {
     "tagline": "НАШ ШЛЯХ",
@@ -80,64 +44,38 @@
     "events": [
       {
         "year": "2019",
-        "event": "Засновано в Берліні",
-        "event_ru": "Основано в Берлине",
-        "event_en": "Founded in Berlin"
+        "event": "Засновано в Берліні"
       },
       {
         "year": "2020",
-        "event": "Запуск першої колекції",
-        "event_ru": "Запуск первой коллекции",
-        "event_en": "Launch of the first collection"
+        "event": "Запуск першої колекції"
       },
       {
         "year": "2021",
-        "event": "Міжнародна експансія",
-        "event_ru": "Международная экспансия",
-        "event_en": "International expansion"
+        "event": "Міжнародна експансія"
       },
       {
         "year": "2022",
-        "event": "100K+ учасників спільноти",
-        "event_ru": "100K+ участников сообщества",
-        "event_en": "100K+ community members"
+        "event": "100K+ учасників спільноти"
       },
       {
         "year": "2023",
-        "event": "Відкриття BUKSY Studio",
-        "event_ru": "Открытие BUKSY Studio",
-        "event_en": "Opening of BUKSY Studio"
+        "event": "Відкриття BUKSY Studio"
       },
       {
         "year": "2024",
-        "event": "Початок нової глави",
-        "event_ru": "Начало новой главы",
-        "event_en": "The beginning of a new chapter"
+        "event": "Початок нової глави"
       },
       {
         "year": "2026",
-        "event": "Створення власного сайту",
-        "event_ru": "Создание собственного сайта",
-        "event_en": "Creating your own website"
+        "event": "Створення власного сайту"
       }
-    ],
-    "tagline_ru": "НАШ ПУТЬ",
-    "tagline_en": "OUR WAY",
-    "title_ru": "Вехи",
-    "title_en": "Milestones"
+    ]
   },
   "cta": {
     "title1": "Приєднуйся до",
     "title2": "Руху",
     "description": "Стань частиною спільноти, яка цінує автентичність, якість та індивідуальність. Підпишись на ранній доступ, ексклюзивні дропи та 10% знижки на перше замовлення.",
-    "button": "ДОСЛІДИТИ КОЛЕКЦІЮ",
-    "title1_ru": "Присоединяйся",
-    "title1_en": "Join the",
-    "title2_ru": "Движения",
-    "title2_en": "Movement",
-    "description_ru": "Стань частью сообщества, которое ценит подлинность, качество и индивидуальность. Подпишись на ранний доступ, эксклюзивные дропы и 10% скидки по первому заказу.",
-    "description_en": "Become part of a community that values ​​authenticity, quality and individuality. Sign up for early access, exclusive drops, and 10% off your first order.",
-    "button_ru": "ИССЛЕДОВАТЬ КОЛЛЕКЦИЮ",
-    "button_en": "EXPLORE THE COLLECTION"
+    "button": "ДОСЛІДИТИ КОЛЕКЦІЮ"
   }
 }

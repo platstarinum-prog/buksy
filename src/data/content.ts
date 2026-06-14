@@ -101,6 +101,10 @@ export const aboutPage = {
       {
         "year": "2024",
         "event": "Початок нової глави"
+      },
+      {
+        "year": "2026",
+        "event": "Створення власного сайту"
       }
     ]
   },
@@ -306,9 +310,7 @@ export const footerData = {
     ]
   },
   "copyright": {
-    "allRights": "Всі права захищено.",
-    "designedFor": "Створено для",
-    "dark": "темряви"
+    "allRights": "Всі права захищено."
   },
   "social": {
     "instagram": "https://instagram.com",

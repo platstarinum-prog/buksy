@@ -11,27 +11,60 @@
   "navigation": {
     "title": "НАВІГАЦІЯ",
     "links": [
-      { "name": "Головна", "href": "/" },
-      { "name": "Магазин", "href": "/shop" },
-      { "name": "Про нас", "href": "/about" },
-      { "name": "Контакти", "href": "/contact" }
+      {
+        "name": "Головна",
+        "href": "/"
+      },
+      {
+        "name": "Магазин",
+        "href": "/shop"
+      },
+      {
+        "name": "Про нас",
+        "href": "/about"
+      },
+      {
+        "name": "Контакти",
+        "href": "/contact"
+      }
     ]
   },
   "support": {
     "title": "ПІДТРИМКА",
     "links": [
-      { "name": "Доставка та повернення", "href": "/shipping" },
-      { "name": "Таблиця розмірів", "href": "/size-guide" },
-      { "name": "FAQ", "href": "/faq" },
-      { "name": "Відстежити замовлення", "href": "/track" }
+      {
+        "name": "Доставка та повернення",
+        "href": "/shipping"
+      },
+      {
+        "name": "Таблиця розмірів",
+        "href": "/size-guide"
+      },
+      {
+        "name": "FAQ",
+        "href": "/faq"
+      },
+      {
+        "name": "Відстежити замовлення",
+        "href": "/track"
+      }
     ]
   },
   "legal": {
     "title": "ПРАВОВА",
     "links": [
-      { "name": "Політика конфіденційності", "href": "/privacy" },
-      { "name": "Умови використання", "href": "/terms" },
-      { "name": "Cookie політика", "href": "/cookies" }
+      {
+        "name": "Політика конфіденційності",
+        "href": "/privacy"
+      },
+      {
+        "name": "Умови використання",
+        "href": "/terms"
+      },
+      {
+        "name": "Cookie політика",
+        "href": "/cookies"
+      }
     ]
   },
   "copyright": {

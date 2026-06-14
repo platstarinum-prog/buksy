@@ -1,11 +1,7 @@
 {
   "hero": {
     "tagline": "ЗВ'ЯЖІТЬСЯ З НАМИ",
-    "title": "Контакти",
-    "tagline_ru": "свяжитесь с нами",
-    "tagline_en": "CONTACT US",
-    "title_ru": "Контакты",
-    "title_en": "Contacts"
+    "title": "Контакти"
   },
   "form": {
     "title": "Надіслати повідомлення",
@@ -18,60 +14,30 @@
     "subjectOptions": [
       {
         "value": "order",
-        "label": "Запит щодо замовлення",
-        "label_ru": "Запрос по заказу",
-        "label_en": "Order inquiry"
+        "label": "Запит щодо замовлення"
       },
       {
         "value": "product",
-        "label": "Питання про товар",
-        "label_ru": "Вопрос о товаре",
-        "label_en": "Question about the product"
+        "label": "Питання про товар"
       },
       {
         "value": "returns",
-        "label": "Повернення та обмін",
-        "label_ru": "Возврат и обмен",
-        "label_en": "Returns and Exchanges"
+        "label": "Повернення та обмін"
       },
       {
         "value": "wholesale",
-        "label": "Оптовий запит",
-        "label_ru": "Оптовый запрос",
-        "label_en": "Wholesale request"
+        "label": "Оптовий запит"
       },
       {
         "value": "other",
-        "label": "Інше",
-        "label_ru": "Другое",
-        "label_en": "Other"
+        "label": "Інше"
       }
     ],
     "messageLabel": "ПОВІДОМЛЕННЯ",
     "messagePlaceholder": "Як ми можемо допомогти?",
     "submitButton": "НАДІСЛАТИ",
     "successTitle": "Повідомлення надіслано",
-    "successText": "Ми зв'яжемось з вами протягом 24-48 годин.",
-    "title_ru": "Отправить сообщение",
-    "title_en": "Send a message",
-    "nameLabel_ru": "ИМЯ",
-    "nameLabel_en": "NAME",
-    "namePlaceholder_ru": "Ваше имя",
-    "namePlaceholder_en": "your name",
-    "subjectLabel_ru": "ТЕМА",
-    "subjectLabel_en": "TOPIC",
-    "subjectPlaceholder_ru": "Выберите тему",
-    "subjectPlaceholder_en": "Choose a topic",
-    "messageLabel_ru": "СООБЩЕНИЕ",
-    "messageLabel_en": "MESSAGE",
-    "messagePlaceholder_ru": "Как мы можем помочь?",
-    "messagePlaceholder_en": "How can we help?",
-    "submitButton_ru": "ОТПРАВИТЬ",
-    "submitButton_en": "SEND",
-    "successTitle_ru": "Сообщение отправлено",
-    "successTitle_en": "Message sent",
-    "successText_ru": "Мы свяжемся с вами в течение 24-48 часов.",
-    "successText_en": "We will contact you within 24-48 hours."
+    "successText": "Ми зв'яжемось з вами протягом 24-48 годин."
   },
   "info": {
     "title": "Наші контакти",
@@ -80,21 +46,13 @@
     "studio": "BUKSY Atelier\nKreuzbergstr. 42\n10997 Berlin, Germany",
     "emailLabel": "EMAIL",
     "phoneLabel": "ТЕЛЕФОН",
-    "studioLabel": "СТУДІЯ",
-    "title_ru": "Наши контакты",
-    "title_en": "Our contacts",
-    "phoneLabel_ru": "ТЕЛЕФОН",
-    "phoneLabel_en": "PHONE",
-    "studioLabel_ru": "СТУДИЯ",
-    "studioLabel_en": "STUDIO"
+    "studioLabel": "СТУДІЯ"
   },
   "social": {
     "title": "МИ В СОЦМЕРЕЖАХ",
     "instagram": "https://instagram.com",
     "twitter": "https://twitter.com",
-    "youtube": "https://youtube.com",
-    "title_ru": "МЫ В СОЦСЕТИ",
-    "title_en": "WE ARE ON SOCIAL NETWORKS"
+    "youtube": "https://youtube.com"
   },
   "faq": {
     "tagline": "ВІДПОВІДІ",
@@ -102,52 +60,28 @@
     "items": [
       {
         "question": "Яка ваша політика доставки?",
-        "answer": "Ми пропонуємо безкоштовну доставку по всьому світу для замовлень від 150$. Стандартна доставка займає 5-7 робочих днів, експрес (2-3 дні) доступна за додаткову плату. Всі замовлення відправляються з нашого ательє в Берліні з повним відстеженням.",
-        "question_ru": "Какова ваша политика доставки?",
-        "question_en": "What is your shipping policy?",
-        "answer_ru": "Мы предлагаем бесплатную доставку по всему миру для заказов от 150$. Стандартная доставка занимает 5-7 рабочих дней, экспресс (2-3 дня) доступна за дополнительную плату. Все заказы отправляются из нашего ателье в Берлине с полным отслеживанием.",
-        "answer_en": "We offer free worldwide shipping on orders over $150. Standard delivery takes 5-7 working days, express delivery (2-3 days) is available for an additional fee. All orders are shipped from our atelier in Berlin with full tracking."
+        "answer": "Ми пропонуємо безкоштовну доставку по всьому світу для замовлень від 150$. Стандартна доставка займає 5-7 робочих днів, експрес (2-3 дні) доступна за додаткову плату. Всі замовлення відправляються з нашого ательє в Берліні з повним відстеженням."
       },
       {
         "question": "Як працюють повернення?",
-        "answer": "Ми пропонуємо 30-денну політику повернення для неношених речей в оригінальній упаковці. Ініціюйте повернення, роздрукуйте накладну та відправте. Відшкодування обробляються протягом 5-7 робочих днів.",
-        "question_ru": "Как работают возвращения?",
-        "question_en": "How do returns work?",
-        "answer_ru": "Мы предлагаем 30-дневную политику возврата для неношеных вещей в оригинальной упаковке. Инициируйте возврат, распечатайте накладную и отправьте. Возмещения обрабатываются в течение 5-7 рабочих дней.",
-        "answer_en": "We offer a 30-day return policy for unworn items in their original packaging. Initiate the return, print the invoice and ship. Refunds are processed within 5-7 business days."
+        "answer": "Ми пропонуємо 30-денну політику повернення для неношених речей в оригінальній упаковці. Ініціюйте повернення, роздрукуйте накладну та відправте. Відшкодування обробляються протягом 5-7 робочих днів."
       },
       {
         "question": "Ваші товари відповідають розміру?",
-        "answer": "Наші вироби мають сучасний вільний крій. Рекомендуємо замовляти свій звичайний розмір для вільного силуету або на розмір менше для більш приталеного вигляду.",
-        "question_ru": "Ваши товары соответствуют размеру?",
-        "question_en": "Are your items true to size?",
-        "answer_ru": "Наши изделия имеют современный свободный крой. Рекомендуем заказывать свой обычный размер для свободного силуэта или на размер меньше для более приталенного вида.",
-        "answer_en": "Our products have a modern free cut. We recommend ordering your usual size for a looser silhouette or a size down for a more fitted look."
+        "answer": "Наші вироби мають сучасний вільний крій. Рекомендуємо замовляти свій звичайний розмір для вільного силуету або на розмір менше для більш приталеного вигляду."
       },
       {
         "question": "Як доглядати за виробами BUKSY?",
-        "answer": "Кожен виріб має інструкції на етикетці. Загалом рекомендуємо прати вивернутими в холодній воді та сушити на повітрі. Для шкіри — кондиціонер щоквартально.",
-        "question_ru": "Как ухаживать за изделиями BUKSY?",
-        "question_en": "How to care for BUKSY products?",
-        "answer_ru": "Каждое изделие содержит инструкции на этикетке. В общем рекомендуем стирать вывернутыми в холодной воде и сушить на воздухе. Для кожи – кондиционер ежеквартально.",
-        "answer_en": "Each product has instructions on the label. In general, we recommend washing inside out in cold water and air drying. For the skin, conditioner every quarter."
+        "answer": "Кожен виріб має інструкції на етикетці. Загалом рекомендуємо прати вивернутими в холодній воді та сушити на повітрі. Для шкіри — кондиціонер щоквартально."
       },
       {
         "question": "Ви доставляєте міжнародно?",
-        "answer": "Так, доставляємо по всьому світу. Міжнародні замовлення прибувають за 7-14 днів. Імпортні мита — відповідальність покупця.",
-        "question_ru": "Вы доставляете международно?",
-        "question_en": "Do you ship internationally?",
-        "answer_ru": "Да, доставляем по всему миру. Международные заказы прибывают через 7-14 дней. Импортные пошлины – ответственность покупателя.",
-        "answer_en": "Yes, we deliver worldwide. International orders arrive in 7-14 days. Import duties are the buyer's responsibility."
+        "answer": "Так, доставляємо по всьому світу. Міжнародні замовлення прибувають за 7-14 днів. Імпортні мита — відповідальність покупця."
       },
       {
         "question": "Як відстежити замовлення?",
-        "answer": "Після відправлення ви отримаєте email з трекінг-номером. Також можна відстежити через особистий кабінет на сайті.",
-        "question_ru": "Как отследить заказ?",
-        "question_en": "How to track an order?"
+        "answer": "Після відправлення ви отримаєте email з трекінг-номером. Також можна відстежити через особистий кабінет на сайті."
       }
-    ],
-    "tagline_ru": "ОТВЕТЫ",
-    "tagline_en": "ANSWERS"
+    ]
   }
 }

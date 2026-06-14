@@ -11,9 +11,11 @@ const savedLang = localStorage.getItem('buksy_lang') || 'uk';
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: savedLang,
+  lng: 'uk',
   fallbackLng: 'uk',
   interpolation: { escapeValue: false },
+  supportedLngs: ['uk'],
+  nonExplicitSupportedLngs: true,
 });
 
 export default i18n;

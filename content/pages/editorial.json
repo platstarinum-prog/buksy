@@ -8,9 +8,18 @@
     "scroll": "ГОРТАЙ"
   },
   "lookbook": [
-    { "image": "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=1200", "caption": "Визначаючи силует сучасного бунту" },
-    { "image": "https://images.pexels.com/photos/1126964/pexels-photo-1126964.jpeg?auto=compress&cs=tinysrgb&w=1200", "caption": "Текстура, тон і мистецтво темряви" },
-    { "image": "https://images.pexels.com/photos/6311387/pexels-photo-6311387.jpeg?auto=compress&cs=tinysrgb&w=1200", "caption": "Народжені з порожнечі, створені для безстрашних" }
+    {
+      "image": "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "caption": "Визначаючи силует сучасного бунту"
+    },
+    {
+      "image": "https://images.pexels.com/photos/1126964/pexels-photo-1126964.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "caption": "Текстура, тон і мистецтво темряви"
+    },
+    {
+      "image": "https://images.pexels.com/photos/6311387/pexels-photo-6311387.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "caption": "Народжені з порожнечі, створені для безстрашних"
+    }
   ],
   "behindScenes": {
     "title": "За кадром",

@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Menu, X, Search, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../store/CartContext';
-import { LanguageSwitcher } from '../i18n/LanguageSwitcher';
 
 const navLinks = [
   { nameKey: 'header.home', href: '/' },
@@ -102,7 +101,6 @@ export function Header() {
 
             {/* Right Icons */}
             <div className="flex items-center gap-2">
-              <LanguageSwitcher />
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="p-2 text-white/70 hover:text-white transition-colors duration-300 hidden md:block"
@@ -176,7 +174,6 @@ export function Header() {
                 transition={{ delay: 0.4 }}
                 className="flex flex-col items-center gap-4 mt-8"
               >
-                <LanguageSwitcher />
                 <div className="flex gap-6">
                   <button onClick={() => { setIsSearchOpen(true); setIsMobileMenuOpen(false); }} className="p-3 text-white/70">
                     <Search size={24} />
