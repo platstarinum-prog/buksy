@@ -10,11 +10,13 @@ import {
   Truck,
   Shield,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../store/CartContext';
 
 type CheckoutStep = 'information' | 'shipping' | 'payment';
 
 export function CheckoutPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { items, totalPrice, totalItems, clearCart } = useCart();
   const [step, setStep] = useState<CheckoutStep>('information');
@@ -58,9 +60,9 @@ export function CheckoutPage() {
     return (
       <div className="min-h-screen bg-noir pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-          <h1 className="font-heading text-2xl mb-4">Your cart is empty</h1>
+          <h1 className="font-heading text-2xl mb-4">{t('checkout.yourCartEmpty')}</h1>
           <Link to="/shop" className="btn-primary">
-            CONTINUE SHOPPING
+            {t('checkout.continueShopping')}
           </Link>
         </div>
       </div>
@@ -79,19 +81,18 @@ export function CheckoutPage() {
             <div className="w-20 h-20 border-2 border-blood rounded-full flex items-center justify-center mx-auto">
               <Check size={40} className="text-blood" />
             </div>
-            <h1 className="font-display text-4xl font-light">Order Confirmed</h1>
+            <h1 className="font-display text-4xl font-light">{t('checkout.orderConfirmed')}</h1>
             <p className="text-white/60 font-body max-w-md mx-auto">
-              Thank you for your purchase. We've sent a confirmation email with your
-              order details and tracking information will follow once your order ships.
+              {t('checkout.orderConfirmedDesc')}
             </p>
-            <p className="text-white/40 font-mono text-sm">Order #BUK-{Date.now().toString().slice(-6)}</p>
+            <p className="text-white/40 font-mono text-sm">{t('checkout.orderPrefix')}{Date.now().toString().slice(-6)}</p>
             <div className="pt-8">
               <Link
                 to="/shop"
                 onClick={() => clearCart()}
                 className="btn-primary"
               >
-                CONTINUE SHOPPING
+                {t('checkout.continueShopping2')}
               </Link>
             </div>
           </motion.div>
@@ -100,10 +101,10 @@ export function CheckoutPage() {
     );
   }
 
-  const steps: { id: CheckoutStep; name: string }[] = [
-    { id: 'information', name: 'Information' },
-    { id: 'shipping', name: 'Shipping' },
-    { id: 'payment', name: 'Payment' },
+  const steps: { id: CheckoutStep; nameKey: string }[] = [
+    { id: 'information', nameKey: 'checkout.information' },
+    { id: 'shipping', nameKey: 'checkout.shippingStep' },
+    { id: 'payment', nameKey: 'checkout.paymentStep' },
   ];
 
   return (
@@ -116,14 +117,14 @@ export function CheckoutPage() {
             className="flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300"
           >
             <ArrowLeft size={18} />
-            <span className="font-body text-sm">Return to cart</span>
+            <span className="font-body text-sm">{t('checkout.returnToCart')}</span>
           </Link>
           <Link to="/" className="font-heading text-2xl tracking-[0.2em] text-blood">
             BUKSY
           </Link>
           <div className="flex items-center gap-2 text-white/40">
             <Lock size={14} />
-            <span className="font-body text-xs">Secure checkout</span>
+            <span className="font-body text-xs">{t('checkout.secureCheckout')}</span>
           </div>
         </div>
 
@@ -153,7 +154,7 @@ export function CheckoutPage() {
                     <span className="font-mono text-sm">{index + 1}</span>
                   )}
                 </div>
-                <span className="font-body text-sm hidden sm:block">{s.name}</span>
+                <span className="font-body text-sm hidden sm:block">{t(s.nameKey)}</span>
               </div>
               {index < steps.length - 1 && (
                 <div
@@ -180,12 +181,12 @@ export function CheckoutPage() {
               {step === 'information' && (
                 <div className="space-y-6">
                   <h2 className="font-heading text-xl tracking-wider mb-6">
-                    CONTACT INFORMATION
+                    {t('checkout.contactInfo')}
                   </h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <input
                       type="text"
-                      placeholder="First name"
+                      placeholder={t('checkout.firstName')}
                       value={shippingInfo.firstName}
                       onChange={(e) =>
                         setShippingInfo({ ...shippingInfo, firstName: e.target.value })
@@ -194,7 +195,7 @@ export function CheckoutPage() {
                     />
                     <input
                       type="text"
-                      placeholder="Last name"
+                      placeholder={t('checkout.lastName')}
                       value={shippingInfo.lastName}
                       onChange={(e) =>
                         setShippingInfo({ ...shippingInfo, lastName: e.target.value })
@@ -204,7 +205,7 @@ export function CheckoutPage() {
                   </div>
                   <input
                     type="email"
-                    placeholder="Email address"
+                    placeholder={t('checkout.email')}
                     value={shippingInfo.email}
                     onChange={(e) =>
                       setShippingInfo({ ...shippingInfo, email: e.target.value })
@@ -213,7 +214,7 @@ export function CheckoutPage() {
                   />
                   <input
                     type="tel"
-                    placeholder="Phone number"
+                    placeholder={t('checkout.phone')}
                     value={shippingInfo.phone}
                     onChange={(e) =>
                       setShippingInfo({ ...shippingInfo, phone: e.target.value })
@@ -222,11 +223,11 @@ export function CheckoutPage() {
                   />
 
                   <h3 className="font-heading text-xl tracking-wider mt-8 mb-6">
-                    SHIPPING ADDRESS
+                    {t('checkout.shippingAddress')}
                   </h3>
                   <input
                     type="text"
-                    placeholder="Address"
+                    placeholder={t('checkout.address')}
                     value={shippingInfo.address}
                     onChange={(e) =>
                       setShippingInfo({ ...shippingInfo, address: e.target.value })
@@ -235,7 +236,7 @@ export function CheckoutPage() {
                   />
                   <input
                     type="text"
-                    placeholder="Apartment, suite, etc. (optional)"
+                    placeholder={t('checkout.apartment')}
                     value={shippingInfo.apartment}
                     onChange={(e) =>
                       setShippingInfo({ ...shippingInfo, apartment: e.target.value })
@@ -245,7 +246,7 @@ export function CheckoutPage() {
                   <div className="grid sm:grid-cols-3 gap-4">
                     <input
                       type="text"
-                      placeholder="City"
+                      placeholder={t('checkout.city')}
                       value={shippingInfo.city}
                       onChange={(e) =>
                         setShippingInfo({ ...shippingInfo, city: e.target.value })
@@ -254,7 +255,7 @@ export function CheckoutPage() {
                     />
                     <input
                       type="text"
-                      placeholder="Country"
+                      placeholder={t('checkout.country')}
                       value={shippingInfo.country}
                       onChange={(e) =>
                         setShippingInfo({ ...shippingInfo, country: e.target.value })
@@ -263,7 +264,7 @@ export function CheckoutPage() {
                     />
                     <input
                       type="text"
-                      placeholder="Postal code"
+                      placeholder={t('checkout.postalCode')}
                       value={shippingInfo.postalCode}
                       onChange={(e) =>
                         setShippingInfo({ ...shippingInfo, postalCode: e.target.value })
@@ -276,7 +277,7 @@ export function CheckoutPage() {
                     onClick={() => setStep('shipping')}
                     className="btn-primary w-full mt-8"
                   >
-                    CONTINUE TO SHIPPING
+                    {t('checkout.continueToShipping')}
                   </button>
                 </div>
               )}
@@ -284,7 +285,7 @@ export function CheckoutPage() {
               {step === 'shipping' && (
                 <div className="space-y-6">
                   <h2 className="font-heading text-xl tracking-wider mb-6">
-                    SHIPPING METHOD
+                    {t('checkout.shippingMethod')}
                   </h2>
                   <div className="space-y-4">
                     <label
@@ -307,17 +308,17 @@ export function CheckoutPage() {
                           <div className="flex items-center gap-2">
                             <Truck size={18} className="text-blood" />
                             <span className="font-heading text-sm tracking-wider">
-                              STANDARD SHIPPING
+                              {t('checkout.standardShipping')}
                             </span>
                           </div>
                           <p className="text-white/60 font-body text-sm mt-1">
-                            5-7 business days
+                            {t('checkout.standardDays')}
                           </p>
                         </div>
                       </div>
                       <span className="font-mono">
                         {totalPrice >= 150 ? (
-                          <span className="text-blood">FREE</span>
+                          <span className="text-blood">{t('common.free')}</span>
                         ) : (
                           '$15'
                         )}
@@ -343,11 +344,11 @@ export function CheckoutPage() {
                           <div className="flex items-center gap-2">
                             <Truck size={18} className="text-blood" />
                             <span className="font-heading text-sm tracking-wider">
-                              EXPRESS SHIPPING
+                              {t('checkout.expressShipping')}
                             </span>
                           </div>
                           <p className="text-white/60 font-body text-sm mt-1">
-                            2-3 business days
+                            {t('checkout.expressDays')}
                           </p>
                         </div>
                       </div>
@@ -357,13 +358,13 @@ export function CheckoutPage() {
 
                   <div className="flex gap-4 mt-8">
                     <button onClick={() => setStep('information')} className="btn-secondary flex-1">
-                      BACK
+                      {t('checkout.back')}
                     </button>
                     <button
                       onClick={() => setStep('payment')}
                       className="btn-primary flex-1"
                     >
-                      CONTINUE TO PAYMENT
+                      {t('checkout.continueToPayment')}
                     </button>
                   </div>
                 </div>
@@ -372,12 +373,12 @@ export function CheckoutPage() {
               {step === 'payment' && (
                 <div className="space-y-6">
                   <h2 className="font-heading text-xl tracking-wider mb-6">
-                    PAYMENT
+                    {t('checkout.payment')}
                   </h2>
                   <div className="p-6 border border-white/10 bg-ash">
                     <div className="flex items-center gap-3 mb-6">
                       <CreditCard className="text-blood" size={24} />
-                      <span className="font-heading tracking-wider">Credit Card</span>
+                      <span className="font-heading tracking-wider">{t('checkout.creditCard')}</span>
                       <div className="ml-auto flex gap-2">
                         <img
                           src="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/flags/4x3/us.svg"
@@ -399,7 +400,7 @@ export function CheckoutPage() {
                     <div className="space-y-4">
                       <input
                         type="text"
-                        placeholder="Card number"
+                        placeholder={t('checkout.cardNumber')}
                         value={paymentInfo.cardNumber}
                         onChange={(e) =>
                           setPaymentInfo({ ...paymentInfo, cardNumber: e.target.value })
@@ -408,7 +409,7 @@ export function CheckoutPage() {
                       />
                       <input
                         type="text"
-                        placeholder="Cardholder name"
+                        placeholder={t('checkout.cardHolder')}
                         value={paymentInfo.cardHolder}
                         onChange={(e) =>
                           setPaymentInfo({ ...paymentInfo, cardHolder: e.target.value })
@@ -418,7 +419,7 @@ export function CheckoutPage() {
                       <div className="grid grid-cols-2 gap-4">
                         <input
                           type="text"
-                          placeholder="MM/YY"
+                          placeholder={t('checkout.expiry')}
                           value={paymentInfo.expiry}
                           onChange={(e) =>
                             setPaymentInfo({ ...paymentInfo, expiry: e.target.value })
@@ -427,7 +428,7 @@ export function CheckoutPage() {
                         />
                         <input
                           type="text"
-                          placeholder="CVV"
+                          placeholder={t('checkout.cvv')}
                           value={paymentInfo.cvv}
                           onChange={(e) =>
                             setPaymentInfo({ ...paymentInfo, cvv: e.target.value })
@@ -440,7 +441,7 @@ export function CheckoutPage() {
 
                   <div className="flex gap-4 mt-8">
                     <button onClick={() => setStep('shipping')} className="btn-secondary flex-1">
-                      BACK
+                      {t('checkout.back2')}
                     </button>
                     <button
                       onClick={handlePlaceOrder}
@@ -448,11 +449,11 @@ export function CheckoutPage() {
                       className="btn-primary flex-1 flex items-center justify-center gap-2"
                     >
                       {isProcessing ? (
-                        <span className="animate-spin">Processing...</span>
+                        <span className="animate-spin">{t('checkout.processing')}</span>
                       ) : (
                         <>
                           <Lock size={16} />
-                          PLACE ORDER
+                          {t('checkout.placeOrder')}
                         </>
                       )}
                     </button>
@@ -461,9 +462,9 @@ export function CheckoutPage() {
                   <div className="flex items-center justify-center gap-6 text-white/40 text-xs font-body mt-6">
                     <span className="flex items-center gap-1">
                       <Shield size={14} />
-                      Secure SSL encryption
+                      {t('checkout.secureSSL')}
                     </span>
-                    <span>Protected by Stripe</span>
+                    <span>{t('checkout.protectedStripe')}</span>
                   </div>
                 </div>
               )}
@@ -474,7 +475,7 @@ export function CheckoutPage() {
           <div className="lg:col-span-2">
             <div className="sticky top-28 p-6 border border-white/5 bg-ash">
               <h3 className="font-heading text-sm tracking-wider mb-4 text-white/40">
-                ORDER SUMMARY
+                {t('checkout.orderSummary')}
               </h3>
               <div className="space-y-4 max-h-64 overflow-y-auto pr-2">
                 {items.map((item) => (
@@ -504,21 +505,21 @@ export function CheckoutPage() {
               </div>
               <div className="space-y-3 pt-4 mt-4 border-t border-white/5">
                 <div className="flex justify-between text-sm font-body">
-                  <span className="text-white/60">Subtotal</span>
+                  <span className="text-white/60">{t('checkout.subtotal')}</span>
                   <span className="font-mono">${totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-body">
-                  <span className="text-white/60">Shipping</span>
+                  <span className="text-white/60">{t('checkout.shipping')}</span>
                   <span className="font-mono">
-                    {shippingCost === 0 ? 'FREE' : `$${shippingCost.toFixed(2)}`}
+                    {shippingCost === 0 ? t('common.free') : `$${shippingCost.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm font-body">
-                  <span className="text-white/60">Tax</span>
+                  <span className="text-white/60">{t('checkout.tax')}</span>
                   <span className="font-mono">${tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-lg border-t border-white/5 pt-3">
-                  <span className="font-heading tracking-wider">Total</span>
+                  <span className="font-heading tracking-wider">{t('checkout.total')}</span>
                   <span className="font-mono text-xl">${total.toFixed(2)}</span>
                 </div>
               </div>

@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { CartProvider } from './store/CartContext';
+import './i18n/i18n';
 
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -15,6 +17,7 @@ import { ContactPage } from './pages/ContactPage';
 import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { InfoPage } from './pages/InfoPage';
+import { EditorialPage } from './pages/EditorialPage';
 
 function PageWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -64,6 +67,14 @@ function AppRoutes() {
           element={
             <PageWrapper>
               <AboutPage />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/editorial"
+          element={
+            <PageWrapper>
+              <EditorialPage />
             </PageWrapper>
           }
         />

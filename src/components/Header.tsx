@@ -2,16 +2,20 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Menu, X, Search, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../store/CartContext';
+import { LanguageSwitcher } from '../i18n/LanguageSwitcher';
 
 const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'Shop', href: '/shop' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' },
+  { nameKey: 'header.home', href: '/' },
+  { nameKey: 'header.shop', href: '/shop' },
+  { nameKey: 'header.about', href: '/about' },
+  { nameKey: 'header.editorial', href: '/editorial' },
+  { nameKey: 'header.contact', href: '/contact' },
 ];
 
 export function Header() {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -74,7 +78,7 @@ export function Header() {
             <nav className="hidden md:flex items-center gap-12">
               {navLinks.map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.href}
                   to={link.href}
                   className="relative group"
                 >
@@ -85,7 +89,7 @@ export function Header() {
                         : 'text-white/70 hover:text-white'
                     }`}
                   >
-                    {link.name}
+                    {t(link.nameKey)}
                   </span>
                   <span
                     className={`absolute -bottom-2 left-0 h-px bg-blood transition-all duration-300 ${
@@ -97,7 +101,8 @@ export function Header() {
             </nav>
 
             {/* Right Icons */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="p-2 text-white/70 hover:text-white transition-colors duration-300 hidden md:block"
@@ -145,12 +150,12 @@ export function Header() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-noir md:hidden"
+            className="fixed inset-0 z-40 bg-noir md:hidden pb-[env(safe-area-inset-bottom)]"
           >
-            <div className="flex flex-col items-center justify-center h-full gap-8">
+            <div className="flex flex-col items-center justify-center h-full gap-8 px-4">
               {navLinks.map((link, index) => (
                 <motion.div
-                  key={link.name}
+                  key={link.href}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
@@ -161,7 +166,7 @@ export function Header() {
                       location.pathname === link.href ? 'text-blood' : 'text-white'
                     }`}
                   >
-                    {link.name}
+                    {t(link.nameKey)}
                   </Link>
                 </motion.div>
               ))}
@@ -169,14 +174,17 @@ export function Header() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex gap-6 mt-8"
+                className="flex flex-col items-center gap-4 mt-8"
               >
-                <button onClick={() => setIsSearchOpen(true)} className="p-3 text-white/70">
-                  <Search size={24} />
-                </button>
-                <Link to="/contact" className="p-3 text-white/70">
-                  <User size={24} />
-                </Link>
+                <LanguageSwitcher />
+                <div className="flex gap-6">
+                  <button onClick={() => setIsSearchOpen(true)} className="p-3 text-white/70">
+                    <Search size={24} />
+                  </button>
+                  <Link to="/contact" className="p-3 text-white/70">
+                    <User size={24} />
+                  </Link>
+                </div>
               </motion.div>
             </div>
           </motion.div>
@@ -190,7 +198,7 @@ export function Header() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-noir/95 backdrop-blur-xl flex items-start justify-center pt-32"
+            className="fixed inset-0 z-[60] bg-noir/95 backdrop-blur-xl flex items-start justify-center             pt-32 safe-area-top"
             onClick={() => setIsSearchOpen(false)}
           >
             <motion.div
@@ -207,14 +215,14 @@ export function Header() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search products..."
+                    placeholder={t('header.searchProducts')}
                     autoFocus
                     className="w-full px-6 py-5 pl-14 bg-ash border border-white/10 text-white text-lg placeholder:text-white/30 focus:outline-none focus:border-blood/50 transition-colors duration-300 font-body"
                   />
                 </div>
               </form>
               <div className="mt-4 text-white/40 text-sm font-body text-center">
-                Press Enter to search
+                {t('header.pressEnter')}
               </div>
             </motion.div>
           </motion.div>

@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { products, heroImage, editorialImage } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 
 export function HomePage() {
+  const { t } = useTranslation();
   const featuredProducts = products.filter((p) => p.isFeatured);
   const bestsellers = products.filter((p) => p.isBestseller);
 
@@ -32,16 +34,15 @@ export function HomePage() {
             className="max-w-2xl"
           >
             <p className="font-heading text-sm tracking-[0.4em] text-blood mb-4">
-              DARK LUXURY STREETWEAR
+              {t('home.heroTagline')}
             </p>
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-light text-white leading-tight mb-6">
-              Embrace the
+{t('home.heroTitle1')}
               <br />
-              <span className="text-blood">Shadows</span>
+              <span className="text-blood">{t('home.heroTitle2')}</span>
             </h1>
             <p className="text-lg text-white/70 leading-relaxed mb-10 max-w-lg">
-              Premium streetwear for those who walk their own path. Crafted with intention,
-              designed for the unconventional.
+              {t('home.heroDesc')}
             </p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -50,11 +51,11 @@ export function HomePage() {
               className="flex flex-wrap gap-4"
             >
               <Link to="/shop" className="btn-primary flex items-center gap-3">
-                SHOP NOW
+                {t('home.shopNow')}
                 <ArrowRight size={18} />
               </Link>
               <Link to="/about" className="btn-secondary">
-                OUR STORY
+{t('home.ourStory')}
               </Link>
             </motion.div>
           </motion.div>
@@ -67,7 +68,7 @@ export function HomePage() {
           transition={{ delay: 1.5 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <span className="text-white/40 text-xs tracking-[0.2em] font-body">SCROLL</span>
+          <span className="text-white/40 text-xs tracking-[0.2em] font-body">{t('home.scroll')}</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
@@ -95,16 +96,16 @@ export function HomePage() {
             className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-12"
           >
             <div>
-              <p className="section-subtitle mb-3">SELECTED FOR YOU</p>
+              <p className="section-subtitle mb-3">{t('home.selectedForYou')}</p>
               <h2 className="section-title">
-                Featured <span className="text-blood">.</span>
+                {t('home.featured')} <span className="text-blood">.</span>
               </h2>
             </div>
             <Link
               to="/shop"
               className="group flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300"
             >
-              <span className="font-body text-sm tracking-wider">VIEW ALL</span>
+              <span className="font-body text-sm tracking-wider">{t('common.viewAll')}</span>
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </motion.div>
@@ -146,29 +147,23 @@ export function HomePage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="lg:pl-8"
           >
-            <p className="section-subtitle mb-3">OUR PHILOSOPHY</p>
+            <p className="section-subtitle mb-3">{t('home.ourPhilosophy')}</p>
             <h2 className="section-title mb-8">
-              Born from <br />Darkness
+              {t('home.bornFrom')} <br />{t('home.darkness')}
             </h2>
             <div className="space-y-6 text-white/70 font-body leading-relaxed">
               <p>
-                BUKSY exists at the intersection of luxury and rebellion. We believe that
-                true style doesn't demand attention—it commands it through subtlety,
-                quality, and intention.
+                {t('home.philosophy1')}
               </p>
               <p>
-                Every piece is crafted with obsessive attention to detail, using only the
-                finest materials: heavyweight Japanese cotton, Italian leather, and
-                Swiss hardware. Our designs are minimal yet memorable, timeless yet
-                distinctly modern.
+                {t('home.philosophy2')}
               </p>
               <p>
-                We create for those who reject the ordinary, who find beauty in shadows,
-                and who understand that luxury is not about logos—it's about excellence.
+                {t('home.philosophy3')}
               </p>
             </div>
             <Link to="/about" className="btn-primary inline-flex items-center gap-3 mt-10">
-              EXPLORE OUR STORY
+              {t('home.exploreStory')}
               <ArrowRight size={18} />
             </Link>
           </motion.div>
@@ -187,9 +182,9 @@ export function HomePage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <p className="section-subtitle mb-3">MOST WANTED</p>
+            <p className="section-subtitle mb-3">{t('home.mostWanted')}</p>
             <h2 className="section-title">
-              Bestsellers <span className="text-blood">.</span>
+              {t('home.bestsellers')} <span className="text-blood">.</span>
             </h2>
           </motion.div>
 
@@ -210,20 +205,20 @@ export function HomePage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <p className="section-subtitle mb-3">SHOP BY CATEGORY</p>
+            <p className="section-subtitle mb-3">{t('home.shopByCategory')}</p>
             <h2 className="section-title">
-              Collections <span className="text-blood">.</span>
+              {t('home.collections')} <span className="text-blood">.</span>
             </h2>
           </motion.div>
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { name: 'Hoodies', slug: 'hoodies', image: products.find(p => p.category === 'hoodies')?.images[0] },
-              { name: 'T-Shirts', slug: 't-shirts', image: products.find(p => p.category === 't-shirts')?.images[0] },
-              { name: 'Jackets', slug: 'jackets', image: products.find(p => p.category === 'jackets')?.images[0] },
-              { name: 'Pants', slug: 'pants', image: products.find(p => p.category === 'pants')?.images[0] },
-              { name: 'Accessories', slug: 'accessories', image: products.find(p => p.category === 'accessories')?.images[0] },
-              { name: 'Footwear', slug: 'footwear', image: products.find(p => p.category === 'footwear')?.images[0] },
+              { nameKey: 'shop.categoryHoodies', slug: 'hoodies', image: products.find(p => p.category === 'hoodies')?.images[0] },
+              { nameKey: 'shop.categoryTShirts', slug: 't-shirts', image: products.find(p => p.category === 't-shirts')?.images[0] },
+              { nameKey: 'shop.categoryJackets', slug: 'jackets', image: products.find(p => p.category === 'jackets')?.images[0] },
+              { nameKey: 'shop.categoryPants', slug: 'pants', image: products.find(p => p.category === 'pants')?.images[0] },
+              { nameKey: 'shop.categoryAccessories', slug: 'accessories', image: products.find(p => p.category === 'accessories')?.images[0] },
+              { nameKey: 'shop.categoryFootwear', slug: 'footwear', image: products.find(p => p.category === 'footwear')?.images[0] },
             ].map((category, index) => (
               <motion.div
                 key={category.slug}
@@ -238,14 +233,14 @@ export function HomePage() {
                 >
                   <img
                     src={category.image}
-                    alt={category.name}
+                    alt={t(category.nameKey)}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-noir via-noir/40 to-transparent" />
                   <div className="absolute inset-0 bg-blood/0 group-hover:bg-blood/10 transition-colors duration-500" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <h3 className="font-heading text-lg tracking-[0.2em] text-white group-hover:text-blood transition-colors duration-300">
-                      {category.name.toUpperCase()}
+                      {t(category.nameKey).toUpperCase()}
                     </h3>
                   </div>
                 </Link>

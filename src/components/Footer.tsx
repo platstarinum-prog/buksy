@@ -1,27 +1,29 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Twitter, Youtube, Send } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'Shop', href: '/shop' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' },
+  { nameKey: 'footer.home', href: '/' },
+  { nameKey: 'footer.shop', href: '/shop' },
+  { nameKey: 'footer.about', href: '/about' },
+  { nameKey: 'footer.contact', href: '/contact' },
 ];
 
 const supportLinks = [
-  { name: 'Shipping & Returns', href: '/shipping' },
-  { name: 'Size Guide', href: '/size-guide' },
-  { name: 'FAQ', href: '/faq' },
-  { name: 'Track Order', href: '/track' },
+  { nameKey: 'footer.shippingReturns', href: '/shipping' },
+  { nameKey: 'footer.sizeGuide', href: '/size-guide' },
+  { nameKey: 'footer.faq', href: '/faq' },
+  { nameKey: 'footer.trackOrder', href: '/track' },
 ];
 
 const legalLinks = [
-  { name: 'Privacy Policy', href: '/privacy' },
-  { name: 'Terms of Service', href: '/terms' },
-  { name: 'Cookie Policy', href: '/cookies' },
+  { nameKey: 'footer.privacyPolicy', href: '/privacy' },
+  { nameKey: 'footer.termsOfService', href: '/terms' },
+  { nameKey: 'footer.cookiePolicy', href: '/cookies' },
 ];
 
 export function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="bg-ash border-t border-white/5">
       {/* Newsletter Section */}
@@ -33,7 +35,7 @@ export function Footer() {
               <div className="flex items-center gap-4">
                 <a href="https://t.me/+OQrO3Aya1NQ4YmZi" target="_blank" rel="noopener noreferrer" className="inline-block">
                   <h3 className="font-heading text-2xl tracking-wider hover:text-blood transition-colors duration-300">
-                    JOIN THE DARK SIDE
+                    {t('footer.joinDarkSide')}
                   </h3>
                 </a>
                 <a
@@ -43,11 +45,11 @@ export function Footer() {
                   className="btn-primary inline-flex items-center gap-2"
                 >
                   <Send size={20} />
-                  TG
+                  {t('footer.tg')}
                 </a>
               </div>
               <p className="text-white/60 font-body">
-                Join our Telegram for exclusive drops, early access, and community.
+                {t('footer.joinTelegram')}
               </p>
             </div>
           </div>
@@ -66,8 +68,7 @@ export function Footer() {
               <span className="font-heading text-xl tracking-[0.2em]">BUKSY</span>
             </Link>
             <p className="text-white/60 font-body text-sm leading-relaxed mb-6">
-              Premium dark streetwear for those who embrace the shadows.
-              Crafted with intention, designed for the unconventional.
+              {t('footer.premiumStreetwear')}
             </p>
             <div className="flex gap-4">
               <a
@@ -104,16 +105,16 @@ export function Footer() {
           {/* Navigation */}
           <div>
             <h4 className="font-heading text-sm tracking-[0.3em] mb-6 text-white/40">
-              NAVIGATION
+              {t('footer.navigation')}
             </h4>
             <ul className="space-y-3">
               {navLinks.map((link) => (
-                <li key={link.name}>
+                <li key={t(link.nameKey)}>
                   <Link
                     to={link.href}
                     className="text-white/70 hover:text-blood transition-colors duration-300 font-body"
                   >
-                    {link.name}
+                    {t(link.nameKey)}
                   </Link>
                 </li>
               ))}
@@ -123,16 +124,16 @@ export function Footer() {
           {/* Support */}
           <div>
             <h4 className="font-heading text-sm tracking-[0.3em] mb-6 text-white/40">
-              SUPPORT
+{t('footer.support')}
             </h4>
             <ul className="space-y-3">
               {supportLinks.map((link) => (
-                <li key={link.name}>
+                <li key={t(link.nameKey)}>
                   <Link
                     to={link.href}
                     className="text-white/70 hover:text-blood transition-colors duration-300 font-body"
                   >
-                    {link.name}
+                    {t(link.nameKey)}
                   </Link>
                 </li>
               ))}
@@ -142,16 +143,16 @@ export function Footer() {
           {/* Legal */}
           <div>
             <h4 className="font-heading text-sm tracking-[0.3em] mb-6 text-white/40">
-              LEGAL
+{t('footer.legal')}
             </h4>
             <ul className="space-y-3">
               {legalLinks.map((link) => (
-                <li key={link.name}>
+                <li key={t(link.nameKey)}>
                   <Link
                     to={link.href}
                     className="text-white/70 hover:text-blood transition-colors duration-300 font-body"
                   >
-                    {link.name}
+                    {t(link.nameKey)}
                   </Link>
                 </li>
               ))}
@@ -164,9 +165,9 @@ export function Footer() {
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/40 font-body">
-            <p>&copy; {new Date().getFullYear()} BUKSY. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} BUKSY. {t('footer.allRightsReserved')}</p>
             <p className="flex items-center gap-2">
-              Designed for the <span className="text-blood">dark</span>
+              {t('footer.designedFor')} <span className="text-blood">{t('footer.dark')}</span>
             </p>
           </div>
         </div>

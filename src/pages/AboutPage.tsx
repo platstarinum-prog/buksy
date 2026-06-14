@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const editorialImages = [
   'https://images.pexels.com/photos/2062587/pexels-photo-2062587.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -8,35 +9,24 @@ const editorialImages = [
   'https://images.pexels.com/photos/1126964/pexels-photo-1126964.jpeg?auto=compress&cs=tinysrgb&w=800',
 ];
 
-const values = [
-  {
-    title: 'Intentionality',
-    description: 'Every seam, every stitch, every detail serves a purpose. We reject excess in favor of meaningful design.',
-  },
-  {
-    title: 'Quality Obsession',
-    description: 'Japanese cotton, Italian leather, Swiss hardware. We source only the finest materials from the world\'s best mills.',
-  },
-  {
-    title: 'Timeless Rebellion',
-    description: 'We create pieces that outlast trends. Our designs are modern yet destined to become future classics.',
-  },
-  {
-    title: 'Sustainable Future',
-    description: 'Slow fashion is the only fashion. We produce in limited quantities to ensure no waste.',
-  },
+const valueKeys = [
+  { titleKey: 'about.valueIntentionality', descKey: 'about.valueIntentionalityDesc' },
+  { titleKey: 'about.valueQuality', descKey: 'about.valueQualityDesc' },
+  { titleKey: 'about.valueRebellion', descKey: 'about.valueRebellionDesc' },
+  { titleKey: 'about.valueSustainable', descKey: 'about.valueSustainableDesc' },
 ];
 
-const timeline = [
-  { year: '2019', event: 'Founded in Berlin' },
-  { year: '2020', event: 'First collection launches' },
-  { year: '2021', event: 'International expansion' },
-  { year: '2022', event: '100K+ community members' },
-  { year: '2023', event: 'BUKSY Studio opens' },
-  { year: '2024', event: 'New chapter begins' },
+const timelineEvents = [
+  { year: '2019', eventKey: 'about.event2019' },
+  { year: '2020', eventKey: 'about.event2020' },
+  { year: '2021', eventKey: 'about.event2021' },
+  { year: '2022', eventKey: 'about.event2022' },
+  { year: '2023', eventKey: 'about.event2023' },
+  { year: '2024', eventKey: 'about.event2024' },
 ];
 
 export function AboutPage() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-noir pt-24">
       {/* Hero */}
@@ -56,10 +46,10 @@ export function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <p className="section-subtitle mb-4">OUR STORY</p>
+            <p className="section-subtitle mb-4">{t('about.ourStory')}</p>
             <h1 className="section-title max-w-2xl">
-              Born from Darkness, <br />
-              <span className="text-blood">Crafted with Purpose</span>
+              {t('about.heroTitle1')} <br />
+              <span className="text-blood">{t('about.heroTitle2')}</span>
             </h1>
           </motion.div>
         </div>
@@ -80,12 +70,10 @@ export function AboutPage() {
               </p>
               <blockquote className="relative">
                 <p className="font-display text-2xl md:text-3xl font-light text-white leading-relaxed mb-6">
-                  BUKSY exists at the intersection of luxury and rebellion.
-                  We believe that true style doesn't demand attention—it commands
-                  it through subtlety, quality, and intention.
+                  {t('about.philosophyQuote')}
                 </p>
                 <footer className="text-white/60 font-body">
-                  <span className="text-blood">—</span> The Founders
+                  <span className="text-blood">—</span> {t('about.theFounders')}
                 </footer>
               </blockquote>
             </motion.div>
@@ -118,16 +106,16 @@ export function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="section-subtitle mb-3">WHAT WE STAND FOR</p>
+            <p className="section-subtitle mb-3">{t('about.whatWeStandFor')}</p>
             <h2 className="section-title">
-              Our Values <span className="text-blood">.</span>
+              {t('about.ourValues')} <span className="text-blood">.</span>
             </h2>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
+            {valueKeys.map((v, index) => (
               <motion.div
-                key={value.title}
+                key={v.titleKey}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -136,10 +124,10 @@ export function AboutPage() {
               >
                 <span className="font-mono text-blood text-sm mb-4 block">0{index + 1}</span>
                 <h3 className="font-heading text-lg tracking-wider mb-3 group-hover:text-blood transition-colors duration-300">
-                  {value.title}
+                  {t(v.titleKey)}
                 </h3>
                 <p className="text-white/60 font-body text-sm leading-relaxed">
-                  {value.description}
+                  {t(v.descKey)}
                 </p>
               </motion.div>
             ))}
@@ -173,17 +161,13 @@ export function AboutPage() {
               className="flex flex-col justify-center space-y-6"
             >
               <h3 className="font-heading text-2xl tracking-wider">
-                The BUKSY Atelier
+                {t('about.theAtelier')}
               </h3>
               <p className="text-white/70 font-body leading-relaxed">
-                Located in the heart of Berlin's creative district, our atelier
-                serves as both design studio and community space. Here, traditional
-                craftsmanship meets contemporary design philosophy.
+                {t('about.atelierDesc1')}
               </p>
               <p className="text-white/70 font-body leading-relaxed">
-                Every piece begins its journey in this space, where our team of
-                designers, pattern makers, and artisans collaborate to bring our
-                vision to life.
+                {t('about.atelierDesc2')}
               </p>
             </motion.div>
           </div>
@@ -199,9 +183,9 @@ export function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <p className="section-subtitle mb-3">OUR JOURNEY</p>
+            <p className="section-subtitle mb-3">{t('about.ourJourney')}</p>
             <h2 className="section-title">
-              Milestones <span className="text-blood">.</span>
+              {t('about.milestones')} <span className="text-blood">.</span>
             </h2>
           </motion.div>
 
@@ -210,7 +194,7 @@ export function AboutPage() {
             <div className="absolute left-1/2 top-0 bottom-0 w-px bg-blood/20 hidden md:block" />
 
             <div className="space-y-12">
-              {timeline.map((item, index) => (
+              {timelineEvents.map((item, index) => (
                 <motion.div
                   key={item.year}
                   initial={{ opacity: 0, y: 20 }}
@@ -223,7 +207,7 @@ export function AboutPage() {
                     {index % 2 === 0 ? (
                       <>
                         <span className="font-mono text-blood text-3xl">{item.year}</span>
-                        <h4 className="font-heading text-lg mt-2">{item.event}</h4>
+                        <h4 className="font-heading text-lg mt-2">{t(item.eventKey)}</h4>
                       </>
                     ) : (
                       <div className="hidden md:block" />
@@ -234,7 +218,7 @@ export function AboutPage() {
                     {index % 2 === 1 ? (
                       <>
                         <span className="font-mono text-blood text-3xl">{item.year}</span>
-                        <h4 className="font-heading text-lg mt-2">{item.event}</h4>
+                        <h4 className="font-heading text-lg mt-2">{t(item.eventKey)}</h4>
                       </>
                     ) : (
                       <div className="hidden md:block" />
@@ -243,7 +227,7 @@ export function AboutPage() {
                   {/* Mobile view */}
                   <div className="flex items-center gap-4 md:hidden">
                     <span className="font-mono text-blood text-2xl">{item.year}</span>
-                    <h4 className="font-heading text-base">{item.event}</h4>
+                    <h4 className="font-heading text-base">{t(item.eventKey)}</h4>
                   </div>
                 </motion.div>
               ))}
@@ -261,15 +245,13 @@ export function AboutPage() {
             viewport={{ once: true }}
           >
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-light mb-6">
-              Join the <span className="text-blood">Movement</span>
+              {t('about.joinMovement')} <span className="text-blood">{t('about.movement')}</span>
             </h2>
             <p className="text-white/60 font-body max-w-xl mx-auto mb-10">
-              Become part of a community that values authenticity, quality, and
-              individuality. Subscribe for early access, exclusive drops, and 10%
-              off your first order.
+              {t('about.joinDesc')}
             </p>
             <Link to="/shop" className="btn-primary inline-flex items-center gap-3">
-              EXPLORE THE COLLECTION
+              {t('about.exploreCollection')}
               <ArrowRight size={18} />
             </Link>
           </motion.div>

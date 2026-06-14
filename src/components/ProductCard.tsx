@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, ShoppingBag, Heart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Product } from '../types';
 import { useCart } from '../store/CartContext';
 
@@ -11,6 +12,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
+  const { t } = useTranslation();
   const { addItem } = useCart();
   const navigate = useNavigate();
   const firstAvailableSize = product.sizes.find((s) => s.available)?.name || 'M';
@@ -60,7 +62,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {product.isNew && (
               <span className="px-2 py-1 bg-blood text-white text-xs font-heading tracking-wider">
-                NEW
+{t('common.new')}
               </span>
             )}
             {product.isBestseller && (
@@ -70,7 +72,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             )}
             {product.originalPrice && (
               <span className="px-2 py-1 bg-blood/80 text-white text-xs font-heading tracking-wider">
-                SALE
+{t('common.sale')}
               </span>
             )}
           </div>

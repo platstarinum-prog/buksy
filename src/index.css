@@ -5,30 +5,41 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     @apply bg-noir text-white font-body;
     font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
   }
 
   ::selection {
     @apply bg-blood/30 text-white;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
+  /* Better tap targets on mobile */
+  button, a, input, select, textarea, label {
+    @apply cursor-pointer;
   }
 
+  /* Prevent text size adjustment on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
   ::-webkit-scrollbar-track {
     @apply bg-noir;
   }
-
   ::-webkit-scrollbar-thumb {
     @apply bg-blood/50 rounded-full;
   }
-
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-blood/70;
   }
@@ -60,7 +71,7 @@
   }
 
   .section-subtitle {
-    @apply font-heading text-lg tracking-[0.3em] uppercase text-white/60;
+    @apply font-heading text-base sm:text-lg tracking-[0.3em] uppercase text-white/60;
   }
 
   .glass-effect {
@@ -126,6 +137,29 @@
 
 .blood-pulse {
   animation: blood-pulse 2s infinite;
+}
+
+/* Mobile safe area support */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Improved mobile touch targets */
+@media (max-width: 640px) {
+  .btn-primary, .btn-secondary {
+    min-height: 48px;
+  }
+  button, a, select, input, textarea {
+    font-size: 16px;
+  }
+  input, select, textarea {
+    min-height: 48px;
+  }
 }
 
 /* Checkout input styles */

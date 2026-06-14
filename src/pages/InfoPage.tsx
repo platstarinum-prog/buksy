@@ -1,39 +1,20 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const pages: Record<string, { title: string; content: string }> = {
-  faq: {
-    title: 'FAQ',
-    content: 'Find answers to common questions about shipping, returns, sizing, and more. If you need further assistance, feel free to contact our support team.',
-  },
-  shipping: {
-    title: 'Shipping & Returns',
-    content: 'We offer free worldwide shipping on orders over $150. Standard shipping takes 5-7 business days. Express shipping (2-3 days) is available for an additional fee. Returns are accepted within 30 days of delivery for unworn items in original packaging.',
-  },
-  'size-guide': {
-    title: 'Size Guide',
-    content: '',
-  },
-  track: {
-    title: 'Track Order',
-    content: 'Once your order ships, you will receive an email with tracking information. You can also track your order through your account dashboard or contact our support team for assistance.',
-  },
-  privacy: {
-    title: 'Privacy Policy',
-    content: 'We respect your privacy and are committed to protecting your personal data. This policy outlines how we collect, use, and safeguard your information when you use our website and services.',
-  },
-  terms: {
-    title: 'Terms of Service',
-    content: 'By using our website and purchasing our products, you agree to these terms. Please read them carefully. We reserve the right to update these terms at any time.',
-  },
-  cookies: {
-    title: 'Cookie Policy',
-    content: 'We use cookies to enhance your browsing experience, analyze site traffic, and provide personalized content. By continuing to use our site, you consent to our use of cookies.',
-  },
+const pages: Record<string, { titleKey: string; contentKey: string }> = {
+  faq: { titleKey: 'info.faqTitle', contentKey: 'info.faqContent' },
+  shipping: { titleKey: 'info.shippingTitle', contentKey: 'info.shippingContent' },
+  'size-guide': { titleKey: 'info.sizeGuideTitle', contentKey: '' },
+  track: { titleKey: 'info.trackTitle', contentKey: 'info.trackContent' },
+  privacy: { titleKey: 'info.privacyTitle', contentKey: 'info.privacyContent' },
+  terms: { titleKey: 'info.termsTitle', contentKey: 'info.termsContent' },
+  cookies: { titleKey: 'info.cookiesTitle', contentKey: 'info.cookiesContent' },
 };
 
 function SizeGuide() {
+  const { t } = useTranslation();
   const tops = [
     { size: 'XS', chest: '34-36', waist: '28-30', length: '26' },
     { size: 'S', chest: '36-38', waist: '30-32', length: '27' },
@@ -63,21 +44,20 @@ function SizeGuide() {
   return (
     <div className="space-y-12">
       <p className="text-white/70 font-body leading-relaxed text-lg">
-        Find your perfect fit. Measurements are in inches. If you're between sizes,
-        we recommend sizing up for a relaxed fit or down for a more fitted look.
+        {t('info.findYourFit')}
       </p>
 
       {/* Tops */}
       <div>
-        <h2 className="font-heading text-xl tracking-wider text-blood mb-4">Tops — Hoodies, T-Shirts, Jackets</h2>
+        <h2 className="font-heading text-xl tracking-wider text-blood mb-4">{t('info.tops')}</h2>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse font-body text-sm">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Size</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Chest (in)</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Waist (in)</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Length (in)</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.size')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.chest')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.waist')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.length')}</th>
               </tr>
             </thead>
             <tbody>
@@ -96,15 +76,15 @@ function SizeGuide() {
 
       {/* Bottoms */}
       <div>
-        <h2 className="font-heading text-xl tracking-wider text-blood mb-4">Bottoms — Pants</h2>
+        <h2 className="font-heading text-xl tracking-wider text-blood mb-4">{t('info.bottoms')}</h2>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse font-body text-sm">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Size</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Waist (in)</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Hip (in)</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Inseam (in)</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.size')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.waist')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.hip')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.inseam')}</th>
               </tr>
             </thead>
             <tbody>
@@ -123,15 +103,15 @@ function SizeGuide() {
 
       {/* Footwear */}
       <div>
-        <h2 className="font-heading text-xl tracking-wider text-blood mb-4">Footwear</h2>
+        <h2 className="font-heading text-xl tracking-wider text-blood mb-4">{t('info.footwear')}</h2>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse font-body text-sm">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">EU</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">US</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">UK</th>
-                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">Foot (cm)</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.eu')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.us')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.uk')}</th>
+                <th className="py-3 px-4 text-left text-white/40 tracking-wider uppercase">{t('info.footCm')}</th>
               </tr>
             </thead>
             <tbody>
@@ -150,19 +130,19 @@ function SizeGuide() {
 
       {/* Measuring Instructions */}
       <div className="p-6 border border-white/10 bg-ash">
-        <h3 className="font-heading text-lg tracking-wider text-blood mb-3">How to Measure</h3>
+        <h3 className="font-heading text-lg tracking-wider text-blood mb-3">{t('info.howToMeasure')}</h3>
         <ul className="space-y-2 text-white/70 font-body text-sm">
-          <li><strong className="text-white">Chest:</strong> Measure around the fullest part of your chest, keeping the tape horizontal.</li>
-          <li><strong className="text-white">Waist:</strong> Measure around your natural waistline, just above the belly button.</li>
-          <li><strong className="text-white">Hip:</strong> Measure around the fullest part of your hips, about 8 inches below your waist.</li>
-          <li><strong className="text-white">Inseam:</strong> Measure from the top of your inner thigh down to your ankle bone.</li>
-          <li><strong className="text-white">Foot:</strong> Stand on a piece of paper, trace your foot, and measure from heel to longest toe.</li>
+          <li><strong className="text-white">{t('info.chest')}:</strong> {t('info.measureChest')}</li>
+          <li><strong className="text-white">{t('info.waist')}:</strong> {t('info.measureWaist')}</li>
+          <li><strong className="text-white">{t('info.hip')}:</strong> {t('info.measureHip')}</li>
+          <li><strong className="text-white">{t('info.inseam')}:</strong> {t('info.measureInseam')}</li>
+          <li><strong className="text-white">{t('info.footCm')}:</strong> {t('info.measureFoot')}</li>
         </ul>
       </div>
 
       <div>
         <Link to="/contact" className="btn-primary inline-flex items-center gap-3">
-          Contact Support
+          {t('info.contactSupport')}
         </Link>
       </div>
     </div>
@@ -170,6 +150,7 @@ function SizeGuide() {
 }
 
 export function InfoPage() {
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const page = slug ? pages[slug] : undefined;
 
@@ -182,14 +163,14 @@ export function InfoPage() {
             className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300 mb-8 font-body text-sm"
           >
             <ArrowLeft size={18} />
-            Back to Home
+            {t('common.backToHome')}
           </Link>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="font-display text-4xl md:text-5xl font-light mb-2">Size Guide</h1>
+            <h1 className="font-display text-4xl md:text-5xl font-light mb-2">{t('info.sizeGuideTitle')}</h1>
             <div className="h-px bg-blood/30 mb-8" />
             <SizeGuide />
           </motion.div>
@@ -202,9 +183,9 @@ export function InfoPage() {
     return (
       <div className="min-h-screen bg-noir pt-24 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="font-display text-4xl font-light mb-4">Page Not Found</h1>
-          <p className="text-white/60 font-body mb-6">"{slug}" — this page doesn't exist.</p>
-          <Link to="/" className="text-blood hover:underline">Return Home</Link>
+          <h1 className="font-display text-4xl font-light mb-4">{t('common.pageNotFound')}</h1>
+          <p className="text-white/60 font-body mb-6">{`"${slug}" — this page doesn't exist.`}</p>
+          <Link to="/" className="text-blood hover:underline">{t('common.backToHome')}</Link>
         </div>
       </div>
     );
@@ -218,21 +199,21 @@ export function InfoPage() {
           className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300 mb-8 font-body text-sm"
         >
           <ArrowLeft size={18} />
-          Back to Home
+          {t('common.backToHome')}
         </Link>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="font-display text-4xl md:text-5xl font-light mb-6">{page.title}</h1>
+          <h1 className="font-display text-4xl md:text-5xl font-light mb-6">{t(page.titleKey)}</h1>
           <div className="h-px bg-blood/30 mb-8" />
           <p className="text-white/70 font-body leading-relaxed text-lg">
-            {page.content}
+            {t(page.contentKey)}
           </p>
           <div className="mt-12">
             <Link to="/contact" className="btn-primary inline-flex items-center gap-3">
-              Contact Support
+              {t('info.contactSupport')}
             </Link>
           </div>
         </motion.div>

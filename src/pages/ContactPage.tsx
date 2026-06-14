@@ -1,35 +1,19 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Phone, Send, Instagram, Twitter, Youtube } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const faqItems = [
-  {
-    question: 'What is your shipping policy?',
-    answer: 'We offer free worldwide shipping on orders over $150. Standard shipping takes 5-7 business days, while express shipping (2-3 days) is available for an additional fee. All orders are shipped from our Berlin atelier with full tracking.',
-  },
-  {
-    question: 'How do returns work?',
-    answer: 'We offer a 30-day return policy for unworn items in original packaging. Simply initiate a return through your account, print the prepaid label, and drop it off at any shipping point. Refunds are processed within 5-7 business days of receipt.',
-  },
-  {
-    question: 'Are your products true to size?',
-    answer: 'Our pieces are designed with a modern, relaxed fit. We recommend sizing true for a relaxed silhouette, or sizing down for a more fitted look. Check our detailed size guide on each product page for specific measurements.',
-  },
-  {
-    question: 'How should I care for my BUKSY pieces?',
-    answer: 'Each piece comes with specific care instructions on the label. Generally, we recommend washing inside out in cold water and hanging to dry. For leather items, use a leather conditioner quarterly and avoid direct sunlight.',
-  },
-  {
-    question: 'Do you ship internationally?',
-    answer: 'Yes, we ship worldwide. International orders typically arrive within 7-14 business days depending on location. Import duties and taxes may apply and are the responsibility of the customer.',
-  },
-  {
-    question: 'How can I track my order?',
-    answer: 'Once your order ships, you\'ll receive an email with tracking information. You can also track your order through your account dashboard on our website.',
-  },
+const faqItemKeys = [
+  { qKey: 'faq.q1', aKey: 'faq.a1' },
+  { qKey: 'faq.q2', aKey: 'faq.a2' },
+  { qKey: 'faq.q3', aKey: 'faq.a3' },
+  { qKey: 'faq.q4', aKey: 'faq.a4' },
+  { qKey: 'faq.q5', aKey: 'faq.a5' },
+  { qKey: 'faq.q6', aKey: 'faq.a6' },
 ];
 
 export function ContactPage() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -68,9 +52,9 @@ export function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <p className="section-subtitle mb-3">GET IN TOUCH</p>
+            <p className="section-subtitle mb-3">{t('contact.getInTouch')}</p>
             <h1 className="section-title">
-              Contact Us <span className="text-blood">.</span>
+              {t('contact.contactUs')} <span className="text-blood">.</span>
             </h1>
           </motion.div>
         </div>
@@ -87,7 +71,7 @@ export function ContactPage() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="font-heading text-2xl tracking-wider mb-8">
-                Send a Message
+                {t('contact.sendMessage')}
               </h2>
               {isSubmitted ? (
                 <motion.div
@@ -98,9 +82,9 @@ export function ContactPage() {
                   <div className="w-16 h-16 border border-blood rounded-full flex items-center justify-center mb-6 mx-auto">
                     <Send className="w-8 h-8 text-blood" />
                   </div>
-                  <h3 className="font-heading text-xl text-center mb-2">Message Sent</h3>
+                  <h3 className="font-heading text-xl text-center mb-2">{t('contact.messageSent')}</h3>
                   <p className="text-white/60 text-center font-body">
-                    We'll get back to you within 24-48 hours.
+                    {t('contact.messageSentDesc')}
                   </p>
                 </motion.div>
               ) : (
@@ -108,7 +92,7 @@ export function ContactPage() {
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
                       <label className="block font-body text-sm text-white/60 mb-2">
-                        NAME
+                        {t('contact.name')}
                       </label>
                       <input
                         type="text"
@@ -116,12 +100,12 @@ export function ContactPage() {
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
                         className="w-full px-4 py-3 bg-ash border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-blood/50 transition-colors duration-300"
-                        placeholder="Your name"
+                        placeholder={t('contact.yourName')}
                       />
                     </div>
                     <div>
                       <label className="block font-body text-sm text-white/60 mb-2">
-                        EMAIL
+                        {t('contact.email')}
                       </label>
                       <input
                         type="email"
@@ -129,13 +113,13 @@ export function ContactPage() {
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required
                         className="w-full px-4 py-3 bg-ash border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-blood/50 transition-colors duration-300"
-                        placeholder="your@email.com"
+                        placeholder={t('contact.yourEmail')}
                       />
                     </div>
                   </div>
                   <div>
                     <label className="block font-body text-sm text-white/60 mb-2">
-                      SUBJECT
+                      {t('contact.subject')}
                     </label>
                     <select
                       value={formData.subject}
@@ -143,17 +127,17 @@ export function ContactPage() {
                       required
                       className="w-full px-4 py-3 bg-ash border border-white/10 text-white focus:outline-none focus:border-blood/50 transition-colors duration-300 appearance-none"
                     >
-                      <option value="" className="bg-noir">Select a subject</option>
-                      <option value="order" className="bg-noir">Order Inquiry</option>
-                      <option value="product" className="bg-noir">Product Question</option>
-                      <option value="returns" className="bg-noir">Returns & Exchanges</option>
-                      <option value="wholesale" className="bg-noir">Wholesale Inquiry</option>
-                      <option value="other" className="bg-noir">Other</option>
+                      <option value="" className="bg-noir">{t('contact.selectSubject')}</option>
+                      <option value="order" className="bg-noir">{t('contact.orderInquiry')}</option>
+                      <option value="product" className="bg-noir">{t('contact.productQuestion')}</option>
+                      <option value="returns" className="bg-noir">{t('contact.returnsExchanges')}</option>
+                      <option value="wholesale" className="bg-noir">{t('contact.wholesaleInquiry')}</option>
+                      <option value="other" className="bg-noir">{t('contact.other')}</option>
                     </select>
                   </div>
                   <div>
                     <label className="block font-body text-sm text-white/60 mb-2">
-                      MESSAGE
+                      {t('contact.message')}
                     </label>
                     <textarea
                       value={formData.message}
@@ -161,7 +145,7 @@ export function ContactPage() {
                       required
                       rows={6}
                       className="w-full px-4 py-3 bg-ash border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-blood/50 transition-colors duration-300 resize-none"
-                      placeholder="How can we help?"
+                      placeholder={t('contact.howCanWeHelp')}
                     />
                   </div>
                   <motion.button
@@ -170,7 +154,7 @@ export function ContactPage() {
                     type="submit"
                     className="btn-primary w-full flex items-center justify-center gap-3"
                   >
-                    SEND MESSAGE
+                    {t('contact.sendMessageBtn')}
                     <Send size={18} />
                   </motion.button>
                 </form>
@@ -184,7 +168,7 @@ export function ContactPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <h2 className="font-heading text-2xl tracking-wider mb-8">
-                Connect With Us
+                {t('contact.connectWithUs')}
               </h2>
               <div className="space-y-8">
                 <div className="flex items-start gap-4">
@@ -192,7 +176,7 @@ export function ContactPage() {
                     <Mail className="w-5 h-5 text-blood" />
                   </div>
                   <div>
-                    <h3 className="font-heading text-sm tracking-wider mb-1">EMAIL</h3>
+                    <h3 className="font-heading text-sm tracking-wider mb-1">{t('contact.emailTitle')}</h3>
                     <a
                       href="mailto:info@buksy.studio"
                       className="text-white/70 font-body hover:text-blood transition-colors duration-300"
@@ -206,7 +190,7 @@ export function ContactPage() {
                     <Phone className="w-5 h-5 text-blood" />
                   </div>
                   <div>
-                    <h3 className="font-heading text-sm tracking-wider mb-1">PHONE</h3>
+                    <h3 className="font-heading text-sm tracking-wider mb-1">{t('contact.phoneTitle')}</h3>
                     <p className="text-white/70 font-body">+49 30 123 4567</p>
                   </div>
                 </div>
@@ -215,7 +199,7 @@ export function ContactPage() {
                     <MapPin className="w-5 h-5 text-blood" />
                   </div>
                   <div>
-                    <h3 className="font-heading text-sm tracking-wider mb-1">STUDIO</h3>
+                    <h3 className="font-heading text-sm tracking-wider mb-1">{t('contact.studioTitle')}</h3>
                     <p className="text-white/70 font-body">
                       BUKSY Atelier<br />
                       Kreuzbergstr. 42<br />
@@ -228,7 +212,7 @@ export function ContactPage() {
               {/* Social Links */}
               <div className="mt-12">
                 <h3 className="font-heading text-sm tracking-wider mb-4 text-white/40">
-                  FOLLOW US
+                  {t('contact.followUs')}
                 </h3>
                 <div className="flex gap-4">
                   <a
@@ -271,14 +255,14 @@ export function ContactPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <p className="section-subtitle mb-3">ANSWERS</p>
+            <p className="section-subtitle mb-3">{t('contact.answers')}</p>
             <h2 className="section-title">
-              FAQ <span className="text-blood">.</span>
+              {t('contact.faq')} <span className="text-blood">.</span>
             </h2>
           </motion.div>
 
           <div className="space-y-4">
-            {faqItems.map((item, index) => (
+            {faqItemKeys.map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -292,7 +276,7 @@ export function ContactPage() {
                   className="w-full flex items-center justify-between p-6 text-left hover:bg-white/[0.02] transition-colors duration-300"
                 >
                   <span className="font-heading text-sm tracking-wider pr-8">
-                    {item.question}
+                    {t(item.qKey)}
                   </span>
                   <motion.span
                     animate={{ rotate: expandedFaq === index ? 45 : 0 }}
@@ -312,7 +296,7 @@ export function ContactPage() {
                 >
                   <div className="px-6 pb-6 pt-0">
                     <p className="text-white/60 font-body text-sm leading-relaxed">
-                      {item.answer}
+                      {t(item.aKey)}
                     </p>
                   </div>
                 </motion.div>

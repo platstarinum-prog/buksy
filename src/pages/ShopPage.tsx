@@ -1,19 +1,31 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { SlidersHorizontal, X, ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { products, categories } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { useSearchParams } from 'react-router-dom';
 
 const sortOptions = [
-  { value: 'featured', label: 'Featured' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'price-asc', label: 'Price: Low to High' },
-  { value: 'price-desc', label: 'Price: High to Low' },
-  { value: 'rating', label: 'Highest Rated' },
+  { value: 'featured', labelKey: 'shop.sortFeatured' },
+  { value: 'newest', labelKey: 'shop.sortNewest' },
+  { value: 'price-asc', labelKey: 'shop.sortPriceLow' },
+  { value: 'price-desc', labelKey: 'shop.sortPriceHigh' },
+  { value: 'rating', labelKey: 'shop.sortRating' },
 ];
 
+const categoryKeys: Record<string, string> = {
+  all: 'shop.categoryAll',
+  hoodies: 'shop.categoryHoodies',
+  't-shirts': 'shop.categoryTShirts',
+  jackets: 'shop.categoryJackets',
+  pants: 'shop.categoryPants',
+  accessories: 'shop.categoryAccessories',
+  footwear: 'shop.categoryFootwear',
+};
+
 export function ShopPage() {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || 'all';
   const searchQuery = searchParams.get('q') || '';
@@ -83,9 +95,9 @@ export function ShopPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <p className="section-subtitle mb-3">THE COLLECTION</p>
+          <p className="section-subtitle mb-3">{t('shop.theCollection')}</p>
           <h1 className="section-title">
-            The Shop <span className="text-blood">.</span>
+            {t('shop.theShop')} <span className="text-blood">.</span>
           </h1>
         </motion.div>
 
@@ -108,7 +120,7 @@ export function ShopPage() {
                     : 'text-white/60 hover:text-white border-b-2 border-transparent'
                 }`}
               >
-                {category.name}
+                {t(categoryKeys[category.id])}
               </button>
             ))}
           </div>
@@ -119,7 +131,7 @@ export function ShopPage() {
             className="lg:hidden flex items-center gap-2 px-4 py-2 border border-white/10 text-white/70"
           >
             <SlidersHorizontal size={16} />
-            <span className="font-body text-sm">Filters</span>
+            <span className="font-body text-sm">{t('shop.filters')}</span>
             {selectedCategory !== 'all' && (
               <span className="w-2 h-2 bg-blood rounded-full" />
             )}
@@ -128,7 +140,7 @@ export function ShopPage() {
           {/* Sort & Count */}
           <div className="flex items-center gap-6">
             <span className="text-white/40 font-body text-sm hidden sm:block">
-              {productCount} {productCount === 1 ? 'product' : 'products'}
+              {productCount} {productCount === 1 ? t('shop.product') : t('shop.products')}
             </span>
             <div className="relative">
               <select
@@ -138,7 +150,7 @@ export function ShopPage() {
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value} className="bg-noir">
-                    {option.label}
+                    {t(option.labelKey)}
                   </option>
                 ))}
               </select>
@@ -154,10 +166,10 @@ export function ShopPage() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-3 py-4"
           >
-            <span className="text-white/40 font-body text-sm">Showing:</span>
+            <span className="text-white/40 font-body text-sm">{t('shop.showing')}</span>
             {selectedCategory !== 'all' && (
               <span className="inline-flex items-center gap-2 px-3 py-1 bg-blood/20 border border-blood/30 text-blood font-body text-sm">
-                {categories.find((c) => c.id === selectedCategory)?.name}
+                {t(categoryKeys[selectedCategory])}
                 <button
                   onClick={() => handleCategoryChange('all')}
                   className="hover:text-white transition-colors duration-200"
@@ -202,13 +214,13 @@ export function ShopPage() {
               <span className="text-3xl text-white/20">?</span>
             </div>
             <p className="text-white/60 font-body mb-4">
-              {searchQuery ? `No products found for "${searchQuery}"` : 'No products found in this category'}
+              {searchQuery ? `${t('shop.noSearchResults')} "${searchQuery}"` : t('shop.noProductsFound')}
             </p>
             <button
               onClick={() => handleCategoryChange('all')}
               className="text-blood hover:text-white transition-colors duration-300 font-body text-sm"
             >
-              View all products
+              {t('shop.viewAllProducts')}
             </button>
           </motion.div>
         )}
@@ -240,7 +252,7 @@ export function ShopPage() {
           className="absolute bottom-0 left-0 right-0 bg-ash rounded-t-3xl p-6"
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-heading text-lg tracking-wider">FILTER</h3>
+            <h3 className="font-heading text-lg tracking-wider">{t('shop.filters')}</h3>
             <button onClick={() => setIsFilterOpen(false)} className="p-2">
               <X size={24} className="text-white/60" />
             </button>
@@ -256,7 +268,7 @@ export function ShopPage() {
                     : 'border-white/10 text-white/70'
                 } transition-all duration-300`}
               >
-                <span className="font-body">{category.name}</span>
+                <span className="font-body">{t(categoryKeys[category.id])}</span>
                 <span className="font-mono text-sm">
                   {category.id === 'all'
                     ? products.length

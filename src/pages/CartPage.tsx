@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Minus, Plus, X, ShoppingBag, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../store/CartContext';
 
 export function CartPage() {
+  const { t } = useTranslation();
   const { items, removeItem, updateQuantity, totalPrice, totalItems, clearCart } = useCart();
 
   if (items.length === 0) {
@@ -18,12 +20,12 @@ export function CartPage() {
             <div className="w-24 h-24 border border-white/10 rounded-full flex items-center justify-center mb-6">
               <ShoppingBag size={40} className="text-white/40" />
             </div>
-            <h1 className="font-heading text-2xl tracking-wider mb-4">YOUR CART IS EMPTY</h1>
+            <h1 className="font-heading text-2xl tracking-wider mb-4">{t('cart.yourCartEmpty')}</h1>
             <p className="text-white/60 font-body mb-8 max-w-md">
-              Looks like you haven't added anything yet. Explore our collection to find your next favorite piece.
+              {t('cart.cartEmptyDesc')}
             </p>
             <Link to="/shop" className="btn-primary flex items-center gap-3">
-              START SHOPPING
+              {t('cart.startShopping')}
               <ArrowRight size={18} />
             </Link>
           </motion.div>
@@ -45,9 +47,9 @@ export function CartPage() {
           className="flex items-center justify-between mb-12"
         >
           <div>
-            <p className="section-subtitle mb-2">SHOPPING</p>
+            <p className="section-subtitle mb-2">{t('cart.shopping')}</p>
             <h1 className="section-title">
-              Your Cart <span className="text-blood">.</span>
+              {t('cart.yourCartTitle')} <span className="text-blood">.</span>
             </h1>
           </div>
           <Link
@@ -55,7 +57,7 @@ export function CartPage() {
             className="flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300"
           >
             <ArrowLeft size={18} />
-            <span className="font-body text-sm">Continue Shopping</span>
+            <span className="font-body text-sm">{t('cart.continueShopping')}</span>
           </Link>
         </motion.div>
 
@@ -68,7 +70,7 @@ export function CartPage() {
                 onClick={clearCart}
                 className="text-sm text-white/40 hover:text-blood transition-colors duration-300 font-body"
               >
-                Clear Cart
+{t('cart.clearCart')}
               </button>
             </div>
 
@@ -99,7 +101,7 @@ export function CartPage() {
                     >
                       {item.product.name}
                     </Link>
-                    <p className="text-white/60 font-body mt-1">Size: {item.size}</p>
+                    <p className="text-white/60 font-body mt-1">{t('cart.size')}: {item.size}</p>
                   </div>
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center border border-white/10">
@@ -141,19 +143,19 @@ export function CartPage() {
           >
             <div className="sticky top-28 p-8 border border-white/5 bg-ash space-y-6">
               <h2 className="font-heading text-xl tracking-wider mb-6">
-                ORDER SUMMARY
+                {t('checkout.orderSummary')}
               </h2>
 
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-white/60 font-body">Subtotal ({totalItems} items)</span>
+                  <span className="text-white/60 font-body">{t('cart.subtotal')} ({totalItems} items)</span>
                   <span className="font-mono">${totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-white/60 font-body">Shipping</span>
+                  <span className="text-white/60 font-body">{t('cart.shipping')}</span>
                   <span className="font-mono">
                     {shippingCost === 0 ? (
-                      <span className="text-blood">FREE</span>
+                      <span className="text-blood">{t('common.free')}</span>
                     ) : (
                       `$${shippingCost.toFixed(2)}`
                     )}
@@ -166,7 +168,7 @@ export function CartPage() {
                 )}
                 <div className="border-t border-white/5 pt-4">
                   <div className="flex justify-between text-lg">
-                    <span className="font-heading tracking-wider">TOTAL</span>
+                    <span className="font-heading tracking-wider">{t('cart.total')}</span>
                     <span className="font-mono">${totalWithShipping.toFixed(2)}</span>
                   </div>
                 </div>
@@ -202,12 +204,12 @@ export function CartPage() {
                 to="/checkout"
                 className="btn-primary w-full flex items-center justify-center gap-3 mt-6"
               >
-                PROCEED TO CHECKOUT
+                {t('common.checkout')}
                 <ArrowRight size={18} />
               </Link>
 
               <p className="text-center text-white/40 text-xs font-body pt-4">
-                Secure checkout powered by Stripe
+                {t('checkout.secureSSL')}
               </p>
             </div>
           </motion.div>

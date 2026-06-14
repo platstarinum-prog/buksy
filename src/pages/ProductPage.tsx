@@ -15,11 +15,13 @@ import {
   Minus,
   Plus,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { products, reviews } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { useCart } from '../store/CartContext';
 
 export function ProductPage() {
+  const { t } = useTranslation();
   const { slug } = useParams();
   const product = products.find((p) => p.slug === slug);
   const { addItem } = useCart();
@@ -41,9 +43,9 @@ export function ProductPage() {
     return (
       <div className="min-h-screen bg-noir pt-24 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-white/60 mb-4">Product not found</p>
+          <p className="text-white/60 mb-4">{t('product.productNotFound')}</p>
           <Link to="/shop" className="text-blood hover:underline">
-            Return to shop
+            {t('product.returnToShop')}
           </Link>
         </div>
       </div>
@@ -80,9 +82,9 @@ export function ProductPage() {
           animate={{ opacity: 1 }}
           className="flex items-center gap-2 text-sm text-white/40 font-body mb-8"
         >
-          <Link to="/" className="hover:text-white transition-colors">Home</Link>
+          <Link to="/" className="hover:text-white transition-colors">{t('common.home')}</Link>
           <span>/</span>
-          <Link to="/shop" className="hover:text-white transition-colors">Shop</Link>
+          <Link to="/shop" className="hover:text-white transition-colors">{t('common.shop')}</Link>
           <span>/</span>
           <Link to={`/shop?category=${product.category}`} className="hover:text-white transition-colors">
             {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
@@ -132,12 +134,12 @@ export function ProductPage() {
               <div className="absolute top-4 left-4 flex flex-col gap-2">
                 {product.isNew && (
                   <span className="px-3 py-1 bg-blood text-white text-xs font-heading tracking-wider">
-                    NEW
+                    {t('common.new')}
                   </span>
                 )}
                 {product.originalPrice && (
                   <span className="px-3 py-1 bg-blood/80 text-white text-xs font-heading tracking-wider">
-                    SALE
+                    {t('common.sale')}
                   </span>
                 )}
               </div>
@@ -206,9 +208,9 @@ export function ProductPage() {
             {/* Size Selector */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-heading text-sm tracking-wider text-white/60">SIZE</span>
+                <span className="font-heading text-sm tracking-wider text-white/60">{t('product.size')}</span>
                 <Link to="/size-guide" className="text-blood text-sm hover:underline font-body">
-                  Size Guide
+                  {t('product.sizeGuide')}
                 </Link>
               </div>
               <div className="flex flex-wrap gap-3">
@@ -257,10 +259,10 @@ export function ProductPage() {
                 {isAddedToCart ? (
                   <>
                     <Check size={18} />
-                    ADDED
+                    {t('product.added')}
                   </>
                 ) : (
-                  'ADD TO CART'
+                  t('product.addToCart')
                 )}
               </motion.button>
 
@@ -292,15 +294,15 @@ export function ProductPage() {
             <div className="grid grid-cols-3 gap-4 pt-6">
               <div className="p-4 border border-white/5 text-center">
                 <Truck size={20} className="mx-auto mb-2 text-blood" />
-                <p className="text-xs text-white/60 font-body">Free Shipping over $150</p>
+                <p className="text-xs text-white/60 font-body">{t('product.freeShipping')}</p>
               </div>
               <div className="p-4 border border-white/5 text-center">
                 <RotateCcw size={20} className="mx-auto mb-2 text-blood" />
-                <p className="text-xs text-white/60 font-body">30-Day Returns</p>
+                <p className="text-xs text-white/60 font-body">{t('product.returns')}</p>
               </div>
               <div className="p-4 border border-white/5 text-center">
                 <Shield size={20} className="mx-auto mb-2 text-blood" />
-                <p className="text-xs text-white/60 font-body">2-Year Warranty</p>
+                <p className="text-xs text-white/60 font-body">{t('product.warranty')}</p>
               </div>
             </div>
 
@@ -317,7 +319,7 @@ export function ProductPage() {
                         : 'text-white/60 hover:text-white'
                     }`}
                   >
-                    {tab.toUpperCase()}
+                    {t(`product.${tab}`)}
                   </button>
                 ))}
               </div>
@@ -356,7 +358,7 @@ export function ProductPage() {
         <section className="mt-24">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-heading text-2xl tracking-wider">
-              Customer Reviews <span className="text-blood">.</span>
+              {t('product.reviews')} <span className="text-blood">.</span>
             </h2>
             <button
               onClick={() => {
@@ -365,7 +367,7 @@ export function ProductPage() {
               }}
               className="btn-secondary text-sm px-4 py-2"
             >
-              WRITE A REVIEW
+              {t('product.writeReview')}
             </button>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
@@ -382,7 +384,7 @@ export function ProductPage() {
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-heading text-sm tracking-wider">{review.author}</span>
                       {review.verified && (
-                        <span className="text-xs text-blood font-body">VERIFIED</span>
+                        <span className="text-xs text-blood font-body">{t('product.verified')}</span>
                       )}
                     </div>
                     <div className="flex gap-1">
@@ -410,7 +412,7 @@ export function ProductPage() {
         {relatedProducts.length > 0 && (
           <section className="mt-24">
             <h2 className="font-heading text-2xl tracking-wider mb-8">
-              You May Also Like <span className="text-blood">.</span>
+              {t('product.youMayAlsoLike')} <span className="text-blood">.</span>
             </h2>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((p, index) => (

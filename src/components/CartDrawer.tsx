@@ -1,9 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../store/CartContext';
 
 export function CartDrawer() {
+  const { t } = useTranslation();
   const { items, isOpen, closeCart, removeItem, updateQuantity, totalPrice, totalItems } = useCart();
 
   return (
@@ -32,7 +34,7 @@ export function CartDrawer() {
               <div className="flex items-center gap-3">
                 <ShoppingBag size={20} className="text-blood" />
                 <h2 className="font-heading text-lg tracking-wider">
-                  YOUR CART ({totalItems})
+                  {t('cart.yourCart')} ({totalItems})
                 </h2>
               </div>
               <button
@@ -50,13 +52,13 @@ export function CartDrawer() {
                   <div className="w-16 h-16 border border-white/10 rounded-full flex items-center justify-center mb-4">
                     <ShoppingBag size={24} className="text-white/40" />
                   </div>
-                  <p className="text-white/60 font-body mb-6">Your cart is empty</p>
+                  <p className="text-white/60 font-body mb-6">{t('cart.cartEmpty')}</p>
                   <Link
                     to="/shop"
                     onClick={closeCart}
                     className="btn-secondary"
                   >
-                    CONTINUE SHOPPING
+                    {t('common.continueShopping')}
                   </Link>
                 </div>
               ) : (
@@ -90,7 +92,7 @@ export function CartDrawer() {
                           >
                             {item.product.name}
                           </Link>
-                          <p className="text-white/60 text-sm mt-1">Size: {item.size}</p>
+                          <p className="text-white/60 text-sm mt-1">{t('cart.size')}: {item.size}</p>
                         </div>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center border border-white/10">
@@ -131,25 +133,25 @@ export function CartDrawer() {
             {items.length > 0 && (
               <div className="px-6 py-5 border-t border-white/5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-white/60 font-body">Subtotal</span>
+                  <span className="text-white/60 font-body">{t('cart.subtotal')}</span>
                   <span className="font-mono text-xl">${totalPrice.toFixed(2)}</span>
                 </div>
                 <p className="text-white/40 text-sm">
-                  Shipping and taxes calculated at checkout
+                  {t('cart.shippingTaxes')}
                 </p>
                 <Link
                   to="/checkout"
                   onClick={closeCart}
                   className="btn-primary w-full flex items-center justify-center gap-3"
                 >
-                  CHECKOUT
+                  {t('common.checkout')}
                   <ArrowRight size={18} />
                 </Link>
                 <button
                   onClick={closeCart}
                   className="w-full py-3 text-white/60 hover:text-white font-body text-sm transition-colors duration-300"
                 >
-                  Continue Shopping
+                  {t('cart.continueShopping')}
                 </button>
               </div>
             )}
