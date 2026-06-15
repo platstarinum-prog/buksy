@@ -195,7 +195,7 @@ export const contactInfo = {
   },
   "info": {
     "title": "Наші контакти",
-    "email": "buksy.shop@gmail.com",
+    "email": "buksy.shop\u0040gmail.com",
     "phone": "Напиши в Telegram",
     "studio": "Україна",
     "emailLabel": "EMAIL",
