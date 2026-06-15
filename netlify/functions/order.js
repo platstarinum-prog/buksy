@@ -139,6 +139,11 @@ exports.handler = async (event) => {
       }).catch(() => {});
     }
 
+    // Auto-create TTN if Nova Poshta is configured
+    if (paymentMethod !== 'monobank') {
+      autoCreateTtn(orderId, info, safeItems, total).catch(() => {});
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({ success: true, orderId, total, message: 'Order placed successfully!' }),
@@ -147,3 +152,96 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify({ error: 'Internal server error' }) };
   }
 };
+
+// Auto-create Nova Poshta TTN for COD orders
+async function autoCreateTtn(orderId, shippingInfo, items, total) {
+  const apiKey = process.env.NOVA_POSHTA_API_KEY;
+  const senderCity = process.env.NP_SENDER_CITY_REF;
+  const senderAddr = process.env.NP_SENDER_ADDRESS_REF;
+  const senderContact = process.env.NP_SENDER_CONTACT_REF;
+  const senderPhone = process.env.NP_SENDER_PHONE;
+
+  if (!apiKey || !senderCity || !senderAddr || !senderContact) return;
+
+  try {
+    const cargoDesc = items.map(function (i) { return i.product.name; }).join(', ').slice(0, 255);
+    const codAmount = Math.round(total);
+
+    const props = {
+      SenderPhone: senderPhone || '',
+      CitySender: senderCity,
+      SenderAddress: senderAddr,
+      ContactSender: senderContact,
+      SendersPhone: senderPhone || '',
+      RecipientCityName: String(shippingInfo.city || ''),
+      RecipientAddressName: String(shippingInfo.address || ''),
+      RecipientName: [shippingInfo.firstName, shippingInfo.lastName].filter(Boolean).join(' ') || 'Клієнт',
+      RecipientType: 'PrivatePerson',
+      RecipientsPhone: String(shippingInfo.phone || ''),
+      ServiceType: 'WarehouseWarehouse',
+      PaymentMethod: 'Cash',
+      CargoType: 'Cargo',
+      Weight: '1',
+      SeatsAmount: '1',
+      Description: cargoDesc || 'Товари',
+      Cost: String(codAmount),
+      BackwardDeliveryData: [
+        { PayerType: 'Recipient', CargoType: 'Money', RedeliveryString: String(codAmount) },
+      ],
+    };
+
+    const npRes = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ apiKey, modelName: 'InternetDocument', calledMethod: 'save', methodProperties: props }),
+    });
+
+    const npData = await npRes.json();
+    if (!npData.success) return;
+
+    const ttn = (npData.data[0] || {}).IntDocNumber;
+    if (!ttn) return;
+
+    // Update order with TTN
+    const { updateOrderStatus } = require('./_supabase');
+    const { sendEmail, trackingUpdateHtml } = require('./_email');
+    await updateOrderStatus(orderId, {
+      status: 'shipped',
+      tracking_number: ttn,
+      shipped_at: new Date().toISOString(),
+    }).catch(function () {});
+
+    // Telegram
+    const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+    if (TOKEN && CHAT_ID) {
+      const ttnMsg = [
+        '\uD83D\uDCE6 <b>ТТН створено авто</b>',
+        '<code>#' + orderId + '</code>',
+        '',
+        '\uD83D\uDE9A <b>ТТН: ' + ttn + '</b>',
+        '\uD83D\uDCB0 Наложений: ' + codAmount + ' грн',
+      ].join('\n');
+      try {
+        await fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: CHAT_ID, text: ttnMsg, parse_mode: 'HTML' }),
+        });
+      } catch (e) {}
+    }
+
+    // Email customer tracking
+    if (shippingInfo.email) {
+      sendEmail({
+        to: shippingInfo.email,
+        subject: 'Замовлення #' + orderId + ' відправлено — BUKSY',
+        html: trackingUpdateHtml({ orderId, trackingNumber: ttn }),
+      }).catch(function () {});
+    }
+
+    console.log('[NP Auto] TTN ' + ttn + ' for order ' + orderId);
+  } catch (err) {
+    console.error('[NP Auto] Error:', err.message);
+  }
+}
