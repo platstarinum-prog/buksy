@@ -10,7 +10,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://api.telegram.org https://www.liqpay.ua; frame-src 'none'; frame-ancestors 'none'; form-action 'self' https://www.liqpay.ua; base-uri 'self'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://api.telegram.org https://api.monobank.ua; frame-src 'none'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'"
 
 [[headers]]
   for = "/.netlify/functions/*"

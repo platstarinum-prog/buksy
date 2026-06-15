@@ -81,38 +81,25 @@ export function CheckoutPage() {
     }
   };
 
-  const handleLiqPay = async () => {
+  const handleCardPayment = async () => {
     if (!validateInformation()) { setStep('information'); return; }
     setIsProcessing(true);
     setSubmitError('');
     try {
       const orderId = 'BUK-' + Date.now().toString().slice(-6);
-      const res = await fetch('/.netlify/functions/liqpay-checkout', {
+      const res = await fetch('/.netlify/functions/monobank-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items, shippingInfo, total, orderId, email: shippingInfo.email }),
       });
-      const lp = await res.json();
-      if (lp.mode === 'test') {
-        setSubmitError('LiqPay не налаштовано. Зв яжіться з магазином.');
+      const data = await res.json();
+      if (data.error) {
+        setSubmitError(data.error);
         setIsProcessing(false);
         return;
       }
-      if (lp.data && lp.signature) {
-        // Submit form to LiqPay
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = 'https://www.liqpay.ua/api/3/checkout';
-        form.style.display = 'none';
-        ['data', 'signature'].forEach((name) => {
-          const input = document.createElement('input');
-          input.name = name;
-          input.value = lp[name];
-          form.appendChild(input);
-        });
-        document.body.appendChild(form);
-        form.submit();
-        setTimeout(() => document.body.removeChild(form), 100);
+      if (data.redirectUrl) {
+        window.location.href = data.redirectUrl;
       }
     } catch {
       setSubmitError('Payment failed. Try again.');
@@ -457,14 +444,14 @@ export function CheckoutPage() {
                   <div className="space-y-3">
                     {/* Primary: LiqPay */}
                     <button
-                      onClick={handleLiqPay}
+                      onClick={handleCardPayment}
                       disabled={isProcessing}
                       className="w-full py-4 bg-blood text-white font-heading text-sm tracking-wider hover:bg-blood/90 transition-colors duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {isProcessing ? (
                         <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       ) : (
-                        <><CreditCard size={18} /> {t('checkout.liqPayButton')}</>
+                        <><CreditCard size={18} /> {t('checkout.cardPayButton')}</>
                       )}
                     </button>
 
@@ -485,7 +472,7 @@ export function CheckoutPage() {
                     </span>
                     <span className="flex items-center gap-1.5">
                       <CreditCard size={14} />
-                      LiqPay
+                      Mono
                     </span>
                   </div>
 

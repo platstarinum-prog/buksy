@@ -194,7 +194,7 @@
     "continueShopping2": "ПРОДОВЖИТИ ПОКУПКИ",
     "orderError": "Помилка. Спробуйте ще раз.",
     "fixErrors": "Будь ласка, виправте помилки нижче.",
-    "liqPayButton": "ОПЛАТИТИ ЧЕРЕЗ LiqPay",
+    "cardPayButton": "ОПЛАТИТИ КАРТКОЮ",
     "submitOrder": "Оплата при отриманні"
   },
   "contact": {

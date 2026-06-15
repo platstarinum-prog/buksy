@@ -194,7 +194,7 @@
     "continueShopping2": "CONTINUE SHOPPING",
     "orderError": "Error. Please try again.",
     "fixErrors": "Please fix the errors below.",
-    "liqPayButton": "PAY WITH LiqPay",
+    "cardPayButton": "PAY BY CARD",
     "submitOrder": "Cash on Delivery"
   },
   "contact": {

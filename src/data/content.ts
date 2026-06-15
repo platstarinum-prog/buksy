@@ -204,9 +204,9 @@ export const contactInfo = {
   },
   "social": {
     "title": "МИ В СОЦМЕРЕЖАХ",
-    "instagram": "#",
-    "tiktok": "#",
-    "telegram": "#"
+    "instagram": "https://www.instagram.com/buksy_ua1?igsh=MWdrejJuNHJobDNteQ%3D%3D&utm_source=qr",
+    "tiktok": "https://www.tiktok.com/@buksy_ua1?_r=1&_t=ZS-97BOiqhindF",
+    "telegram": "https://t.me/+bvX_RcDztvg5YTAy"
   },
   "faq": {
     "tagline": "ВІДПОВІДІ",
@@ -313,9 +313,9 @@ export const footerData = {
     "allRights": "Всі права захищено."
   },
   "social": {
-    "instagram": "#",
-    "tiktok": "#",
-    "telegram": "#"
+    "instagram": "https://www.instagram.com/buksy_ua1?igsh=MWdrejJuNHJobDNteQ%3D%3D&utm_source=qr",
+    "tiktok": "https://www.tiktok.com/@buksy_ua1?_r=1&_t=ZS-97BOiqhindF",
+    "telegram": "https://t.me/+bvX_RcDztvg5YTAy"
   }
 };
 
