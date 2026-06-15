@@ -35,7 +35,7 @@ export function LogoAnimation({ onComplete }: LogoAnimationProps) {
               animate={{ opacity: [0, 0.15, 0] }}
               transition={{ duration: 2.5, ease: 'easeInOut' }}
               className="absolute inset-0 rounded-full blur-3xl bg-blood"
-              style={{ width: 250, height: 250, left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
+              style={{ width: 320, height: 320, left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
             />
 
             {/* Pulsing rings */}
@@ -52,7 +52,7 @@ export function LogoAnimation({ onComplete }: LogoAnimationProps) {
                       ease: 'easeOut',
                     }}
                     className="absolute border border-blood/40 rounded-full"
-                    style={{ width: 180, height: 180, left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
+                    style={{ width: 220, height: 220, left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
                   />
                 ))}
               </>
@@ -68,7 +68,7 @@ export function LogoAnimation({ onComplete }: LogoAnimationProps) {
               <motion.div
                 animate={{ scale: phase === 'pulse' ? [1, 1.04, 1] : 1 }}
                 transition={{ duration: 0.8, repeat: phase === 'pulse' ? 1 : 0 }}
-                className="w-[180px] h-[180px] overflow-hidden"
+                className="w-[220px] h-[220px] overflow-hidden"
               >
                 <motion.img
                   src="/logo.png"
