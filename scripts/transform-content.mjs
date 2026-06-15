@@ -5,17 +5,24 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 
-function readJson(dir, file) {
-  const p = join(root, dir, file);
+function readJson(...segments) {
+  const p = join(root, ...segments);
   if (!existsSync(p)) return {};
   return JSON.parse(readFileSync(p, 'utf-8'));
 }
 
-const homepage = readJson('content/pages', 'homepage.json');
-const about = readJson('content/pages', 'about.json');
-const editorial = readJson('content/pages', 'editorial.json');
-const contact = readJson('content/pages', 'contact.json');
-const footer = readJson('content/pages', 'footer.json');
+const homepage = readJson('content/pages', 'homepage', 'homepage.json');
+const about = readJson('content/pages', 'about', 'about.json');
+const editorial = readJson('content/pages', 'editorial', 'editorial.json');
+const contact = readJson('content/pages', 'contact', 'contact.json');
+const footer = readJson('content/pages', 'footer', 'footer.json');
+
+const shipping = readJson('content/pages', 'shipping', 'shipping.json');
+const faq = readJson('content/pages', 'faq', 'faq.json');
+const track = readJson('content/pages', 'track', 'track.json');
+const privacy = readJson('content/pages', 'privacy', 'privacy.json');
+const terms = readJson('content/pages', 'terms', 'terms.json');
+const cookies = readJson('content/pages', 'cookies', 'cookies.json');
 
 const outPath = join(root, 'src', 'data', 'content.ts');
 
@@ -28,7 +35,16 @@ export const editorialPage = ${JSON.stringify(editorial, null, 2)};
 export const contactInfo = ${JSON.stringify(contact, null, 2)};
 
 export const footerData = ${JSON.stringify(footer, null, 2)};
+
+export const infoPages = {
+  shipping: ${JSON.stringify(shipping, null, 2)},
+  faq: ${JSON.stringify(faq, null, 2)},
+  track: ${JSON.stringify(track, null, 2)},
+  privacy: ${JSON.stringify(privacy, null, 2)},
+  terms: ${JSON.stringify(terms, null, 2)},
+  cookies: ${JSON.stringify(cookies, null, 2)},
+};
 `;
 
 writeFileSync(outPath, content, 'utf-8');
-console.log('✅ Generated content.ts — homepage, about, editorial, contact, footer');
+console.log('✅ Generated content.ts — homepage, about, editorial, contact, footer + 6 info pages');

@@ -1,9 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BUKSY — Admin</title>
+  <style>
+    /* Темна тема для адмінки */
+    :root {
+      --admin-bg: #0a0a0a;
+      --admin-surface: #141414;
+      --admin-border: rgba(255,255,255,0.06);
+      --admin-text: #e0e0e0;
+      --admin-text-secondary: rgba(255,255,255,0.45);
+      --admin-accent: #B10006;
+    }
+  </style>
+  <script defer>
+    // Автоматичне відкриття редактора для колекцій з одним файлом
+    window.addEventListener('load', function () {
+      var observer = new MutationObserver(function () {
+        var list = document.querySelector('[class*="Entries__"]') || document.querySelector('[class*="EntryListing__"]');
+        if (!list) return;
+        var rows = list.querySelectorAll('a, [role="button"]');
+        var clickable = Array.from(rows).filter(function (el) {
+          return !el.closest('[class*="Toolbar"]') && !el.closest('[class*="Header"]');
+        });
+        if (clickable.length === 1) {
+          setTimeout(function () { clickable[0].click(); }, 100);
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  </script>
 </head>
 <body>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>

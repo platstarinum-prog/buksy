@@ -2,17 +2,8 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { infoPages } from '../data/content';
 import { NotFoundPage } from './NotFoundPage';
-
-const pages: Record<string, { titleKey: string; contentKey: string }> = {
-  faq: { titleKey: 'info.faqTitle', contentKey: 'info.faqContent' },
-  shipping: { titleKey: 'info.shippingTitle', contentKey: 'info.shippingContent' },
-  'size-guide': { titleKey: 'info.sizeGuideTitle', contentKey: 'info.sizeGuideContent' },
-  track: { titleKey: 'info.trackTitle', contentKey: 'info.trackContent' },
-  privacy: { titleKey: 'info.privacyTitle', contentKey: 'info.privacyContent' },
-  terms: { titleKey: 'info.termsTitle', contentKey: 'info.termsContent' },
-  cookies: { titleKey: 'info.cookiesTitle', contentKey: 'info.cookiesContent' },
-};
 
 function SizeGuide() {
   const { t } = useTranslation();
@@ -48,7 +39,6 @@ function SizeGuide() {
         {t('info.findYourFit')}
       </p>
 
-      {/* Tops */}
       <div>
         <h2 className="font-heading text-xl tracking-wider text-blood mb-4">{t('info.tops')}</h2>
         <div className="overflow-x-auto">
@@ -75,7 +65,6 @@ function SizeGuide() {
         </div>
       </div>
 
-      {/* Bottoms */}
       <div>
         <h2 className="font-heading text-xl tracking-wider text-blood mb-4">{t('info.bottoms')}</h2>
         <div className="overflow-x-auto">
@@ -102,7 +91,6 @@ function SizeGuide() {
         </div>
       </div>
 
-      {/* Footwear */}
       <div>
         <h2 className="font-heading text-xl tracking-wider text-blood mb-4">{t('info.footwear')}</h2>
         <div className="overflow-x-auto">
@@ -129,7 +117,6 @@ function SizeGuide() {
         </div>
       </div>
 
-      {/* Measuring Instructions */}
       <div className="p-6 border border-white/10 bg-ash">
         <h3 className="font-heading text-lg tracking-wider text-blood mb-3">{t('info.howToMeasure')}</h3>
         <ul className="space-y-2 text-white/70 font-body text-sm">
@@ -153,7 +140,7 @@ function SizeGuide() {
 export function InfoPage() {
   const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
-  const page = slug ? pages[slug] : undefined;
+  const page = slug ? (infoPages as Record<string, { title: string; content: string }>)[slug] : undefined;
 
   if (slug === 'size-guide') {
     return (
@@ -199,10 +186,10 @@ export function InfoPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="font-display text-4xl md:text-5xl font-light mb-6">{t(page.titleKey)}</h1>
+          <h1 className="font-display text-4xl md:text-5xl font-light mb-6">{page.title}</h1>
           <div className="h-px bg-blood/30 mb-8" />
-          <p className="text-white/70 font-body leading-relaxed text-lg">
-            {t(page.contentKey)}
+          <p className="text-white/70 font-body leading-relaxed text-lg whitespace-pre-line">
+            {page.content}
           </p>
           <div className="mt-12">
             <Link to="/contact" className="btn-primary inline-flex items-center gap-3">
