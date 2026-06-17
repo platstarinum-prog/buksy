@@ -1,4 +1,4 @@
-const { guard } = require('./_utils');
+const { guard, esc } = require('./_utils');
 const { saveOrder } = require('./_supabase');
 const { sendEmail, orderConfirmationHtml } = require('./_email');
 const catalog = require('./_catalog.json');
@@ -121,6 +121,43 @@ exports.handler = async (event) => {
       total: serverTotal,
       created_at: new Date().toISOString(),
     }).catch(function (err) { console.error('Save order failed:', err.message); });
+
+    // Telegram — notify admin of new order
+    (function () {
+      var TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+      var CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+      if (!TOKEN || !CHAT_ID) return;
+      var info = shippingInfo || {};
+      var itemLines = validatedItems.map(function (i) {
+        return '   ' + i.qty + '\u00d7 ' + i.name + ' (' + (i.size || '-') + ')';
+      }).join('\n');
+      var msg = [
+        '\uD83D\uDED2 <b>\u041D\u041E\u0412\u0415 \u0417\u0410\u041C\u041E\u0412\u041B\u0415\u041D\u041D\u042F</b>',
+        '<code>#' + orderId + '</code>',
+        '',
+        '<b>\uD83D\uDC64 \u041A\u043B\u0456\u0454\u043D\u0442</b>',
+        '   ' + esc(String(info.firstName || '')) + ' ' + esc(String(info.lastName || '')),
+        '   ' + esc(String(email || '')),
+        info.phone ? '   ' + esc(String(info.phone)) : '',
+        '',
+        '<b>\uD83D\uDCCD \u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430</b>',
+        '   ' + esc(String(info.address || '')) + (info.apartment ? ', ' + esc(String(info.apartment)) : ''),
+        '   ' + esc(String(info.city || '')) + ', ' + esc(String(info.country || '')) + ', ' + esc(String(info.postalCode || '')),
+        info.novaPoshtaBranch ? '   \u041D\u041F \u2116' + esc(String(info.novaPoshtaBranch)) : '',
+        '',
+        '<b>\uD83D\uDECD \u0422\u043E\u0432\u0430\u0440\u0438</b>',
+        itemLines,
+        '',
+        '\uD83D\uDCB3 Monobank (\u043E\u0447\u0456\u043A\u0443\u0454 \u043E\u043F\u043B\u0430\u0442\u0438)',
+        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501',
+        '\uD83D\uDCB0 <b>' + serverTotal.toFixed(0) + ' \u20B4</b>',
+      ].filter(Boolean).join('\n');
+      fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: 'HTML' }),
+      }).catch(function (err) { console.error('Telegram notify failed:', err.message); });
+    })();
 
     // Send immediate order confirmation email
     if (email) {
