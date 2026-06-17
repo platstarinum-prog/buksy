@@ -105,8 +105,11 @@ exports.handler = async (event) => {
       }
     }
 
+    // Collect all side-effects
+    var tasks = [];
+
     // Save to Supabase
-    saveOrder({
+    tasks.push(saveOrder({
       order_id: orderId,
       status: paymentMethod === 'monobank' ? 'awaiting_payment' : 'new',
       payment_method: paymentMethod || 'card',
@@ -118,20 +121,27 @@ exports.handler = async (event) => {
       tax: 0,
       total,
       created_at: new Date().toISOString(),
-    }).catch(function (err) { console.error('Save order failed:', err.message); });
+    }).catch(function (err) { console.error('Save order failed:', err.message); }));
 
     // Decrease stock
-    decreaseStock(safeItems.map((i) => ({ product: { slug: i.product.slug }, quantity: i.quantity })))
-      .catch(function (err) { console.error('Stock decrease failed:', err.message); });
+    tasks.push(
+      decreaseStock(safeItems.map((i) => ({ product: { slug: i.product.slug }, quantity: i.quantity })))
+        .catch(function (err) { console.error('Stock decrease failed:', err.message); })
+    );
 
     // Email
     if (email) {
-      sendEmail({
-        to: email,
-        subject: '\u0417\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u043D\u044F #' + orderId + ' \u043F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0436\u0435\u043D\u043E \u2014 BUKSY',
-        html: orderConfirmationHtml({ orderId, items: safeItems, total, shippingInfo: info }),
-      }).catch(function (err) { console.error('Email send failed:', err.message); });
+      tasks.push(
+        sendEmail({
+          to: email,
+          subject: '\u0417\u0430\u043C\u043E\u0432\u043B\u0435\u043D\u043D\u044F #' + orderId + ' \u043F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0436\u0435\u043D\u043E \u2014 BUKSY',
+          html: orderConfirmationHtml({ orderId, items: safeItems, total, shippingInfo: info }),
+        }).catch(function (err) { console.error('Email send failed:', err.message); })
+      );
     }
+
+    // Wait for all side-effects to complete
+    await Promise.allSettled(tasks);
 
     return {
       statusCode: 200,
