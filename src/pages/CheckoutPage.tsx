@@ -23,12 +23,14 @@ export function CheckoutPage() {
   const [isComplete, setIsComplete] = useState(false);
   const [orderId, setOrderId] = useState('');
 
-  // Show confirmation if returning from Monobank payment
+  // Show confirmation only if returning from Monobank payment with valid orderId
   useEffect(() => {
     var paidOrderId = searchParams.get('orderId');
     if (paidOrderId && items.length === 0) {
-      setOrderId(paidOrderId);
-      setIsComplete(true);
+      if (/^BUK-[A-Z0-9]+-[A-Z0-9]+$/.test(paidOrderId)) {
+        setOrderId(paidOrderId);
+        setIsComplete(true);
+      }
     }
   }, []);
 
@@ -71,14 +73,19 @@ export function CheckoutPage() {
     setIsProcessing(true);
     setSubmitError('');
     try {
+      var idempotencyKey = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2);
       const res = await fetch('/.netlify/functions/monobank-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, shippingInfo, email: shippingInfo.email }),
+        body: JSON.stringify({ items, shippingInfo, email: shippingInfo.email, idempotencyKey }),
       });
       const data = await res.json();
       if (data.error) {
-        setSubmitError(data.error);
+        if (data.duplicate) {
+          setSubmitError('Це замовлення вже оформлено. Перевірте пошту.');
+        } else {
+          setSubmitError(data.error);
+        }
         setIsProcessing(false);
         return;
       }

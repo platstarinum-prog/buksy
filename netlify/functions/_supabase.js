@@ -18,7 +18,13 @@ async function saveOrder(order) {
   const supabase = getClient();
   if (!supabase) return null;
   const { data, error } = await supabase.from('orders').insert(order).select('id').single();
-  if (error) { console.error('Supabase saveOrder error:', error.message); return null; }
+  if (error) {
+    if (error.code === '23505' && error.message.includes('idempotency_key')) {
+      return { duplicate: true };
+    }
+    console.error('Supabase saveOrder error:', error.message);
+    return null;
+  }
   return data;
 }
 
@@ -30,20 +36,20 @@ async function updateOrderStatus(orderId, updates) {
   return !error;
 }
 
-async function markOrderPaid(orderId, paymentId) {
-  const supabase = getClient();
+async function markOrderPaidWithStock(orderId, paymentId, itemsJson) {
+  var supabase = getClient();
   if (!supabase) throw new Error('Supabase not configured');
-  const { data, error } = await supabase
-    .from('orders')
-    .update({ status: 'paid', payment_id: paymentId, paid_at: new Date().toISOString() })
-    .eq('order_id', orderId)
-    .neq('status', 'paid')
-    .select('id')
-    .single();
+  var { data, error } = await supabase.rpc('mark_order_paid_with_stock', {
+    p_order_id: orderId,
+    p_payment_id: paymentId,
+    p_items: itemsJson
+  });
   if (error) {
-    if (error.code === 'PGRST116') return false; // no rows = already paid
-    console.error('Supabase markOrderPaid error:', error.message);
-    throw new Error('Failed to mark order as paid');
+    if (error.message && error.message.includes('Insufficient stock')) {
+      throw new Error('STOCK_INSUFFICIENT: ' + error.message);
+    }
+    console.error('Supabase markOrderPaidWithStock error:', error.message);
+    throw new Error('Failed to process payment');
   }
   return !!data;
 }
@@ -56,8 +62,9 @@ async function decreaseStock(items) {
     var item = items[i];
     var slug = item.product?.slug;
     var qty = Number(item.quantity) || 0;
+    var defaultStock = Number(item.default_stock) || 99;
     if (!slug || qty <= 0) continue;
-    var resp = await supabase.rpc('decrease_stock', { product_slug: slug, qty: qty });
+    var resp = await supabase.rpc('decrease_stock', { product_slug: slug, qty: qty, default_stock: defaultStock });
     if (resp.error) {
       console.error('decreaseStock failed for', slug, ':', resp.error.message);
       errors.push(slug);
@@ -66,10 +73,18 @@ async function decreaseStock(items) {
   return errors;
 }
 
-async function getOrderByRef(orderId) {
-  const supabase = getClient();
+async function getStock(slug) {
+  var supabase = getClient();
   if (!supabase) return null;
-  const { data, error } = await supabase
+  var { data, error } = await supabase.rpc('get_stock', { product_slug: slug });
+  if (error) { console.error('getStock error:', error.message); return null; }
+  return data;
+}
+
+async function getOrderByRef(orderId) {
+  var supabase = getClient();
+  if (!supabase) return null;
+  var { data, error } = await supabase
     .from('orders')
     .select('*')
     .eq('order_id', orderId)
@@ -78,4 +93,4 @@ async function getOrderByRef(orderId) {
   return data;
 }
 
-module.exports = { saveOrder, updateOrderStatus, markOrderPaid, decreaseStock, getOrderByRef };
+module.exports = { saveOrder, updateOrderStatus, markOrderPaidWithStock, decreaseStock, getStock, getOrderByRef };

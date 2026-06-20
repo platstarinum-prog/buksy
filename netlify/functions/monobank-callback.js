@@ -1,6 +1,7 @@
-const { esc, rateLimit } = require('./_utils');
-const { markOrderPaid, decreaseStock, getOrderByRef } = require('./_supabase');
+const { esc, rateLimit, parseBody } = require('./_utils');
+const { markOrderPaidWithStock, getOrderByRef } = require('./_supabase');
 const { sendEmail, paymentConfirmedHtml } = require('./_email');
+const catalog = require('./_catalog.json');
 const crypto = require('crypto');
 
 let cachedPubKey = null;
@@ -40,7 +41,6 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  // Rate limit BEFORE expensive crypto verification
   const ip = event.headers['client-ip'] || 'unknown';
   if (!rateLimit(ip, 30)) {
     return { statusCode: 429, body: JSON.stringify({ error: 'Too many requests' }) };
@@ -49,7 +49,6 @@ exports.handler = async (event) => {
   const rawBody = event.body || '';
   const xSign = event.headers['x-sign'] || '';
 
-  // Verify Monobank signature (required)
   const pubKey = await getPubKey();
   if (!pubKey) {
     console.error('Monobank callback: cannot verify signature (public key unavailable)');
@@ -60,21 +59,24 @@ exports.handler = async (event) => {
     return { statusCode: 403, body: 'Invalid signature' };
   }
 
-  try {
-    const body = JSON.parse(rawBody);
+  var parsed = parseBody(event, 65536);
+  if (parsed.error) {
+    return { statusCode: 400, body: 'Invalid JSON payload' };
+  }
+  var body = parsed.data;
 
+  try {
     if (!body.invoiceId || !body.status || !body.reference) {
       return { statusCode: 400, body: 'Invalid callback payload' };
     }
-
-    const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
     if (body.status !== 'success') {
       return { statusCode: 200, body: 'OK' };
     }
 
     const amount = (body.amount || body.finalAmount || 0) / 100;
+    const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
     const msg = [
       '\u2705 <b>ОПЛАЧЕНО (Monobank)</b>',
@@ -100,21 +102,29 @@ exports.handler = async (event) => {
       }
     }
 
-    let wasPaid;
+    var itemsForStock = [];
+    if (body.basketOrder && Array.isArray(body.basketOrder) && body.basketOrder.length) {
+      itemsForStock = body.basketOrder.map(function (b) {
+        var catEntry = catalog[b.code];
+        var catStock = catEntry ? Number(catEntry.stock) : 99;
+        return { slug: b.code, qty: Number(b.qty) || 0, default_stock: catStock || 99 };
+      }).filter(function (i) { return i.slug && i.qty > 0; });
+    }
+
+    var wasPaid;
     try {
-      wasPaid = await markOrderPaid(body.reference, body.invoiceId);
+      wasPaid = await markOrderPaidWithStock(body.reference, body.invoiceId, itemsForStock.length ? itemsForStock : null);
     } catch (err) {
-      console.error('markOrderPaid DB error:', err.message);
+      console.error('markOrderPaidWithStock error:', err.message);
       return { statusCode: 500, body: 'DB error' };
     }
+
     if (!wasPaid) {
       return { statusCode: 200, body: 'OK' };
     }
 
-    // Collect all async side-effects
     var tasks = [];
 
-    // Payment confirmation email
     try {
       const order = await getOrderByRef(body.reference);
       if (order && order.customer && order.customer.email) {
@@ -131,18 +141,6 @@ exports.handler = async (event) => {
       }
     } catch (e) { console.error('Failed to send payment email:', e.message); }
 
-    // Decrease stock
-    if (body.basketOrder && body.basketOrder.length) {
-      tasks.push(
-        decreaseStock(
-          body.basketOrder.map(function (b) {
-            return { product: { slug: b.code }, quantity: b.qty };
-          })
-        ).catch(function (err) { console.error('Stock decrease failed:', err.message); })
-      );
-    }
-
-    // Wait for email + stock before returning
     await Promise.allSettled(tasks).then(function (results) {
       var failed = results.filter(function (r) { return r.status === 'rejected'; }).length;
       if (failed) console.error('monobank-callback: ' + failed + ' side-effect(s) failed');

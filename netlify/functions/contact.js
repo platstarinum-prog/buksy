@@ -1,4 +1,4 @@
-const { esc, guard, validateEmail } = require('./_utils');
+const { esc, sanitize, guard, validateEmail, parseBody } = require('./_utils');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -8,8 +8,17 @@ exports.handler = async (event) => {
   const blocked = guard(event, 5);
   if (blocked) return blocked;
 
+  var parsed = parseBody(event, 16384);
+  if (parsed.error) {
+    return { statusCode: 400, body: JSON.stringify({ error: parsed.error }) };
+  }
+  var body = parsed.data;
+
   try {
-    const { name, email, subject, message } = JSON.parse(event.body);
+    var name = body.name;
+    var email = body.email;
+    var subject = body.subject;
+    var message = body.message;
 
     if (!email || !message) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Email and message are required' }) };
@@ -23,22 +32,23 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: 'Message too long (max 4096 chars)' }) };
     }
 
+    const safeEmail = sanitize(String(email), 256);
+    const safeMessage = sanitize(message, 4096);
+    const safeName = name ? sanitize(String(name), 128) : '';
+    const safeSubject = subject ? sanitize(String(subject), 256) : '';
+
     const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
     if (TOKEN && CHAT_ID) {
-      const safeName = name ? esc(name.slice(0, 128)) : '';
-      const safeSubject = subject ? esc(subject.slice(0, 256)) : '';
-      const safeMessage = esc(message.slice(0, 4096));
-
       const msg = [
-        '✉️ <b>НОВА ЗАЯВКА</b>',
+        '\u2709\uFE0F <b>НОВА ЗАЯВКА</b>',
         '',
-        safeName ? `👤 <b>${safeName}</b>` : '👤 <b>—</b>',
-        `📧 ${esc(email)}`,
-        safeSubject ? `📝 ${safeSubject}` : '',
+        safeName ? '\uD83D\uDC64 <b>' + esc(safeName) + '</b>' : '\uD83D\uDC64 <b>—</b>',
+        '\uD83D\uDCE7 ' + esc(safeEmail),
+        safeSubject ? '\uD83D\uDCDD ' + esc(safeSubject) : '',
         '',
-        safeMessage ? `💬 ${safeMessage}` : '',
+        safeMessage ? '\uD83D\uDCAC ' + esc(safeMessage) : '',
       ].filter(Boolean).join('\n');
 
       try {
