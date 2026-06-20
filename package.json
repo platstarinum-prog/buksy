@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
-    "cms": "decap-server"
+    "cms": "decap-server",
+    "test": "node --test tests/*.test.cjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
