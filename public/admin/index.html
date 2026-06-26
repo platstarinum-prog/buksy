@@ -1,40 +1,625 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BUKSY — Admin</title>
-  <style>
-    /* Темна тема для адмінки */
-    :root {
-      --admin-bg: #0a0a0a;
-      --admin-surface: #141414;
-      --admin-border: rgba(255,255,255,0.06);
-      --admin-text: #e0e0e0;
-      --admin-text-secondary: rgba(255,255,255,0.45);
-      --admin-accent: #B10006;
-    }
-  </style>
-  <script defer>
-    // Автоматичне відкриття редактора для колекцій з одним файлом
-    window.addEventListener('load', function () {
-      var observer = new MutationObserver(function () {
-        var list = document.querySelector('[class*="Entries__"]') || document.querySelector('[class*="EntryListing__"]');
-        if (!list) return;
-        var rows = list.querySelectorAll('a, [role="button"]');
-        var clickable = Array.from(rows).filter(function (el) {
-          return !el.closest('[class*="Toolbar"]') && !el.closest('[class*="Header"]');
-        });
-        if (clickable.length === 1) {
-          setTimeout(function () { clickable[0].click(); }, 100);
-        }
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-    });
-  </script>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>BUKSY — Admin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#0a0a0a;color:#e5e5e5;min-height:100vh}
+#login,#dashboard,#pager{display:none}
+#login.active,#dashboard.active,#pager.active{display:block}
+#login.active{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+.login-box{background:#141414;border:1px solid #262626;border-radius:1rem;padding:2.5rem;width:100%;max-width:380px;text-align:center}
+.login-box .logo{font-size:2.5rem;font-weight:900;letter-spacing:-2px;margin-bottom:1.5rem;color:#fff}
+.login-box .logo span{color:#dc2626}
+.login-box input{width:100%;padding:.75rem 1rem;background:#1a1a1a;border:1px solid #333;border-radius:.6rem;color:#fff;font-size:.9rem;margin-bottom:.75rem;outline:none}
+.login-box input:focus{border-color:#dc2626}
+.login-box button{width:100%;padding:.75rem;background:#dc2626;color:#fff;border:none;border-radius:.6rem;font-weight:600;font-size:.9rem;cursor:pointer;transition:opacity .15s}
+.login-box button:hover{opacity:.9}.login-box button:disabled{opacity:.5}
+.error{color:#f87171;font-size:.8rem;margin-top:.5rem;display:none}.error.show{display:block}
+.page{max-width:1100px;margin:0 auto;padding:1rem}
+.header{padding:1.2rem 0;display:flex;justify-content:space-between;align-items:center}
+.header h2{font-size:1.1rem;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.7rem}
+.dash-card{background:#141414;border:1px solid #262626;border-radius:.8rem;padding:1.2rem;cursor:pointer;transition:all .15s}
+.dash-card:hover{border-color:#dc2626;transform:translateY(-2px)}
+.dash-card .icon{font-size:1.5rem;margin-bottom:.5rem}
+.dash-card h3{font-size:.85rem;color:#fff;margin-bottom:.3rem}
+.dash-card p{font-size:.7rem;color:#737373}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1rem;border-radius:.5rem;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;color:#fff;background:#262626}
+.btn:hover{background:#333}
+.btn-sm{padding:.4rem .7rem;font-size:.75rem}
+.btn-green{background:#16a34a}.btn-green:hover{background:#15803d}
+.btn-red{background:#dc2626}.btn-red:hover{background:#b91c1c}
+.btn-ghost{background:transparent;border:1px solid #333;color:#999}.btn-ghost:hover{background:#1a1a1a;color:#fff}
+.breadcrumb{font-size:.8rem;color:#737373;margin-bottom:.8rem}.breadcrumb a{color:#999;cursor:pointer;text-decoration:none}.breadcrumb a:hover{color:#fff}
+.item-list{display:flex;flex-direction:column;gap:.4rem}
+.item-row{display:flex;align-items:center;justify-content:space-between;background:#141414;border:1px solid #262626;border-radius:.6rem;padding:.7rem 1rem;cursor:pointer;transition:border-color .1s}
+.item-row:hover{border-color:#333}
+.item-title{font-weight:600;color:#fff;font-size:.85rem}
+.item-meta{font-size:.7rem;color:#737373}
+.editor-wrap{background:#141414;border:1px solid #262626;border-radius:.8rem;padding:1.5rem}
+.form-section{margin-bottom:1.5rem}.form-section:last-child{margin-bottom:0}
+.form-section-title{font-size:.9rem;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid #262626}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:.75rem;color:#999;margin-bottom:.3rem;font-weight:600}
+.form-group input[type=text],.form-group input[type=url],.form-group input[type=number],.form-group input[type=datetime-local],.form-group textarea,.form-group select{width:100%;padding:.6rem .8rem;background:#1a1a1a;border:1px solid #333;border-radius:.5rem;color:#fff;font-size:.85rem;outline:none;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#dc2626}
+.form-group textarea{min-height:80px;resize:vertical;line-height:1.4}
+.editor-tabs{display:flex;gap:.3rem;margin-bottom:1rem;flex-wrap:wrap}
+.editor-tab{padding:.4rem .8rem;border-radius:.4rem;font-size:.75rem;font-weight:600;cursor:pointer;border:1px solid #333;background:transparent;color:#999;transition:all .1s}
+.editor-tab.active{background:#dc2626;color:#fff;border-color:#dc2626}
+.editor-tab:hover:not(.active){border-color:#555;color:#fff}
+.img-row{display:flex;gap:.5rem}.img-row input{flex:1}
+.img-upload-btn{cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .7rem;background:#262626;border-radius:.5rem;font-size:.75rem;font-weight:500;border:1px solid #333;transition:all .15s;color:#999}
+.img-upload-btn:hover{background:#333;color:#fff}.img-upload-btn input{display:none}
+.img-browse-link{font-size:.75rem;color:#737373;cursor:pointer;margin-top:.3rem;display:inline-block}.img-browse-link:hover{color:#dc2626}
+.img-preview{margin-top:.4rem;max-width:200px;max-height:200px;border-radius:.4rem;cursor:pointer}
+.empty{padding:3rem;text-align:center;color:#555;font-size:.85rem}
+.toast{position:fixed;bottom:2rem;right:2rem;background:#16a34a;color:#fff;padding:.7rem 1.2rem;border-radius:.5rem;font-size:.85rem;z-index:100;opacity:0;transform:translateY(1rem);transition:all .3s}.toast.show{opacity:1;transform:translateY(0)}.toast.err{background:#dc2626}
+.mde-toolbar{display:flex;gap:.2rem;margin-bottom:.3rem;flex-wrap:wrap}
+.mde-toolbar button{padding:.2rem .5rem;border:1px solid #333;background:#1a1a1a;color:#999;border-radius:.3rem;cursor:pointer;font-size:.7rem}.mde-toolbar button:hover{background:#262626;color:#fff}
+.list-row{background:#1a1a1a;border:1px solid #333;border-radius:.5rem;padding:.8rem;margin-bottom:.5rem;position:relative}
+.list-row .del-row{position:absolute;top:.3rem;right:.3rem;width:22px;height:22px;border-radius:4px;border:none;background:#3b0a0a;color:#f87171;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+.list-row .del-row:hover{background:#dc2626;color:#fff}
+.add-row-btn{width:100%;padding:.5rem;border:1px dashed #333;border-radius:.5rem;background:transparent;color:#737373;font-size:.75rem;font-weight:600;cursor:pointer;margin-top:.3rem}
+.add-row-btn:hover{border-color:#dc2626;color:#dc2626}
+.checkbox-group{display:flex;align-items:center;gap:.5rem;margin-top:.3rem}
+.checkbox-group input{width:auto}
+#imgModal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.9);padding:2rem;overflow-y:auto}
+#imgModal.show{display:block}
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.5rem}
+.img-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:.4rem;cursor:pointer;transition:opacity .15s}
+.img-grid img:hover{opacity:.7}
+.page-tab{display:none}.page-tab.active{display:block}
+</style>
 </head>
 <body>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script defer src="https://unpkg.com/decap-cms@3.6.2/dist/decap-cms.js"></script>
+
+<div id="login" class="active">
+<div class="login-box">
+<div class="logo">BUK<span>SY</span></div>
+<form id="loginForm">
+<input type="password" id="password" placeholder="Пароль" autocomplete="current-password" required>
+<button type="submit" id="loginBtn">Увійти</button>
+<div class="error" id="loginError"></div>
+</form>
+</div></div>
+
+<div id="dashboard">
+<div class="page">
+<div class="header"><h2>BUKSY — Панель керування</h2><button class="btn btn-ghost" onclick="logout()">Вийти</button></div>
+<div class="grid" id="dashGrid"></div>
+</div></div>
+
+<div id="pager">
+<div class="page">
+<div class="breadcrumb" id="breadcrumb"></div>
+<div class="header"><h2 id="pageTitle"></h2><div id="pageActions"></div></div>
+<div id="pageContent"></div>
+</div></div>
+
+<div id="imgModal"><div id="imgModalBody"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API='/api/github';
+function getPass(){return sessionStorage.getItem('buksy_pass')||''}
+function setPass(p){sessionStorage.setItem('buksy_pass',p)}
+let currentView=null;
+let currentImgFolder='';
+
+document.getElementById('loginForm').onsubmit=async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('loginBtn'),err=document.getElementById('loginError');
+  const pass=document.getElementById('password').value;
+  if(!pass){err.textContent='Введіть пароль';err.classList.add('show');return}
+  btn.disabled=true;btn.textContent='Вхід...';err.classList.remove('show');
+  try{
+    setPass(pass);
+    await api({action:'login'});
+    show('dashboard');
+  }catch{
+    sessionStorage.removeItem('buksy_pass');
+    err.textContent='Невірний пароль';err.classList.add('show');
+  }
+  btn.disabled=false;btn.textContent='Увійти';
+};
+
+(function(){
+  if(getPass()){
+    api({action:'login'}).then(()=>show('dashboard')).catch(()=>sessionStorage.removeItem('buksy_pass'));
+  }
+})();
+
+function show(id){['login','dashboard','pager'].forEach(x=>document.getElementById(x).classList.toggle('active',x===id))}
+
+function logout(){sessionStorage.removeItem('buksy_pass');location.reload()}
+function backToDashboard(){show('dashboard')}
+
+function bcSegs(){
+  var html='<a onclick="backToDashboard()">🏠 Панель</a>';
+  for(var i=0;i<arguments.length;i++)html+=' / <a>'+arguments[i]+'</a>';
+  return html;
+}
+
+async function api(body){
+  const pass=getPass();
+  const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${pass}`},body:JSON.stringify(body)});
+  if(!res.ok){
+    if(res.status===401){sessionStorage.removeItem('buksy_pass');show('login');return}
+    const err=await res.json().catch(()=>({error:'Request failed'}));
+    throw new Error(err.error||err.detail||'Error');
+  }
+  return res.json();
+}
+
+function toast(msg,err){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(err?' err':'');
+  setTimeout(()=>t.classList.add('show'),10);
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// ─── DASHBOARD ─────────────────────────────
+const dashCards=[
+  {id:'products',icon:'👕',title:'Товари',desc:'Каталог товарів',action:()=>openProducts()},
+  {id:'homepage',icon:'🏠',title:'Головна',desc:'Hero, featured, philosophy',action:()=>openPage('homepage')},
+  {id:'about',icon:'📖',title:'Про нас',desc:'Історія, місія, цінності',action:()=>openPage('about')},
+  {id:'editorial',icon:'📸',title:'Lookbook',desc:'Редакційна зйомка',action:()=>openPage('editorial')},
+  {id:'contact',icon:'📞',title:'Контакти',desc:'Форма, соцмережі, FAQ',action:()=>openPage('contact')},
+  {id:'footer',icon:'🔗',title:'Футер',desc:'Навігація, соцмережі',action:()=>openPage('footer')},
+  {id:'shipping',icon:'📦',title:'Доставка',desc:'Умови доставки',action:()=>openPage('shipping')},
+  {id:'faq',icon:'❓',title:'FAQ',desc:'Питання та відповіді',action:()=>openPage('faq')},
+  {id:'track',icon:'🔍',title:'Трекінг',desc:'Відстеження замовлення',action:()=>openPage('track')},
+  {id:'privacy',icon:'🔒',title:'Privacy',desc:'Політика конфіденційності',action:()=>openPage('privacy')},
+  {id:'terms',icon:'📄',title:'Terms',desc:'Умови використання',action:()=>openPage('terms')},
+  {id:'cookies',icon:'🍪',title:'Cookies',desc:'Політика cookies',action:()=>openPage('cookies')},
+];
+document.getElementById('dashGrid').innerHTML=dashCards.map(c=>
+  `<div class="dash-card" onclick="(${c.action.toString()})()"><div class="icon">${c.icon}</div><h3>${c.title}</h3><p>${c.desc}</p></div>`
+).join('');
+
+// ─── PAGE SCHEMAS ──────────────────────────
+function N(t,l,ty){return{name:t,label:l||t,type:ty||'text'}}
+function NI(t,l){return{name:t,label:l||t,type:'image'}}
+function NT(t,l){return{name:t,label:l||t,type:'textarea'}}
+function NO(t,l,fields,arr){return{name:t,label:l||t,type:'object',fields:fields||[],array:arr}}
+
+const PAGE_SCHEMAS={
+  homepage:{file:'content/pages/homepage/homepage.json',label:'Головна',sections:[
+    {title:'Hero',fields:[N('hero.tagline','Теглайн'),N('hero.title1','Заголовок 1'),N('hero.title2','Заголовок 2'),NT('hero.description','Опис'),N('hero.shopNow','Кнопка Магазин'),N('hero.ourStory','Кнопка Про нас'),NI('hero.image','Фонове фото'),N('hero.scroll','Scroll текст')]},
+    {title:'Featured',fields:[N('featured.tagline','Теглайн'),N('featured.title','Заголовок'),N('featured.viewAll','Кнопка Все')]},
+    {title:'Philosophy',fields:[N('philosophy.tagline','Теглайн'),N('philosophy.title1','Заголовок 1'),N('philosophy.title2','Заголовок 2'),NT('philosophy.text1','Текст 1'),NT('philosophy.text2','Текст 2'),NT('philosophy.text3','Текст 3'),N('philosophy.button','Кнопка'),NI('philosophy.image','Фото')]},
+    {title:'Bestsellers',fields:[N('bestsellers.tagline','Теглайн'),N('bestsellers.title','Заголовок')]},
+    {title:'Collections',fields:[N('collections.tagline','Теглайн'),N('collections.title','Заголовок')]},
+  ]},
+  about:{file:'content/pages/about/about.json',label:'Про нас',sections:[
+    {title:'Hero',fields:[N('hero.tagline','Теглайн'),N('hero.title1','Заголовок 1'),N('hero.title2','Заголовок 2'),NI('hero.image','Фото')]},
+    {title:'Philosophy',fields:[NT('philosophy.quote','Цитата'),N('philosophy.author','Автор'),NI('philosophy.image','Фото')]},
+    {title:'Values',fields:[N('values.tagline','Теглайн'),N('values.title','Заголовок')],array:'values.items',itemLabel:'Цінність',itemFields:[N('title','Заголовок'),NT('description','Опис')]},
+    {title:'Atelier',fields:[N('atelier.title','Заголовок'),NT('atelier.description1','Опис 1'),NT('atelier.description2','Опис 2'),NI('atelier.image','Фото')]},
+    {title:'Timeline',fields:[N('timeline.tagline','Теглайн'),N('timeline.title','Заголовок')],array:'timeline.events',itemLabel:'Подія',itemFields:[N('year','Рік'),N('event','Опис')]},
+    {title:'CTA',fields:[N('cta.title1','Заголовок 1'),N('cta.title2','Заголовок 2'),NT('cta.description','Опис'),N('cta.button','Кнопка')]},
+  ]},
+  editorial:{file:'content/pages/editorial/editorial.json',label:'Lookbook',sections:[
+    {title:'Hero',fields:[N('hero.subtitle','Підзаголовок'),N('hero.title','Заголовок'),NT('hero.description','Опис'),NI('hero.image','Фото'),N('hero.button','Кнопка'),N('hero.scroll','Scroll')]},
+    {title:'Lookbook',array:'lookbook',itemLabel:'Фото',itemFields:[NI('image','Фото'),N('caption','Підпис')]},
+    {title:'Behind Scenes',fields:[N('behindScenes.title','Заголовок'),NT('behindScenes.description','Опис'),NI('behindScenes.image','Фото'),N('behindScenes.button','Кнопка')]},
+    {title:'Finale',fields:[N('finale.title','Заголовок'),NI('finale.image','Фото'),N('finale.button','Кнопка')]},
+  ]},
+  contact:{file:'content/pages/contact/contact.json',label:'Контакти',sections:[
+    {title:'Hero',fields:[N('hero.tagline','Теглайн'),N('hero.title','Заголовок')]},
+    {title:'Форма',fields:[N('form.title','Заголовок'),N('form.nameLabel','Лейбл Ім\'я'),N('form.namePlaceholder','Placeholder Ім\'я'),N('form.emailLabel','Лейбл Email'),N('form.emailPlaceholder','Placeholder Email'),N('form.subjectLabel','Лейбл Тема'),N('form.subjectPlaceholder','Placeholder Тема'),N('form.messageLabel','Лейбл Повідомлення'),N('form.messagePlaceholder','Placeholder Повідомлення'),N('form.submitButton','Кнопка'),N('form.successTitle','Заголовок успіху'),NT('form.successText','Текст успіху')]},
+    {title:'Теми',array:'form.subjectOptions',itemLabel:'Тема',itemFields:[N('value','Значення'),N('label','Назва')]},
+    {title:'Інфо',fields:[N('info.title','Заголовок'),N('info.emailUser','Email (користувач)'),N('info.emailDomain','Email (домен)'),N('info.phone','Телефон'),N('info.studio','Адреса'),N('info.emailLabel','Лейбл Email'),N('info.phoneLabel','Лейбл Телефон'),N('info.studioLabel','Лейбл Адреса')]},
+    {title:'Соцмережі',fields:[N('social.title','Заголовок'),N('social.instagram','Instagram URL'),N('social.tiktok','TikTok URL'),N('social.telegram','Telegram URL')]},
+    {title:'FAQ',fields:[N('faq.tagline','Теглайн'),N('faq.title','Заголовок')],array:'faq.items',itemLabel:'Питання',itemFields:[N('question','Питання'),NT('answer','Відповідь')]},
+  ]},
+  footer:{file:'content/pages/footer/footer.json',label:'Футер',sections:[
+    {title:'Newsletter',fields:[N('newsletter.title','Заголовок'),N('newsletter.tg','Кнопка TG'),NT('newsletter.description','Опис'),N('newsletter.telegramUrl','Telegram URL')]},
+    {title:'Brand',fields:[NT('brand.description','Опис')]},
+    {title:'Social',fields:[N('social.instagram','Instagram'),N('social.tiktok','TikTok'),N('social.telegram','Telegram')]},
+    {title:'Navigation',array:'navigation.links',itemLabel:'Посилання',itemFields:[N('name','Назва'),N('href','URL')],fields:[N('navigation.title','Заголовок')]},
+    {title:'Support',array:'support.links',itemLabel:'Посилання',itemFields:[N('name','Назва'),N('href','URL')],fields:[N('support.title','Заголовок')]},
+    {title:'Legal',array:'legal.links',itemLabel:'Посилання',itemFields:[N('name','Назва'),N('href','URL')],fields:[N('legal.title','Заголовок')]},
+    {title:'Copyright',fields:[N('copyright.allRights','Текст')]},
+  ]},
+};
+
+function simplePageSchema(file,label){
+  var sections=[{title:'Контент',fields:[N('title','Заголовок'),NT('content','Текст')]}];
+  return {file:file,label:label,sections:sections};
+}
+['shipping','faq','track','privacy','terms','cookies'].forEach(function(id){
+  var labels={shipping:'Доставка',faq:'FAQ',track:'Трекінг',privacy:'Privacy',terms:'Terms',cookies:'Cookies'};
+  PAGE_SCHEMAS[id]=simplePageSchema('content/pages/'+id+'/'+id+'.json',labels[id]);
+});
+
+// ─── FORM RENDERERS ────────────────────────
+function encPath(p){return p.replace(/\./g,'_').replace(/\[/g,'_').replace(/\]/g,'_')}
+
+function getNested(obj,path){
+  return path.split('.').reduce(function(o,k){return o&&o[k]!==undefined?o[k]:''},obj);
+}
+function setNested(obj,path,val){
+  var keys=path.split('.'),last=keys.pop(),o=obj;
+  keys.forEach(function(k){if(!o[k])o[k]={};o=o[k]});
+  o[last]=val;
+}
+
+function renderField(f,val,path){
+  var id='f-'+encPath(path),label=f.label||path,v=val!==undefined&&val!==null?val:'',html='';
+  if(f.type==='object')return renderObjectFields(f.fields||[],val||{},path);
+  if(f.type==='image'){
+    var preview=v?'<img class="img-preview" src="'+esc(v)+'" onclick="window.open(\''+esc(v)+'\')">':'';
+    var folder=f.folder||('content/'+(currentView&&currentView.schema?currentView.schema.id:'pages')+'-images');
+    return '<div class="form-group"><label>'+label+'</label><div class="img-row"><input type="text" id="'+id+'" value="'+esc(v)+'" placeholder="URL або завантаж"><label class="img-upload-btn">📁<input type="file" accept="image/*" data-folder="'+folder+'" onchange="upImg(this,event,\''+id+'\')"></label></div><div id="preview-'+id+'">'+preview+'</div><a class="img-browse-link" onclick="openImgBrowser(\''+id+'\',\''+encodeURIComponent(folder)+'\')">📂 Галерея</a></div>';
+  }
+  if(f.type==='textarea'){return '<div class="form-group"><label>'+label+'</label><textarea id="'+id+'">'+(v||'')+'</textarea></div>'}
+  if(f.type==='number'){return '<div class="form-group"><label>'+label+'</label><input type="number" id="'+id+'" value="'+esc(v)+'"'+(f.min!==undefined?' min="'+f.min+'"':'')+(f.max!==undefined?' max="'+f.max+'"':'')+'></div>'}
+  if(f.type==='datetime'){return '<div class="form-group"><label>'+label+'</label><input type="datetime-local" id="'+id+'" value="'+(v?String(v).replace('Z','').slice(0,16):'')+'"></div>'}
+  if(f.type==='checkbox'){return '<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="'+id+'" '+(v?'checked':'')+'><label>'+label+'</label></div></div>'}
+  return '<div class="form-group"><label>'+label+'</label><input type="text" id="'+id+'" value="'+esc(v)+'"></div>';
+}
+
+function renderObjectFields(fields,data,prefix){
+  var html='';
+  fields.forEach(function(f){
+    var fp=prefix?prefix+'.'+f.name:f.name;
+    html+=renderField(f,getNested(data,f.name),fp);
+  });
+  return html;
+}
+
+function renderArray(arrPath,items,itemLabel,itemFields,prefix){
+  var arrId='arr-'+encPath(arrPath||'');
+  var html='<div id="'+arrId+'">';
+  (items||[]).forEach(function(item,i){
+    html+='<div class="list-row" data-idx="'+i+'"><button class="del-row" onclick="removeArrItem(\''+arrId+'\','+i+')">✕</button>';
+    html+='<div style="font-size:.7rem;color:#737373;margin-bottom:.4rem">'+(itemLabel||'')+' #'+(i+1)+'</div>';
+    (itemFields||[]).forEach(function(f){
+      html+=renderField(f,item[f.name]||'',arrPath+'['+i+'].'+f.name);
+    });
+    html+='</div>';
+  });
+  html+='</div><button class="add-row-btn" data-arrpath="'+encPath(arrPath)+'" data-label="'+encPath(itemLabel||'item')+'" data-fields="'+encPath(JSON.stringify(itemFields||[]))+'" onclick="addArrItem(this)">+ Додати '+(itemLabel||'')+'</button>';
+  return html;
+}
+
+function addArrItem(btn){
+  var arrId='arr-'+btn.dataset.arrpath;
+  var itemFields=JSON.parse(decodeURIComponent(btn.dataset.fields));
+  var itemLabel=decodeURIComponent(btn.dataset.label);
+  var container=document.getElementById(arrId);
+  if(!container)return;
+  var idx=container.querySelectorAll('.list-row').length;
+  var div=document.createElement('div');
+  div.className='list-row';div.dataset.idx=idx;
+  var html='<button class="del-row" onclick="removeArrItem(\''+arrId+'\','+idx+')">✕</button>';
+  html+='<div style="font-size:.7rem;color:#737373;margin-bottom:.4rem">'+(itemLabel||'')+' #'+(idx+1)+'</div>';
+  itemFields.forEach(function(f){html+=renderField(f,'',btn.dataset.arrpath.replace(/_/g,'.')+'['+idx+'].'+f.name)});
+  div.innerHTML=html;container.appendChild(div);
+}
+
+function removeArrItem(arrId,idx){
+  var container=document.getElementById(arrId);
+  if(!container)return;
+  var item=container.querySelector('[data-idx="'+idx+'"]');
+  if(item)item.remove();
+  container.querySelectorAll('.list-row').forEach(function(el,i){el.dataset.idx=i});
+}
+
+function collectArr(arrPath,itemFields){
+  var container=document.getElementById('arr-'+encPath(arrPath));
+  if(!container)return[];
+  var items=[];
+  container.querySelectorAll('.list-row').forEach(function(row){
+    var obj={};
+    itemFields.forEach(function(f){
+      var el=row.querySelector('#f-'+encPath(arrPath+'['+items.length+'].'+f.name));
+      if(el)obj[f.name]=f.type==='number'?Number(el.value):f.type==='checkbox'?el.checked:el.value;
+    });
+    items.push(obj);
+  });
+  return items;
+}
+
+// ─── PAGE EDITOR ───────────────────────────
+async function openPage(id){
+  var schema=PAGE_SCHEMAS[id];
+  if(!schema)return;
+  schema.id=id;
+  show('pager');
+  document.getElementById('pageTitle').innerHTML=schema.label;
+  document.getElementById('breadcrumb').innerHTML=bcSegs(schema.label);
+  document.getElementById('pageActions').innerHTML=`
+    <button class="btn btn-sm btn-green" onclick="savePage()">Зберегти</button>
+    ${['homepage','about','contact','footer'].indexOf(id)===-1?`<button class="btn btn-sm btn-red" onclick="deleteItem('${schema.file}')">Видалити</button>`:''}
+    <button class="btn btn-sm btn-ghost" onclick="backToDashboard()">← Назад</button>`;
+  try{
+    var data=await api({action:'read',path:schema.file});
+    var parsed={};
+    if(data&&data.content)try{parsed=JSON.parse(data.content)}catch(e){}
+    currentView={type:'page',schema:schema,data:parsed,file:schema.file,sha:data?data.sha:null};
+    renderPageEditor(schema,parsed);
+  }catch(e){toast('❌ '+e.message,true)}
+}
+
+function renderPageEditor(schema,data){
+  var el=document.getElementById('pageContent');
+  var html='<div class="editor-wrap">';
+  if(schema.sections.length>1){
+    html+='<div class="editor-tabs">';
+    schema.sections.forEach(function(sec,i){
+      html+='<button class="editor-tab'+(i===0?' active':'')+'" onclick="switchTab(this,'+i+')">'+sec.title+'</button>';
+    });
+    html+='</div>';
+  }
+  schema.sections.forEach(function(sec,i){
+    html+='<div class="page-tab'+(i===0?' active':'')+'" data-idx="'+i+'">';
+    html+='<div class="form-section"><div class="form-section-title">'+sec.title+'</div>';
+    if(sec.array){
+      var arrData=getNested(data,sec.array);
+      html+=renderArray(sec.array,Array.isArray(arrData)?arrData:[],sec.itemLabel||sec.title,sec.itemFields||[],sec.array);
+    }
+    if(sec.fields){
+      if(sec.array)html+=renderObjectFields(sec.fields,data,'');
+      else sec.fields.forEach(function(f){
+        var val=getNested(data,f.name);
+        html+=renderField(f,val,f.name);
+      });
+    }
+    html+='</div></div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function switchTab(btn,idx){
+  btn.closest('.editor-tabs').querySelectorAll('.editor-tab').forEach(function(t){t.classList.remove('active')});
+  btn.classList.add('active');
+  document.querySelectorAll('.page-tab').forEach(function(t){t.style.display=t.dataset.idx==String(idx)?'block':'none'});
+}
+
+function collectPageData(schema,existing){
+  var data=JSON.parse(JSON.stringify(existing||{}));
+  schema.sections.forEach(function(sec){
+    if(sec.array){
+      var items=collectArr(sec.array,sec.itemFields||[]);
+      setNested(data,sec.array,items);
+    }
+    if(sec.fields){
+      if(sec.array){
+        // Already handled by array
+      }else{
+        sec.fields.forEach(function(f){
+          var el=document.getElementById('f-'+encPath(f.name));
+          if(!el)return;
+          var val=f.type==='number'?Number(el.value):f.type==='checkbox'?el.checked:el.value;
+          setNested(data,f.name,val);
+        });
+      }
+    }
+  });
+  return data;
+}
+
+async function savePage(){
+  if(!currentView||currentView.type!=='page')return;
+  var schema=currentView.schema;
+  var data=collectPageData(schema,currentView.data);
+  try{
+    await api({action:'write',path:schema.file,content:JSON.stringify(data,null,2),message:'Update '+schema.file,sha:currentView.sha});
+    toast('✅ Збережено!');
+    currentView.data=data;
+  }catch(e){toast('❌ '+e.message,true)}
+}
+
+// ─── PRODUCTS ──────────────────────────────
+const PRODUCT_FIELDS=[
+  {name:'id',label:'ID'},{name:'name',label:'Назва'},{name:'slug',label:'Slug'},
+  {name:'price',label:'Ціна',type:'number'},{name:'originalPrice',label:'Стара ціна',type:'number'},
+  {name:'category',label:'Категорія',type:'select',options:['hoodies','t-shirts','jackets','pants','accessories','footwear']},
+  {name:'image1',label:'Фото 1',type:'image',folder:'public/uploads'},
+  {name:'image2',label:'Фото 2',type:'image',folder:'public/uploads'},
+  {name:'image3',label:'Фото 3',type:'image',folder:'public/uploads'},
+  {name:'sizes',label:'Розміри',type:'array',fields:[{name:'name',label:'Розмір'},{name:'available',label:'Доступний',type:'checkbox'}]},
+  {name:'inStock',label:'В наявності',type:'checkbox'},
+  {name:'stock',label:'Кількість',type:'number'},
+  {name:'isNew',label:'Новинка',type:'checkbox'},{name:'isFeatured',label:'На головну',type:'checkbox'},{name:'isBestseller',label:'Бестселер',type:'checkbox'},
+  {name:'rating',label:'Рейтинг',type:'number',min:0,max:5},
+  {name:'shortDescription',label:'Короткий опис',type:'textarea'},
+  {name:'description',label:'Опис',type:'textarea'},
+  {name:'details',label:'Деталі (per line)',type:'textarea',hint:'Кожен пункт на новому рядку'},
+  {name:'care',label:'Догляд (per line)',type:'textarea',hint:'Кожен пункт на новому рядку'},
+  {name:'body',label:'Текст (Markdown)',type:'textarea'},
+];
+
+function makeProductField(f,val){
+  var id='f-'+f.name,v=val!==undefined&&val!==null?val:'',html='';
+  if(f.type==='image'){
+    var preview=v?'<img class="img-preview" src="'+esc(v)+'">':'';
+    var folder=f.folder||'public/uploads';
+    return '<div class="form-group"><label>'+f.label+'</label><div class="img-row"><input type="text" id="'+id+'" value="'+esc(v)+'" placeholder="URL"><label class="img-upload-btn">📁<input type="file" accept="image/*" data-folder="'+folder+'" onchange="upImg(this,event,\''+id+'\')"></label></div><div id="preview-'+id+'">'+preview+'</div><a class="img-browse-link" onclick="openImgBrowser(\''+id+'\',\''+encodeURIComponent(folder)+'\')">📂 Галерея</a></div>';
+  }
+  if(f.type==='textarea'){
+    var hint=f.hint?'<div style="font-size:.7rem;color:#737373;margin-bottom:.3rem">'+f.hint+'</div>':'';
+    return '<div class="form-group"><label>'+f.label+'</label>'+hint+'<textarea id="'+id+'">'+(v||'')+'</textarea></div>';
+  }
+  if(f.type==='number')return '<div class="form-group"><label>'+f.label+'</label><input type="number" id="'+id+'" value="'+esc(v)+'"'+(f.min!==undefined?' min="'+f.min+'"':'')+(f.max!==undefined?' max="'+f.max+'"':'')+'></div>';
+  if(f.type==='checkbox')return '<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="'+id+'" '+(v?'checked':'')+'><label>'+f.label+'</label></div></div>';
+  if(f.type==='select')return '<div class="form-group"><label>'+f.label+'</label><select id="'+id+'">'+(f.options||[]).map(function(o){return '<option'+((v===o)?' selected':'')+'>'+esc(o)+'</option>'}).join('')+'</select></div>';
+  return '<div class="form-group"><label>'+f.label+'</label><input type="text" id="'+id+'" value="'+esc(v)+'"></div>';
+}
+
+function productToFM(d){
+  var fm='---';
+  PRODUCT_FIELDS.forEach(function(f){
+    if(f.type==='textarea'&&f.name==='body')return;
+    if(f.type==='checkbox'){fm+='\n'+f.name+': '+d[f.name];return}
+    if(f.type==='number'){fm+='\n'+f.name+': '+d[f.name];return}
+    if(f.type==='select'){fm+='\n'+f.name+': '+(d[f.name]||'');return}
+    if(f.name==='sizes')fm+='\nsizes:\n'+(d[f.name]||[]).map(function(s){return'  - name: '+s.name+'\n    available: '+s.available}).join('\n');
+    else if(f.name==='details'||f.name==='care')fm+='\n'+f.name+':\n'+(Array.isArray(d[f.name])?d[f.name].map(function(x){return'  - '+x}).join('\n'):d[f.name]||'');
+    else fm+='\n'+f.name+': '+(d[f.name]||'');
+  });
+  return fm+'\n---\n'+(d.body||'');
+}
+
+function parseFM(content){
+  var d={},lines=content.split('\n');
+  if(!lines[0]||lines[0].trim()!=='---')return d;
+  var i=1,end=lines.indexOf('---',1);
+  if(end===-1)return d;
+  for(;i<end;i++){
+    var line=lines[i],m=line.match(/^(\w+):\s*(.*)/);
+    if(!m)continue;
+    var key=m[1],val=m[2];
+    if(key==='sizes'||key==='details'||key==='care'){
+      d[key]=[];
+      for(i++;i<end;i++){
+        var lm=lines[i].match(/^\s+-\s+(.*)/);
+        if(!lm)break;
+        d[key].push(lm[1]);
+      }
+      i--;
+    }else d[key]=val;
+  }
+  d.body=lines.slice(end+1).join('\n').trim();
+  PRODUCT_FIELDS.forEach(function(f){if(f.type==='checkbox')d[f.name]=d[f.name]==='true'});
+  return d;
+}
+
+async function openProducts(){
+  currentView={type:'products-list'};
+  show('pager');
+  document.getElementById('pageTitle').innerHTML='👕 Товари';
+  document.getElementById('breadcrumb').innerHTML=bcSegs('Товари');
+  document.getElementById('pageActions').innerHTML=`
+    <button class="btn btn-sm" onclick="addProduct()">+ Створити товар</button>
+    <button class="btn btn-sm btn-ghost" onclick="backToDashboard()">← Назад</button>`;
+  try{
+    var items=await api({action:'list',folder:'content/products'});
+    var el=document.getElementById('pageContent');
+    if(!items||!items.length){el.innerHTML='<div class="empty">Немає товарів</div>';return}
+    el.innerHTML='<div class="item-list">'+items.filter(function(f){return f.name!=='.gitkeep'}).map(function(f){
+      var name=f.name.replace(/\.md$/,'');
+      return '<div class="item-row"><div onclick="editProduct(\''+f.path+'\')" style="flex:1;cursor:pointer"><div class="item-title">'+esc(name)+'</div><div class="item-meta">'+f.path+'</div></div><button class="btn btn-sm btn-red" onclick="event.stopPropagation();deleteItem(\''+f.path+'\',openProducts)" style="padding:.3rem .6rem;font-size:.7rem">✕</button></div>';
+    }).join('')+'</div>';
+  }catch(e){toast('❌ '+e.message,true)}
+}
+
+function addProduct(){
+  currentView={type:'product-editor',data:{},file:null};
+  show('pager');
+  document.getElementById('pageTitle').innerHTML='Новий товар';
+  document.getElementById('breadcrumb').innerHTML=bcSegs('Товари','Новий');
+  document.getElementById('pageActions').innerHTML=`
+    <button class="btn btn-sm btn-green" onclick="saveProduct()">Зберегти</button>
+    <button class="btn btn-sm btn-ghost" onclick="openProducts()">← Скасувати</button>`;
+  document.getElementById('pageContent').innerHTML='<div class="editor-wrap">'+PRODUCT_FIELDS.map(function(f){return makeProductField(f,'')}).join('')+'</div>';
+}
+
+async function editProduct(path){
+  try{
+    var data=await api({action:'read',path});
+    if(!data){toast('Файл не знайдено',true);return}
+    var parsed=parseFM(data.content||'');
+    currentView={type:'product-editor',data:parsed,file:path,sha:data.sha};
+    show('pager');
+    document.getElementById('pageTitle').innerHTML=parsed.name||'Редагувати товар';
+    document.getElementById('breadcrumb').innerHTML=bcSegs('Товари',parsed.name||'...');
+    document.getElementById('pageActions').innerHTML=`
+      <button class="btn btn-sm btn-green" onclick="saveProduct()">Зберегти</button>
+      <button class="btn btn-sm btn-red" onclick="deleteItem('${path}',openProducts)">Видалити</button>
+      <button class="btn btn-sm btn-ghost" onclick="openProducts()">← Скасувати</button>`;
+    document.getElementById('pageContent').innerHTML='<div class="editor-wrap">'+PRODUCT_FIELDS.map(function(f){return makeProductField(f,parsed[f.name]||'')}).join('')+'</div>';
+  }catch(e){toast('❌ '+e.message,true)}
+}
+
+async function saveProduct(){
+  var form={};
+  PRODUCT_FIELDS.forEach(function(f){
+    var el=document.getElementById('f-'+f.name);
+    if(!el)return;
+    if(f.type==='checkbox')form[f.name]=el.checked;
+    else if(f.type==='number')form[f.name]=Number(el.value);
+    else if(f.name==='details'||f.name==='care')form[f.name]=el.value.split('\n').map(function(s){return s.trim()}).filter(Boolean);
+    else if(f.name==='sizes'){
+      // Collect sizes from textarea
+      form[f.name]=el.value.split('\n').map(function(s){return s.trim()}).filter(Boolean).map(function(s){
+        var parts=s.split(':');return{name:(parts[0]||s).trim(),available:parts[1]?parts[1].trim()!=='false':true};
+      });
+    }else form[f.name]=el.value;
+  });
+  var content=productToFM(form);
+  var slug=form.slug||(form.name||'product').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'product';
+  var path=currentView.file||('content/products/'+slug+'.md');
+  try{
+    await api({action:'write',path:path,content:content,message:'Update '+path,sha:currentView.sha});
+    toast('✅ Збережено!');
+    openProducts();
+  }catch(e){toast('❌ '+e.message,true)}
+}
+
+// ─── DELETE ────────────────────────────────
+async function deleteItem(path,callback){
+  if(!confirm('Видалити '+path+'?'))return;
+  try{
+    await api({action:'delete',path:path});
+    toast('✅ Видалено');
+    if(typeof callback==='function')callback();
+    else backToDashboard();
+  }catch(e){toast('❌ '+e.message,true)}
+}
+
+// ─── IMAGE UPLOAD ──────────────────────────
+async function upImg(input,ev,fieldId){
+  var file=ev.target.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=async function(e){
+    var base64=e.target.result.split(',')[1];
+    try{
+      var folder=ev.target.getAttribute('data-folder')||'public/uploads';
+      currentImgFolder=folder;
+      var res=await api({action:'upload',name:file.name,content:base64,folder:folder});
+      var field=document.getElementById(fieldId);
+      if(field){field.value=res.url;var preview=document.getElementById('preview-'+fieldId);if(preview)preview.innerHTML='<img class="img-preview" src="'+esc(res.url)+'">'}
+      toast('✅ Завантажено!');
+    }catch(e){toast('❌ '+e.message,true)}
+    ev.target.value='';
+  };
+  reader.readAsDataURL(file);
+}
+
+function openImgBrowser(targetFieldId,folder){
+  var modal=document.getElementById('imgModal'),body=document.getElementById('imgModalBody');
+  var dir=decodeURIComponent(folder||'public/uploads');
+  currentImgFolder=dir;
+  modal.classList.add('show');
+  api({action:'list',folder:dir}).then(function(items){
+    if(!items||!items.length){body.innerHTML='<div class="empty">Немає зображень</div><button class="btn btn-sm" onclick="closeImgModal()">Закрити</button>';return}
+    var html='<div class="img-grid">';
+    items.forEach(function(f){
+      var url='https://raw.githubusercontent.com/porustzi/buksy/main/'+f.path;
+      html+='<img src="'+url+'" onclick="selImgBrowser(\''+url+'\',\''+targetFieldId+'\')">';
+    });
+    html+='</div>';
+    body.innerHTML=html+'<button class="btn btn-sm" onclick="closeImgModal()">Закрити</button>';
+  }).catch(function(e){body.innerHTML='<div class="empty">'+e.message+'</div><button class="btn btn-sm" onclick="closeImgModal()">Закрити</button>'});
+}
+function selImgBrowser(url,targetId){
+  var field=document.getElementById(targetId);
+  if(field)field.value=url;
+  var preview=document.getElementById('preview-'+targetId);
+  if(preview)preview.innerHTML='<img class="img-preview" src="'+esc(url)+'">';
+  closeImgModal();
+}
+function closeImgModal(){document.getElementById('imgModal').classList.remove('show')}
+</script>
 </body>
 </html>
