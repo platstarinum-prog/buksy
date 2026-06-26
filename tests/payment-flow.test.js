@@ -1,21 +1,10 @@
-/**
- * Tests: Payment Flow — idempotency, double-payment, amount verification, stock
- *
- * These test the LOGIC of the payment system without a real DB.
- * They verify:
- *   - Idempotency: same idempotencyKey → DuplicateOrderError
- *   - Double payment: markOrderPaidWithStock returns FALSE on second call
- *   - Amount mismatch: throws AmountMismatchError
- *   - Stock: decreaseStockBulk validates inputs
- *   - Order ID: generateOrderId format
- *
- * Run: node --test tests/payment-flow.test.js
- */
-var assert = require('node:assert');
-var { describe, it, beforeEach } = require('node:test');
-var { generateOrderId, validateOrderId, validateItems, validateAmount, validateEmail } = require('../netlify/functions/_utils');
-var { DuplicateOrderError, StockInsufficientError, AmountMismatchError, ValidationError } = require('../netlify/functions/_errors');
-var { ORDER_STATUS, PAYMENT, ERROR_CODES, RPC_ERRORS } = require('../netlify/functions/_constants');
+// Tests: Payment Flow — idempotency, double-payment, amount verification, stock
+// Run: `node --test tests/payment-flow.test.js`
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
+import { generateOrderId, validateOrderId, validateItems, validateAmount, validateEmail, esc, sanitize } from '../functions/_lib/utils.js';
+import { DuplicateOrderError, StockInsufficientError, AmountMismatchError, ValidationError } from '../functions/_lib/errors.js';
+import { ORDER_STATUS, PAYMENT, ERROR_CODES, RPC_ERRORS } from '../functions/_lib/constants.js';
 
 // ============================================================================
 // IDEMPOTENCY
@@ -182,11 +171,11 @@ describe('Stock Management', function () {
 
   it('decreaseStockBulk validates non-empty items array', function () {
     assert.throws(
-      function () { require('../netlify/functions/_utils').validateItems([]); },
+      function () { validateItems([]); },
       ValidationError
     );
     assert.throws(
-      function () { require('../netlify/functions/_utils').validateItems(null); },
+      function () { validateItems(null); },
       ValidationError
     );
   });
@@ -284,8 +273,6 @@ describe('RPC Error Classification', function () {
 // SANITIZATION + ESC IN EMAIL/HTML
 // ============================================================================
 describe('XSS Prevention', function () {
-  var { esc, sanitize } = require('../netlify/functions/_utils');
-
   it('sanitize removes angle brackets and quotes', function () {
     var input = '<img src=x onerror=alert(1)>';
     var cleaned = sanitize(input);

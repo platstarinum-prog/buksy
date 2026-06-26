@@ -1,14 +1,11 @@
-/**
- * Tests: Error classes
- * Run: node --test tests/errors.test.js
- */
-var assert = require('node:assert');
-var { describe, it } = require('node:test');
-var {
+// Tests: Error classes — run `node --test tests/errors.test.js`
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
+import {
   DatabaseError, OrderNotFoundError, DuplicateOrderError,
   StockInsufficientError, AmountMismatchError, ValidationError,
   RateLimitError, SignatureError,
-} = require('../netlify/functions/_errors');
+} from '../functions/_lib/errors.js';
 
 describe('Error Classes', function () {
   it('DatabaseError extends Error and has code', function () {

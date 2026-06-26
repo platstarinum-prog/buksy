@@ -75,7 +75,7 @@ export function CheckoutPage() {
     setIsProcessing(true);
     setSubmitError('');
     try {
-      const res = await fetch('/.netlify/functions/monobank-checkout', {
+      const res = await fetch('/api/monobank-checkout', {
         method: 'POST',
         headers: apiHeaders(),
         body: JSON.stringify({ items, shippingInfo, email: shippingInfo.email, idempotencyKey: idempotencyKeyRef.current }),

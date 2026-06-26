@@ -1,0 +1,14 @@
+export const ERROR_CODES = Object.freeze({ UNIQUE_VIOLATION: '23505', NO_ROWS: 'PGRST116' });
+export const RPC_ERRORS = Object.freeze({ STOCK_INSUFFICIENT: 'STK00', AMOUNT_MISMATCH: 'AMT00', ORDER_ALREADY_PAID: 'PAID0' });
+export const DB_TIMEOUT = 10000;
+export const RATE_LIMIT = Object.freeze({ CHECKOUT: 10, CONTACT: 5, WEBHOOK: 30 });
+export const FIELD_LIMITS = Object.freeze({
+  EMAIL: 256, NAME: 128, PHONE: 32, ADDRESS: 256, APARTMENT: 64, CITY: 128, COUNTRY: 128,
+  POSTAL_CODE: 32, NOVA_POSHTA_BRANCH: 32, PRODUCT_SIZE: 64, PRODUCT_NAME: 256,
+  IDEMPOTENCY_KEY: 128, MESSAGE: 4096, SUBJECT: 256, PAYMENT_ID: 128, TRACKING_NUMBER: 64,
+});
+export const ORDER_LIMITS = Object.freeze({ MAX_ITEMS: 20, MAX_QUANTITY: 10, MIN_QUANTITY: 1, MAX_BODY_SIZE: 65536, MAX_CONTACT_BODY: 16384 });
+export const PAYMENT = Object.freeze({ INVOICE_VALIDITY: 3600, AMOUNT_TOLERANCE: 0.99, DEFAULT_STOCK: 99, CCY: 980 });
+export const ORDER_STATUS = Object.freeze({ NEW: 'new', AWAITING_PAYMENT: 'awaiting_payment', PAID: 'paid', SHIPPED: 'shipped', CANCELLED: 'cancelled' });
+export const PAYMENT_METHOD = Object.freeze({ MONOBANK: 'monobank', CARD: 'card' });
+export const PUBKEY_CACHE_TTL = 3600000;

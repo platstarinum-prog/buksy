@@ -24,7 +24,7 @@ export function ContactPage() {
     if (!formData.message.trim()) { setSubmitError('Message is required'); setIsSubmitting(false); return; }
     if (formData.message.length > 4096) { setSubmitError('Message too long'); setIsSubmitting(false); return; }
     try {
-      const res = await fetch('/.netlify/functions/contact', { method: 'POST', headers: apiHeaders(), body: JSON.stringify(formData) });
+      const res = await fetch('/api/contact', { method: 'POST', headers: apiHeaders(), body: JSON.stringify(formData) });
       if (!res.ok) throw new Error('Failed');
       setIsSubmitted(true); setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (err) {

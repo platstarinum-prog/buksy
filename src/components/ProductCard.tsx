@@ -18,8 +18,10 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const { addItem } = useCart();
   const navigate = useNavigate();
   const firstAvailableSize = product.sizes.find((s) => s.available)?.name || product.sizes[0]?.name || '';
+  const isOutOfStock = product.stock !== undefined && product.stock <= 0;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
+    if (isOutOfStock) return;
     e.preventDefault();
     e.stopPropagation();
     addItem(product, firstAvailableSize);
@@ -65,6 +67,12 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-noir/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
+          {isOutOfStock && (
+            <div className="absolute inset-0 bg-noir/60 flex items-center justify-center">
+              <span className="text-white/80 font-heading text-sm tracking-wider uppercase">{t('product.outOfStock') || 'Немає в наявності'}</span>
+            </div>
+          )}
+
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {product.isNew && (
@@ -87,13 +95,14 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           {/* Quick Actions */}
           <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={isOutOfStock ? {} : { scale: 1.05 }}
+              whileTap={isOutOfStock ? {} : { scale: 0.95 }}
               onClick={handleQuickAdd}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-blood text-white font-heading text-xs tracking-wider transition-all duration-300 hover:shadow-blood"
+              disabled={isOutOfStock}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 font-heading text-xs tracking-wider transition-all duration-300 ${isOutOfStock ? 'bg-noir/80 text-white/40 cursor-not-allowed' : 'bg-blood text-white hover:shadow-blood'}`}
             >
               <ShoppingBag size={16} />
-              {t('product.addToCart')}
+              {isOutOfStock ? t('product.outOfStock') : t('product.addToCart')}
             </motion.button>
 
             <motion.button
@@ -137,6 +146,15 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
               </span>
             )}
           </div>
+          {product.stock !== undefined && product.stock > 0 && product.stock <= 10 && (
+            <p className="text-amber-400/80 font-body text-xs">{t('product.lowStock', { count: product.stock })}</p>
+          )}
+          {product.stock !== undefined && product.stock > 10 && (
+            <p className="text-green-400/80 font-body text-xs">{t('product.inStock', { count: product.stock })}</p>
+          )}
+          {isOutOfStock && (
+            <p className="text-red-400/80 font-body text-xs">{t('product.outOfStock') || 'Немає в наявності'}</p>
+          )}
         </div>
       </Link>
     </motion.div>

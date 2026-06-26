@@ -123,7 +123,8 @@
     "returnToShop": "Return to shop",
     "share": "Share",
     "lowStock": "Only {{count}} left in stock",
-    "outOfStock": "Out of stock"
+    "outOfStock": "Out of stock",
+    "inStock": "In stock: {{count}}"
   },
   "cart": {
     "yourCart": "Your Cart",

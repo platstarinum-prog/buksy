@@ -1,10 +1,7 @@
-/**
- * Tests: _constants.js — all frozen, all defined
- * Run: node --test tests/constants.test.js
- */
-var assert = require('node:assert');
-var { describe, it } = require('node:test');
-var c = require('../netlify/functions/_constants');
+// Tests: _constants.js — all frozen, all defined. Run `node --test tests/constants.test.js`
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
+import * as c from '../functions/_lib/constants.js';
 
 describe('Constants', function () {
   it('ERROR_CODES are defined', function () {
@@ -67,11 +64,9 @@ describe('Constants', function () {
   });
 
   it('all constant objects are frozen', function () {
-    // Object.freeze prevents modification in strict mode. In sloppy mode
-    // the assignment silently fails. Test doesn't throw in our context.
-    // Instead verify values are unchanged after attempted writes.
+    // In strict mode (ESM), assigning to frozen object throws TypeError
     var original = c.RATE_LIMIT.CHECKOUT;
-    c.RATE_LIMIT.CHECKOUT = 999;
+    try { c.RATE_LIMIT.CHECKOUT = 999; } catch (_) {}
     assert.strictEqual(c.RATE_LIMIT.CHECKOUT, original, 'Should not be mutable');
   });
 });

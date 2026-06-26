@@ -1,15 +1,13 @@
-/**
- * Tests: _utils.js — validation, sanitization, parsing, rate limiting
- * Run: node --test tests/utils.test.js
- */
-var assert = require('node:assert');
-var { describe, it } = require('node:test');
-var {
+// Tests: _utils.js — validation, sanitization, parsing, rate limiting
+// Run: `node --test tests/utils.test.js`
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
+import {
   esc, sanitize, sanitizeShippingInfo,
   validateOrderId, validatePaymentId, validateAmount, validateItems,
   validateEmail, validateIdempotencyKey, validatePaymentMethod,
   parseBody, generateOrderId,
-} = require('../netlify/functions/_utils');
+} from '../functions/_lib/utils.js';
 
 // ============================================================================
 // esc
@@ -190,36 +188,35 @@ describe('validatePaymentMethod()', function () {
 // parseBody
 // ============================================================================
 describe('parseBody()', function () {
-  it('parses valid JSON', function () {
-    var event = { body: '{"a":1}' };
-    var result = parseBody(event, 1000);
+  it('parses valid JSON', async function () {
+    var req = new Request('http://localhost', { method: 'POST', body: '{"a":1}' });
+    var result = await parseBody(req, 1000);
     assert.deepStrictEqual(result.data, { a: 1 });
     assert.strictEqual(result.error, undefined);
   });
-  it('rejects oversized body', function () {
-    var event = { body: '{"a":1}' };
-    var result = parseBody(event, 5);
+  it('rejects oversized body', async function () {
+    var req = new Request('http://localhost', { method: 'POST', body: '{"a":1}' });
+    var result = await parseBody(req, 5);
     assert.ok(result.error);
   });
-  it('rejects malformed JSON', function () {
-    var event = { body: '{bad' };
-    var result = parseBody(event, 1000);
+  it('rejects malformed JSON', async function () {
+    var req = new Request('http://localhost', { method: 'POST', body: '{bad' });
+    var result = await parseBody(req, 1000);
     assert.ok(result.error);
   });
-  it('rejects non-object JSON', function () {
-    var event = { body: '123' };
-    var result = parseBody(event, 1000);
+  it('rejects non-object JSON', async function () {
+    var req = new Request('http://localhost', { method: 'POST', body: '123' });
+    var result = await parseBody(req, 1000);
     assert.ok(result.error);
   });
-  it('rejects null', function () {
-    var event = { body: 'null' };
-    var result = parseBody(event, 1000);
+  it('rejects null', async function () {
+    var req = new Request('http://localhost', { method: 'POST', body: 'null' });
+    var result = await parseBody(req, 1000);
     assert.ok(result.error);
   });
-  it('handles empty body', function () {
-    var event = { body: '' };
-    var result = parseBody(event, 1000);
-    // Empty string fails JSON.parse, returns error
+  it('handles empty body', async function () {
+    var req = new Request('http://localhost', { method: 'POST', body: '' });
+    var result = await parseBody(req, 1000);
     assert.ok(result.error);
   });
 });

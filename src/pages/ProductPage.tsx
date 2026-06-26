@@ -41,6 +41,7 @@ export function ProductPage() {
   const [activeTab, setActiveTab] = useState<'description' | 'details' | 'care'>('description');
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const addedTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const isOutOfStock = product.stock !== undefined && product.stock <= 0;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -72,6 +73,7 @@ export function ProductPage() {
   const productReviews = product.reviews || [];
 
   const handleAddToCart = () => {
+    if (isOutOfStock) return;
     const size = selectedSize || product.sizes.find((s) => s.available)?.name;
     if (size) {
       addItem(product, size, quantity);
@@ -219,14 +221,19 @@ export function ProductPage() {
               </span>
             </div>
 
-            {/* Short Description */}
-            {product.stock !== undefined && product.stock <= 10 && product.stock > 0 && (
+            {/* Stock Status */}
+            {product.stock !== undefined && product.stock > 0 && product.stock <= 10 && (
               <p className="text-amber-400 font-body text-sm">
-                {t('product.lowStock', { count: product.stock }) || `Лише ${product.stock} шт. в наявності`}
+                {t('product.lowStock', { count: product.stock })}
               </p>
             )}
-            {product.stock === 0 && (
-              <p className="text-red-400 font-body text-sm">{t('product.outOfStock') || 'Немає в наявності'}</p>
+            {product.stock !== undefined && product.stock > 10 && (
+              <p className="text-green-400 font-body text-sm">
+                {t('product.inStock', { count: product.stock })}
+              </p>
+            )}
+            {isOutOfStock && (
+              <p className="text-red-400 font-body text-sm">{t('product.outOfStock')}</p>
             )}
             <p className="text-white/70 font-body leading-relaxed">
               {product.shortDescription}
@@ -266,14 +273,16 @@ export function ProductPage() {
                 <div className="flex items-center border border-white/20">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-3 text-white/60 hover:text-white transition-colors"
+                    disabled={isOutOfStock}
+                    className="p-3 text-white/60 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     <Minus size={18} />
                   </button>
                   <span className="w-12 text-center font-mono">{quantity}</span>
                   <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="p-3 text-white/60 hover:text-white transition-colors"
+                    onClick={() => setQuantity(Math.min(product.stock ?? 99, quantity + 1))}
+                    disabled={!isOutOfStock && product.stock !== undefined && quantity >= product.stock}
+                    className="p-3 text-white/60 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     <Plus size={18} />
                   </button>
@@ -293,12 +302,15 @@ export function ProductPage() {
                 </button>
               </div>
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={isOutOfStock ? {} : { scale: 1.02 }}
+                whileTap={isOutOfStock ? {} : { scale: 0.98 }}
                 onClick={handleAddToCart}
-                className="btn-primary flex-1 flex items-center justify-center gap-2"
+                disabled={isOutOfStock}
+                className={`btn-primary flex-1 flex items-center justify-center gap-2 ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                {isAddedToCart ? (
+                {isOutOfStock ? (
+                  t('product.outOfStock')
+                ) : isAddedToCart ? (
                   <>
                     <Check size={18} />
                     {t('product.added')}

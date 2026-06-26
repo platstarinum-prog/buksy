@@ -123,7 +123,8 @@
     "returnToShop": "Вернуться в магазин",
     "share": "Поделиться",
     "lowStock": "Только {{count}} шт. в наличии",
-    "outOfStock": "Нет в наличии"
+    "outOfStock": "Нет в наличии",
+    "inStock": "В наличии: {{count}} шт."
   },
   "cart": {
     "yourCart": "Ваша корзина",

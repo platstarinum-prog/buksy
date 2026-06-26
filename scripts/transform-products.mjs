@@ -77,7 +77,7 @@ export const editorialImage = '${editorialImage}';
 writeFileSync(outPath, content, 'utf-8');
 console.log(`✅ Generated products.ts — ${jsonFiles.length} JSON + ${mdFiles.length} Markdown = ${products.length} products`);
 
-const catalogPath = join(root, 'netlify', 'functions', '_catalog.json');
+const catalogPath = join(root, '_catalog.json');
 const catalog = {};
 for (const p of products) {
   catalog[p.slug] = { name: p.name, price: Number(p.price), stock: Number(p.stock ?? 99) };

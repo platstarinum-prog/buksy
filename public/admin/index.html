@@ -4,37 +4,1022 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BUKSY — Admin</title>
+  <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
   <style>
-    /* Темна тема для адмінки */
     :root {
-      --admin-bg: #0a0a0a;
-      --admin-surface: #141414;
-      --admin-border: rgba(255,255,255,0.06);
-      --admin-text: #e0e0e0;
-      --admin-text-secondary: rgba(255,255,255,0.45);
-      --admin-accent: #B10006;
+      --bg: #0a0a0a; --surface: #141414; --border: rgba(255,255,255,0.06);
+      --text: #e0e0e0; --text2: rgba(255,255,255,0.45);
+      --accent: #B10006; --accent-hover: #d10008;
+      --input-bg: #1a1a1a; --input-border: #2a2a2a;
+      --sidebar-w: 260px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow: hidden; }
+
+    /* Login */
+    #login-overlay {
+      position: fixed; inset: 0; z-index: 99999;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+    }
+    #login-overlay.hidden { display: none !important; }
+    .login-card {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 48px 40px; width: 360px; text-align: center;
+    }
+    .login-card h1 { font-size: 28px; letter-spacing: 4px; color: var(--accent); margin-bottom: 8px; font-weight: 300; }
+    .login-card p { color: var(--text2); font-size: 13px; margin-bottom: 32px; }
+    .login-card input {
+      width: 100%; padding: 14px 16px; background: var(--input-bg); border: 1px solid var(--input-border);
+      color: #fff; font-size: 14px; outline: none; margin-bottom: 16px; text-align: center;
+    }
+    .login-card input:focus { border-color: var(--accent); }
+    .login-card button {
+      width: 100%; padding: 14px; background: var(--accent); color: #fff;
+      border: none; font-size: 13px; cursor: pointer; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .login-card button:hover { background: var(--accent-hover); }
+    .login-card button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .login-card .error { color: #e53935; font-size: 13px; margin-bottom: 16px; display: none; }
+    .login-card .error.show { display: block; }
+
+    /* Layout */
+    #admin-layout { display: none; height: 100vh; }
+    #admin-layout.show { display: flex; }
+    #sidebar {
+      width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; flex-shrink: 0;
+    }
+    #sidebar .header { padding: 20px 16px 12px; border-bottom: 1px solid var(--border); }
+    #sidebar .header h2 { font-size: 20px; letter-spacing: 3px; color: var(--accent); font-weight: 300; }
+    #sidebar .header .user { font-size: 11px; color: var(--text2); margin-top: 4px; }
+    #sidebar .nav { flex: 1; overflow-y: auto; padding: 8px 0; }
+    #sidebar .nav-item {
+      padding: 8px 16px; font-size: 13px; cursor: pointer; color: var(--text2);
+      transition: all 0.15s; border-left: 2px solid transparent;
+    }
+    #sidebar .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    #sidebar .nav-item.active { color: #fff; border-left-color: var(--accent); background: rgba(177,0,6,0.08); }
+    #sidebar .nav-item .badge { font-size: 10px; color: var(--text2); float: right; opacity: 0.5; }
+    #sidebar .footer { padding: 12px 16px; border-top: 1px solid var(--border); }
+    #sidebar .footer button {
+      width: 100%; padding: 8px; background: none; border: 1px solid var(--input-border);
+      color: var(--text2); font-size: 12px; cursor: pointer;
+    }
+    #sidebar .footer button:hover { color: var(--text); border-color: var(--accent); }
+
+    /* Editor */
+    #editor { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    #editor .toolbar {
+      padding: 12px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    #editor .toolbar h3 { font-size: 16px; font-weight: 500; }
+    #editor .toolbar .status { font-size: 12px; color: var(--text2); }
+    #editor .toolbar .actions { display: flex; gap: 8px; }
+    #editor .toolbar button {
+      padding: 8px 20px; background: var(--accent); color: #fff;
+      border: none; font-size: 12px; cursor: pointer; font-weight: 600;
+    }
+    #editor .toolbar button:hover { background: var(--accent-hover); }
+    #editor .toolbar button:disabled { opacity: 0.4; cursor: not-allowed; }
+    #editor .toolbar button.secondary { background: none; border: 1px solid var(--input-border); color: var(--text2); }
+    #editor .toolbar button.secondary:hover { border-color: var(--accent); color: var(--text); }
+
+    #editor .scroll { flex: 1; overflow-y: auto; padding: 24px; }
+    #editor .empty-state {
+      display: flex; align-items: center; justify-content: center; height: 100%;
+      color: var(--text2); font-size: 14px; flex-direction: column; gap: 8px;
+    }
+    #editor .empty-state span { font-size: 32px; opacity: 0.3; }
+
+    /* Loading */
+    #loading { display: none; text-align: center; padding: 60px; color: var(--text2); }
+    #loading.show { display: block; }
+
+    /* Form */
+    .fieldset { margin-bottom: 20px; }
+    .fieldset-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--accent); margin-bottom: 12px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border); font-weight: 600;
+    }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 11px; color: var(--text2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .field input, .field textarea, .field select {
+      width: 100%; padding: 10px 14px; background: var(--input-bg); border: 1px solid var(--input-border);
+      color: #fff; font-size: 13px; outline: none; font-family: inherit;
+    }
+    .field input:focus, .field textarea:focus { border-color: var(--accent); }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .field input[type="checkbox"] { width: auto; margin-right: 8px; }
+    .field .checkbox-wrap { display: flex; align-items: center; gap: 8px; }
+    .field .checkbox-wrap label { margin-bottom: 0; cursor: pointer; }
+    .field .image-preview { margin-top: 8px; }
+    .field .image-preview img { max-width: 200px; max-height: 120px; border-radius: 4px; border: 1px solid var(--border); }
+    .field .url-input-wrap { display: flex; gap: 8px; }
+    .field .url-input-wrap input { flex: 1; }
+    .upload-btn {
+      padding: 10px 14px; background: var(--input-bg); border: 1px solid var(--input-border);
+      color: var(--text2); font-size: 16px; cursor: pointer; flex-shrink: 0;
+    }
+    .upload-btn:hover { border-color: var(--accent); color: var(--text); }
+
+    /* Array list */
+    .array-items { }
+    .array-item {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      padding: 12px 14px; margin-bottom: 8px; position: relative;
+    }
+    .array-item .remove-btn {
+      position: absolute; top: 8px; right: 8px; background: none; border: none;
+      color: var(--text2); cursor: pointer; font-size: 16px; line-height: 1; padding: 2px 6px;
+    }
+    .array-item .remove-btn:hover { color: var(--accent); }
+    .add-btn {
+      padding: 6px 14px; background: none; border: 1px dashed var(--input-border);
+      color: var(--text2); font-size: 12px; cursor: pointer; width: 100%;
+    }
+    .add-btn:hover { border-color: var(--accent); color: var(--text); }
+
+    /* Catalog */
+    .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; padding: 0; }
+    .catalog-card { background: var(--surface); border: 1px solid var(--border); overflow: hidden; }
+    .catalog-card .thumb { width: 100%; height: 180px; object-fit: cover; background: #1a1a1a; display: block; }
+    .catalog-card .body { padding: 12px 14px; }
+    .catalog-card .body h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .catalog-card .body .price { font-size: 13px; color: var(--accent); }
+    .catalog-card .body .price s { color: var(--text2); margin-right: 6px; font-size: 12px; }
+    .catalog-card .actions { display: flex; gap: 6px; padding: 0 14px 12px; }
+    .catalog-card .actions button {
+      flex: 1; padding: 6px; font-size: 11px; cursor: pointer; border: 1px solid var(--input-border);
+      background: none; color: var(--text2);
+    }
+    .catalog-card .actions button:hover { border-color: var(--accent); color: var(--text); }
+    .catalog-card .actions button.danger:hover { border-color: var(--accent); color: var(--accent); }
+    .catalog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    #toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999999;
+      padding: 12px 20px; background: #1a1a1a; border: 1px solid var(--border);
+      color: #fff; font-size: 13px; display: none; max-width: 360px;
+    }
+    #toast.show { display: block; }
+    #toast.success { border-color: #2e7d32; }
+    #toast.error { border-color: var(--accent); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #sidebar { width: 200px; position: fixed; left: -200px; top: 0; bottom: 0; z-index: 100; transition: left 0.2s; }
+      #sidebar.open { left: 0; }
+      #sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 99; }
+      #sidebar-backdrop.show { display: block; }
+      #editor .scroll { padding: 16px; }
+      .catalog-grid { grid-template-columns: 1fr; }
+      #editor .toolbar { padding: 12px 16px; flex-wrap: wrap; gap: 4px; }
+      #editor .toolbar h3 { font-size: 14px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+      .field input, .field textarea { padding: 14px; font-size: 16px; }
+      .field .url-input-wrap input { font-size: 14px; }
+      .upload-btn { padding: 14px; }
+      .login-card { width: 100%; max-width: 360px; padding: 32px 24px; }
+      #editor .toolbar .actions button { padding: 8px 12px; font-size: 11px; }
+      .catalog-header { flex-direction: column; gap: 12px; align-items: stretch; }
+      .catalog-header button { width: 100%; padding: 14px !important; }
     }
   </style>
-  <script defer>
-    // Автоматичне відкриття редактора для колекцій з одним файлом
-    window.addEventListener('load', function () {
-      var observer = new MutationObserver(function () {
-        var list = document.querySelector('[class*="Entries__"]') || document.querySelector('[class*="EntryListing__"]');
-        if (!list) return;
-        var rows = list.querySelectorAll('a, [role="button"]');
-        var clickable = Array.from(rows).filter(function (el) {
-          return !el.closest('[class*="Toolbar"]') && !el.closest('[class*="Header"]');
-        });
-        if (clickable.length === 1) {
-          setTimeout(function () { clickable[0].click(); }, 100);
-        }
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-    });
-  </script>
 </head>
 <body>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script defer src="https://unpkg.com/decap-cms@3.6.2/dist/decap-cms.js"></script>
+
+<div id="login-overlay">
+  <div class="login-card">
+    <h1>BUKSY</h1>
+    <p>Увійдіть для керування сайтом</p>
+    <div class="error" id="login-error"></div>
+    <form id="login-form" autocomplete="off">
+      <input type="text" id="login-input" placeholder="Логін" autocomplete="off" />
+      <input type="password" id="password-input" placeholder="Пароль" autocomplete="off" />
+      <button type="submit" id="login-btn">Увійти</button>
+    </form>
+  </div>
+</div>
+
+<div id="admin-layout">
+  <aside id="sidebar">
+    <div class="header">
+      <h2>BUKSY</h2>
+      <div class="user" id="user-info"></div>
+    </div>
+    <div class="nav" id="nav-list"></div>
+    <div class="footer">
+      <button onclick="logout()">Вийти</button>
+    </div>
+  </aside>
+  <div id="sidebar-backdrop" onclick="toggleSidebar()"></div>
+  <div id="editor">
+    <div class="toolbar">
+      <button class="secondary" id="menu-btn" onclick="toggleSidebar()" style="font-size:18px;padding:4px 10px;display:none">☰</button>
+      <h3 id="editor-title">Оберіть розділ</h3>
+      <div class="actions">
+        <span class="status" id="editor-status"></span>
+        <button class="secondary" id="back-btn" style="display:none" onclick="goBackToCatalog()">← Назад</button>
+        <button class="secondary" onclick="reloadSection()" id="reload-btn">↻</button>
+        <button onclick="saveSection()" id="save-btn">Зберегти</button>
+      </div>
+    </div>
+    <div class="scroll" id="editor-content">
+      <div class="empty-state" id="empty-state">
+        <span>☰</span>
+        <div>Оберіть розділ зліва для редагування</div>
+      </div>
+      <div id="loading">Завантаження...</div>
+      <div id="form-container"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+var REPO = 'porustzi/buksy';
+var BRANCH = 'main';
+var RAW_URL = 'https://raw.githubusercontent.com/' + REPO + '/' + BRANCH;
+var API_BASE = 'https://api.github.com/repos/' + REPO;
+
+  var SECTIONS = [
+    { id: 'homepage', label: 'Головна', path: 'content/pages/homepage/homepage.json', type: 'json' },
+    { id: 'about', label: 'Про нас', path: 'content/pages/about/about.json', type: 'json' },
+    { id: 'editorial', label: 'Редакція', path: 'content/pages/editorial/editorial.json', type: 'json' },
+    { id: 'contact', label: 'Контакти', path: 'content/pages/contact/contact.json', type: 'json' },
+    { id: 'footer', label: 'Футер', path: 'content/pages/footer/footer.json', type: 'json' },
+    { id: 'catalog', label: 'Каталог', type: 'catalog' },
+  ];
+
+var TOKEN_KEYS = ['gh-token', 'admin-token', 'bukcy-admin-token'];
+var token = null;
+var currentSection = null;
+var currentData = null;
+var currentSha = null;
+var tempIdCounter = 0;
+
+// ============================================================
+// AUTH
+// ============================================================
+function getToken() {
+  for (var i = 0; i < TOKEN_KEYS.length; i++) {
+    var t = localStorage.getItem(TOKEN_KEYS[i]);
+    if (t) return t;
+  }
+  return null;
+}
+
+function storeToken(t) {
+  for (var i = 0; i < TOKEN_KEYS.length; i++) {
+    localStorage.setItem(TOKEN_KEYS[i], t);
+  }
+}
+
+function clearToken() {
+  for (var i = 0; i < TOKEN_KEYS.length; i++) {
+    localStorage.removeItem(TOKEN_KEYS[i]);
+  }
+}
+
+// ============================================================
+// GITHUB API
+// ============================================================
+function ghHeaders() {
+  return {
+    'Authorization': 'token ' + token,
+    'Accept': 'application/vnd.github.v3+json',
+    'User-Agent': 'buksy-admin'
+  };
+}
+
+function ghGet(url) {
+  return fetch(url, { headers: ghHeaders() }).then(function(r) {
+    if (!r.ok) throw new Error('GitHub API error: ' + r.status);
+    return r.json();
+  });
+}
+
+function ghPut(url, body) {
+  return fetch(url, {
+    method: 'PUT',
+    headers: ghHeaders(),
+    body: JSON.stringify(body)
+  }).then(function(r) {
+    if (!r.ok) throw new Error('GitHub API error: ' + r.status);
+    return r.json();
+  });
+}
+
+function ghDelete(url, body) {
+  return fetch(url, {
+    method: 'DELETE',
+    headers: ghHeaders(),
+    body: JSON.stringify(body)
+  }).then(function(r) {
+    if (!r.ok) throw new Error('GitHub API error: ' + r.status);
+    return r.json();
+  });
+}
+
+function utf8decode(bin) {
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(bytes);
+}
+
+function utf8encode(str) {
+  var bytes = new TextEncoder().encode(str);
+  var bin = '';
+  for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+
+function fetchFile(path) {
+  return ghGet(API_BASE + '/contents/' + path + '?ref=' + BRANCH).then(function(data) {
+    var content = utf8decode(atob(data.content.replace(/\n/g, '')));
+    return { content: content, sha: data.sha };
+  });
+}
+
+function saveFile(path, content, sha, message) {
+  var encoded = utf8encode(content);
+  return ghPut(API_BASE + '/contents/' + path, {
+    message: message || 'Update ' + path,
+    content: encoded,
+    sha: sha,
+    branch: BRANCH
+  });
+}
+
+function uploadFile(path, base64Content, message) {
+  return ghPut(API_BASE + '/contents/' + path, {
+    message: message || 'Upload ' + path,
+    content: base64Content,
+    branch: BRANCH
+  });
+}
+
+// ============================================================
+// YAML HELPERS (for product MD file)
+// ============================================================
+function parseYamlFrontmatter(text) {
+  var m = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  if (!m) return { data: {}, body: text };
+  var yamlStr = m[1];
+  var body = (m[2] || '').trim();
+  var data = {};
+  try { data = jsyaml.load(yamlStr); } catch(e) { data = {}; }
+  if (data === null || data === undefined) data = {};
+  return { data: data, body: body };
+}
+
+function serializeYamlFrontmatter(data, body) {
+  var yamlStr = jsyaml.dump(data, { lineWidth: -1, noRefs: true, quotingType: '"', forceQuotes: true });
+  return '---\n' + yamlStr.trim() + '\n---\n' + (body || '');
+}
+
+// ============================================================
+// FORM RENDERER
+// ============================================================
+function genId() { return 'f_' + (++tempIdCounter); }
+
+function isImageUrl(v) {
+  return typeof v === 'string' && (v.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i) || v.match(/^https?:\/\//));
+}
+
+function isLongText(v) {
+  return typeof v === 'string' && v.length > 80;
+}
+
+function renderForm(obj, path) {
+  path = path || '';
+  var html = '';
+  var keys = Object.keys(obj);
+
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var val = obj[key];
+    var fullPath = path ? path + '.' + key : key;
+    var id = genId();
+
+    if (typeof val === 'string') {
+      var isLong = val.length > 80 || val.indexOf('\n') !== -1;
+      if (isImageUrl(val)) {
+        html += '<div class="field">';
+        html += '<label for="' + id + '">' + key + '</label>';
+        html += '<div class="url-input-wrap">';
+        html += '<input type="text" id="' + id + '" value="' + esc(val) + '" data-path="' + fullPath + '" />';
+        html += '<button type="button" class="upload-btn" onclick="uploadImage(this, \'' + fullPath + '\')">📁</button>';
+        html += '</div>';
+        if (val.match(/^https?:\/\//)) {
+          html += '<div class="image-preview"><img src="' + esc(val) + '" onerror="this.style.display=\'none\'" /></div>';
+        } else if (val.match(/^\//)) {
+          html += '<div class="image-preview"><img src="' + esc(RAW_URL + '/public' + val) + '" onerror="this.style.display=\'none\'" /></div>';
+        }
+        html += '</div>';
+      } else if (isLong) {
+        html += '<div class="field">';
+        html += '<label for="' + id + '">' + key + '</label>';
+        html += '<textarea id="' + id + '" data-path="' + fullPath + '">' + esc(val) + '</textarea>';
+        html += '</div>';
+      } else {
+        html += '<div class="field">';
+        html += '<label for="' + id + '">' + key + '</label>';
+        html += '<input type="text" id="' + id + '" value="' + esc(val) + '" data-path="' + fullPath + '" />';
+        html += '</div>';
+      }
+    } else if (typeof val === 'number') {
+      html += '<div class="field">';
+      html += '<label for="' + id + '">' + key + '</label>';
+      html += '<input type="number" id="' + id + '" value="' + val + '" data-path="' + fullPath + '" step="any" />';
+      html += '</div>';
+    } else if (typeof val === 'boolean') {
+      html += '<div class="field">';
+      html += '<div class="checkbox-wrap">';
+      html += '<input type="checkbox" id="' + id + '" data-path="' + fullPath + '"' + (val ? ' checked' : '') + ' />';
+      html += '<label for="' + id + '">' + key + '</label>';
+      html += '</div></div>';
+    } else if (val === null || val === undefined) {
+      html += '<div class="field">';
+      html += '<label for="' + id + '">' + key + '</label>';
+      html += '<input type="text" id="' + id + '" data-path="' + fullPath + '" placeholder="(пусто)" />';
+      html += '</div>';
+    } else if (Array.isArray(val)) {
+      html += '<div class="fieldset">';
+      html += '<div class="fieldset-label">' + key + '</div>';
+      html += '<div class="array-items" data-array-path="' + fullPath + '">';
+      for (var j = 0; j < val.length; j++) {
+        html += renderArrayItem(val[j], fullPath + '.' + j);
+      }
+      html += '</div>';
+      html += '<button class="add-btn" onclick="addArrayItem(\'' + fullPath + '\')">+ Додати</button>';
+      html += '</div>';
+    } else if (typeof val === 'object') {
+      html += '<div class="fieldset">';
+      html += '<div class="fieldset-label">' + key + '</div>';
+      html += renderForm(val, fullPath);
+      html += '</div>';
+    }
+  }
+  return html;
+}
+
+function renderArrayItem(item, path) {
+  if (typeof item === 'object' && item !== null) {
+    var html = '<div class="array-item" data-path="' + path + '">';
+    html += '<button class="remove-btn" onclick="removeArrayItem(this)">✕</button>';
+    html += renderForm(item, path);
+    html += '</div>';
+    return html;
+  }
+  var id = genId();
+  var html = '<div class="array-item">';
+  html += '<button class="remove-btn" onclick="removeArrayItem(this)">✕</button>';
+  html += '<input type="text" value="' + esc(String(item)) + '" data-path="' + path + '" />';
+  html += '</div>';
+  return html;
+}
+
+// ============================================================
+// FORM DATA COLLECTOR
+// ============================================================
+function collectFormData(container) {
+  var obj = {};
+  var inputs = container.querySelectorAll('[data-path]');
+  for (var i = 0; i < inputs.length; i++) {
+    var el = inputs[i];
+    var path = el.getAttribute('data-path');
+    var parts = path.split('.');
+    var parent = obj;
+    for (var j = 0; j < parts.length - 1; j++) {
+      var p = parts[j];
+      if (p.match(/^\d+$/)) {
+        if (!parent[parseInt(p)]) parent[parseInt(p)] = {};
+        parent = parent[parseInt(p)];
+      } else {
+        if (!parent[p]) {
+          var nextPart = parts[j + 1];
+          parent[p] = nextPart.match(/^\d+$/) ? [] : {};
+        }
+        parent = parent[p];
+      }
+    }
+    var lastKey = parts[parts.length - 1];
+    if (lastKey.match(/^\d+$/)) {
+      var idx = parseInt(lastKey);
+      var val = getInputValue(el);
+      var arr = parent;
+      while (arr.length <= idx) arr.push(null);
+      arr[idx] = val;
+    } else {
+      if (el.type === 'checkbox') {
+        parent[lastKey] = el.checked;
+      } else if (el.type === 'number') {
+        parent[lastKey] = el.value === '' ? null : parseFloat(el.value);
+      } else {
+        parent[lastKey] = el.value;
+      }
+    }
+  }
+  return obj;
+}
+
+function getInputValue(el) {
+  if (el.type === 'checkbox') return el.checked;
+  if (el.type === 'number') return el.value === '' ? null : parseFloat(el.value);
+  return el.value;
+}
+
+// ============================================================
+// ARRAY ITEM MANAGEMENT
+// ============================================================
+function addArrayItem(path) {
+  var items = document.querySelector('[data-array-path="' + path + '"]');
+  if (!items) return;
+  var count = items.querySelectorAll(':scope > .array-item').length;
+  var firstItem = items.querySelector(':scope > .array-item');
+  var sample = {};
+  if (firstItem) {
+    firstItem.querySelectorAll('[data-path]').forEach(function(inp) {
+      var p = inp.getAttribute('data-path');
+      var key = p.split('.').pop();
+      if (key.match(/^\d+$/)) return;
+      if (inp.type === 'checkbox') sample[key] = false;
+      else if (inp.type === 'number') sample[key] = null;
+      else sample[key] = '';
+    });
+  }
+  var newPath = path + '.' + count;
+  var div = document.createElement('div');
+  div.className = 'array-item';
+  div.setAttribute('data-path', newPath);
+  div.innerHTML = '<button class="remove-btn" onclick="removeArrayItem(this)">✕</button>' + renderForm(sample, newPath);
+  items.appendChild(div);
+}
+
+function removeArrayItem(btn) {
+  if (btn.closest('.array-item').querySelectorAll('[data-path]').length > 0) {
+    if (!confirm('Видалити цей елемент?')) return;
+  }
+  btn.closest('.array-item').remove();
+  // Renumber remaining items
+  var items = btn.closest('.array-items');
+  if (items) renumberItems(items);
+}
+
+function renumberItems(container) {
+  var items = container.querySelectorAll(':scope > .array-item');
+  items.forEach(function(item, idx) {
+    var inputs = item.querySelectorAll('[data-path]');
+    inputs.forEach(function(inp) {
+      var path = inp.getAttribute('data-path');
+      var parts = path.split('.');
+      var last = parts[parts.length - 1];
+      if (last.match(/^\d+$/)) {
+        parts[parts.length - 1] = String(idx);
+        inp.setAttribute('data-path', parts.join('.'));
+      }
+    });
+  });
+}
+
+// ============================================================
+// ESCAPE
+// ============================================================
+function esc(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (type ? ' ' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.className = ''; }, 4000);
+}
+
+var currentProductPath = null;
+
+// ============================================================
+// SECTION LOADING
+// ============================================================
+function loadSection(sectionId) {
+  currentSection = null;
+  currentData = null;
+  currentSha = null;
+  currentProductPath = null;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('form-container').innerHTML = '';
+  document.getElementById('reload-btn').style.display = '';
+  document.getElementById('save-btn').style.display = '';
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('save-btn').disabled = true;
+  document.getElementById('editor-status').textContent = 'Завантаження...';
+
+  var section = SECTIONS.find(function(s) { return s.id === sectionId; });
+  if (!section) return;
+  currentSection = section;
+  document.getElementById('editor-title').textContent = section.label;
+  document.getElementById('back-btn').style.display = 'none';
+
+  document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('active'); });
+  var navEl = document.querySelector('[data-section="' + sectionId + '"]');
+  if (navEl) navEl.classList.add('active');
+
+  if (section.type === 'catalog') {
+    loadCatalogList();
+    return;
+  }
+
+  fetchFile(section.path).then(function(result) {
+    currentSha = result.sha;
+    var data;
+    if (section.type === 'yaml') {
+      var parsed = parseYamlFrontmatter(result.content);
+      data = parsed.data;
+    } else {
+      data = JSON.parse(result.content);
+    }
+    currentData = data;
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('form-container').innerHTML = renderForm(data);
+    document.getElementById('save-btn').disabled = false;
+    document.getElementById('editor-status').textContent = 'Збережено';
+  }).catch(function(err) {
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('form-container').innerHTML = '<div class="empty-state"><span>⚠</span><div>Помилка завантаження: ' + esc(err.message) + '</div></div>';
+    document.getElementById('editor-status').textContent = 'Помилка';
+    showToast('Помилка: ' + err.message, 'error');
+  });
+}
+
+function loadCatalogList() {
+  document.getElementById('reload-btn').style.display = 'none';
+  document.getElementById('save-btn').style.display = 'none';
+  document.getElementById('back-btn').style.display = 'none';
+  document.getElementById('loading').classList.remove('show');
+  document.getElementById('editor-title').textContent = 'Каталог';
+
+  ghGet(API_BASE + '/contents/content/products?ref=' + BRANCH).then(function(files) {
+    var html = '<div class="catalog-header"><div style="color:var(--text2);font-size:13px;">' + files.length + ' товарів</div><button onclick="addProduct()" style="padding:8px 20px;background:var(--accent);color:#fff;border:none;font-size:12px;cursor:pointer;font-weight:600;">+ Додати товар</button></div>';
+    html += '<div class="catalog-grid">';
+
+    var loaded = 0;
+    files.forEach(function(file) {
+      if (file.name === '.gitkeep') { loaded++; if (loaded === files.length) finish(); return; }
+      // Fetch each product to show preview
+      fetchFile('content/products/' + file.name).then(function(result) {
+        loaded++;
+        var data;
+        try {
+          var parsed = parseYamlFrontmatter(result.content);
+          data = parsed.data;
+        } catch(e) { data = {}; }
+        var img = data.image1 || (data.images && data.images[0]) || '';
+        var price = data.price || '';
+        var origPrice = data.originalPrice || '';
+        var name = data.name || file.name.replace('.md','');
+        html += '<div class="catalog-card">';
+        if (img) {
+          var src = img.match(/^\//) ? RAW_URL + '/public' + img : img;
+          html += '<img class="thumb" src="' + esc(src) + '" onerror="this.style.display=\'none\'" />';
+        } else {
+          html += '<div class="thumb" style="display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:24px;">📷</div>';
+        }
+        html += '<div class="body"><h4>' + esc(name) + '</h4>';
+        html += '<div class="price">' + (origPrice ? '<s>₴' + origPrice + '</s>' : '') + (price ? '₴' + price : '') + '</div>';
+        var stock = data.stock;
+        if (stock !== undefined) {
+          html += '<div style="font-size:11px;margin-top:4px;' + (stock <= 0 ? 'color:var(--accent);' : 'color:var(--text2);') + '">' + (stock <= 0 ? 'Немає в наявності' : 'В наявності: ' + stock + ' шт.') + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="actions">';
+        html += '<button onclick="loadProduct(\'content/products/' + esc(file.name) + '\')">✏️ Редагувати</button>';
+        html += '<button class="danger" onclick="deleteProduct(\'content/products/' + esc(file.name) + '\', \'' + esc(file.name) + '\')">🗑️</button>';
+        html += '</div></div>';
+        if (loaded === files.length) finish();
+      }).catch(function(e) {
+        loaded++;
+        if (loaded === files.length) finish();
+      });
+    });
+    function finish() {
+      html += '</div>';
+      document.getElementById('form-container').innerHTML = html;
+    }
+    if (files.length === 0) {
+      document.getElementById('form-container').innerHTML = '<div class="empty-state"><span>📦</span><div>Немає товарів</div><button onclick="addProduct()" style="margin-top:12px;padding:8px 20px;background:var(--accent);color:#fff;border:none;font-size:12px;cursor:pointer;font-weight:600;">+ Додати товар</button></div>';
+    }
+  }).catch(function(err) {
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('form-container').innerHTML = '<div class="empty-state"><span>⚠</span><div>Помилка: ' + esc(err.message) + '</div></div>';
+    document.getElementById('editor-status').textContent = 'Помилка';
+  });
+}
+
+function loadProduct(path) {
+  currentSection = { id: 'product', label: 'Товар', path: path, type: 'yaml' };
+  currentProductPath = path;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('form-container').innerHTML = '';
+  document.getElementById('reload-btn').style.display = '';
+  document.getElementById('save-btn').style.display = '';
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('save-btn').disabled = true;
+  document.getElementById('editor-status').textContent = 'Завантаження...';
+  document.getElementById('editor-title').textContent = 'Каталог / ' + path.split('/').pop();
+  document.getElementById('back-btn').style.display = '';
+
+  document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('active'); });
+  var navEl = document.querySelector('[data-section="catalog"]');
+  if (navEl) navEl.classList.add('active');
+
+  fetchFile(path).then(function(result) {
+    currentSha = result.sha;
+    var parsed = parseYamlFrontmatter(result.content);
+    currentData = parsed.data;
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('form-container').innerHTML = renderForm(parsed.data);
+    document.getElementById('save-btn').disabled = false;
+    document.getElementById('editor-status').textContent = 'Збережено';
+  }).catch(function(err) {
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('form-container').innerHTML = '<div class="empty-state"><span>⚠</span><div>Помилка завантаження: ' + esc(err.message) + '</div></div>';
+    document.getElementById('editor-status').textContent = 'Помилка';
+    showToast('Помилка: ' + err.message, 'error');
+  });
+}
+
+function addProduct() {
+  var slug = 'new-product';
+  var name = 'Новий товар';
+  var content = '---\nid: "' + Date.now() + '"\nname: "' + name + '"\nslug: "' + slug + '"\nprice: 0\ncategory: "t-shirts"\nimage1: ""\nimage2: ""\nimage3: ""\n' +
+    'sizes:\n  - { name: "S", available: true }\n  - { name: "M", available: true }\n  - { name: "L", available: true }\ninStock: true\nstock: 1\nisNew: false\nisFeatured: false\nisBestseller: false\n' +
+    'rating: 0\nshortDescription: ""\ndescription: ""\ndetails: []\ncare: []\nreviews: []\n---\n';
+  var encoded = utf8encode(content);
+  var path = 'content/products/' + slug + '.md';
+  ghPut(API_BASE + '/contents/' + path, {
+    message: 'Add product ' + slug,
+    content: encoded,
+    branch: BRANCH
+  }).then(function() {
+    showToast('Товар створено', 'success');
+    loadProduct(path);
+  }).catch(function(err) {
+    showToast('Помилка: ' + err.message, 'error');
+  });
+}
+
+function deleteProduct(path, name) {
+  if (!confirm('Видалити товар "' + name.replace('.md','') + '"?')) return;
+  ghGet(API_BASE + '/contents/' + path + '?ref=' + BRANCH).then(function(data) {
+    return ghDelete(API_BASE + '/contents/' + path, {
+      message: 'Delete product ' + name,
+      sha: data.sha,
+      branch: BRANCH
+    });
+  }).then(function() {
+    showToast('Товар видалено', 'success');
+    loadCatalogList();
+  }).catch(function(err) {
+    showToast('Помилка: ' + err.message, 'error');
+  });
+}
+
+// ============================================================
+// IMAGE UPLOAD
+// ============================================================
+function uploadImage(btn, path) {
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/jpeg,image/png,image/webp,image/gif';
+  input.onchange = function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      var base64 = ev.target.result.split(',')[1];
+      var ext = file.name.split('.').pop().toLowerCase().replace(/jpeg/g, 'jpg');
+      var filename = Date.now() + '_' + Math.random().toString(36).substr(2, 4) + '.' + ext;
+      var ghPath = 'public/uploads/' + filename;
+
+      btn.disabled = true;
+      btn.textContent = '⏳';
+
+      uploadFile(ghPath, base64, 'Upload ' + filename).then(function() {
+        var inputEl = btn.parentElement.querySelector('input[type="text"]');
+        if (inputEl) {
+          inputEl.value = '/uploads/' + filename;
+          // Update image preview if exists
+          var preview = btn.closest('.field').querySelector('.image-preview');
+          if (preview) {
+            preview.innerHTML = '<img src="' + RAW_URL + '/public/uploads/' + filename + '" onerror="this.style.display=\'none\'" />';
+          } else {
+            var p = document.createElement('div');
+            p.className = 'image-preview';
+            p.innerHTML = '<img src="' + RAW_URL + '/public/uploads/' + filename + '" onerror="this.style.display=\'none\'" />';
+            btn.closest('.field').appendChild(p);
+          }
+        }
+        btn.disabled = false;
+        btn.textContent = '📁';
+        showToast('Зображення завантажено', 'success');
+      }).catch(function(err) {
+        btn.disabled = false;
+        btn.textContent = '📁';
+        showToast('Помилка: ' + err.message, 'error');
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function reloadSection() {
+  if (!currentSection) return;
+  if (!confirm('Скасувати зміни та завантажити останню версію?')) return;
+  if (currentSection.type === 'catalog') {
+    loadCatalogList();
+  } else if (currentProductPath) {
+    loadProduct(currentProductPath);
+  } else {
+    loadSection(currentSection.id);
+  }
+}
+
+function goBackToCatalog() {
+  loadSection('catalog');
+}
+
+function toggleSidebar() {
+  var s = document.getElementById('sidebar');
+  var b = document.getElementById('sidebar-backdrop');
+  s.classList.toggle('open');
+  b.classList.toggle('show');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').classList.remove('show');
+}
+
+function showMobileMenuBtn() {
+  var btn = document.getElementById('menu-btn');
+  if (window.innerWidth <= 768) btn.style.display = ''; else btn.style.display = 'none';
+}
+
+// ============================================================
+// SAVE
+// ============================================================
+function saveSection() {
+  if (!currentSection || !currentSha || !currentData) return;
+  var btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.textContent = 'Збереження...';
+  document.getElementById('editor-status').textContent = 'Збереження...';
+
+  var container = document.getElementById('form-container');
+  var newData = collectFormData(container);
+
+  // For YAML files, also get the body
+  if (currentSection.type === 'yaml') {
+    var body = ''; // No body for product
+    var content = serializeYamlFrontmatter(newData, body);
+    saveFile(currentSection.path, content, currentSha, 'Update ' + currentSection.label).then(function() {
+      btn.disabled = false;
+      btn.textContent = 'Зберегти';
+      document.getElementById('editor-status').textContent = 'Збережено ✓';
+      showToast('Збережено!', 'success');
+      // Reload to get new SHA
+      loadSection(currentSection.id);
+    }).catch(function(err) {
+      btn.disabled = false;
+      btn.textContent = 'Зберегти';
+      document.getElementById('editor-status').textContent = 'Помилка';
+      showToast('Помилка: ' + err.message, 'error');
+    });
+  } else {
+    var content = JSON.stringify(newData, null, 2);
+    saveFile(currentSection.path, content, currentSha, 'Update ' + currentSection.label).then(function() {
+      btn.disabled = false;
+      btn.textContent = 'Зберегти';
+      document.getElementById('editor-status').textContent = 'Збережено ✓';
+      showToast('Збережено!', 'success');
+      // Reload to get new SHA
+      loadSection(currentSection.id);
+    }).catch(function(err) {
+      btn.disabled = false;
+      btn.textContent = 'Зберегти';
+      document.getElementById('editor-status').textContent = 'Помилка';
+      showToast('Помилка: ' + err.message, 'error');
+    });
+  }
+}
+
+// ============================================================
+// NAV SIDEBAR
+// ============================================================
+function buildNav() {
+  var html = '<div style="padding:12px 16px 4px;font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;">Сторінки</div>';
+  for (var i = 0; i < SECTIONS.length; i++) {
+    var s = SECTIONS[i];
+    if (s.type === 'catalog') continue;
+    html += '<div class="nav-item" data-section="' + s.id + '" onclick="loadSection(\'' + s.id + '\');closeSidebar()">' + esc(s.label) + '</div>';
+  }
+  html += '<div style="padding:12px 16px 4px;font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-top:8px;">Магазин</div>';
+  html += '<div class="nav-item" data-section="catalog" onclick="loadSection(\'catalog\');closeSidebar()">📦 Каталог</div>';
+  document.getElementById('nav-list').innerHTML = html;
+}
+
+// ============================================================
+// LOGIN / LOGOUT
+// ============================================================
+function login(username, password) {
+  return fetch('/api/auth/password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'login=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password)
+  }).then(function(r) {
+    if (!r.ok) throw new Error('Невірний логін або пароль');
+    return r.json();
+  });
+}
+
+function showAdmin() {
+  document.getElementById('login-overlay').classList.add('hidden');
+  document.getElementById('admin-layout').classList.add('show');
+  document.getElementById('user-info').textContent = 'porustzi';
+  buildNav();
+  showMobileMenuBtn();
+  window.addEventListener('resize', showMobileMenuBtn);
+}
+
+function logout() {
+  clearToken();
+  token = null;
+  currentSection = null;
+  currentData = null;
+  currentSha = null;
+  document.getElementById('admin-layout').classList.remove('show');
+  document.getElementById('login-overlay').classList.remove('hidden');
+  document.getElementById('form-container').innerHTML = '';
+}
+
+function showLoginError(msg) {
+  var el = document.getElementById('login-error');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function hideLoginError() {
+  document.getElementById('login-error').classList.remove('show');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+(function init() {
+  var stored = getToken();
+  if (stored) {
+    token = stored;
+    showAdmin();
+    return;
+  }
+
+  document.getElementById('login-form').onsubmit = function(e) {
+    e.preventDefault();
+    var loginVal = document.getElementById('login-input').value;
+    var passVal = document.getElementById('password-input').value;
+    if (!loginVal || !passVal) { showLoginError('Введіть логін та пароль'); return; }
+    hideLoginError();
+    var btn = document.getElementById('login-btn');
+    btn.disabled = true;
+    btn.textContent = 'Завантаження...';
+    login(loginVal, passVal).then(function(data) {
+      storeToken(data.token);
+      token = data.token;
+      showAdmin();
+    }).catch(function(err) {
+      btn.disabled = false;
+      btn.textContent = 'Увійти';
+      showLoginError(err.message);
+    });
+  };
+})();
+</script>
 </body>
 </html>
