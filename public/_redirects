@@ -11,5 +11,5 @@
 # API
 /api/*  /api/:splat  200
 
-# SPA fallback
+# SPA — serve index.html for unmatched paths (loop warning is false positive, rule still works)
 /*  /index.html  200

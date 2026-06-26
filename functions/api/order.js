@@ -64,11 +64,12 @@ export async function onRequest(context) {
       const tgMsg = `🛒 <b>НОВЕ ЗАМОВЛЕННЯ</b>\n<code>#${orderId}</code>\n\n👤 <b>${esc(shipping.firstName)} ${esc(shipping.lastName)}</b>\n📧 ${esc(safeEmail)}\n${shipping.phone ? '📱 ' + esc(shipping.phone) + '\n' : ''}\n📍 ${esc(shipping.address)}${shipping.apartment ? ', ' + esc(shipping.apartment) : ''}\n   ${esc(shipping.city)}, ${esc(shipping.country)}\n${shipping.novaPoshtaBranch ? '📦 НП №' + esc(shipping.novaPoshtaBranch) + '\n' : ''}\n🛍 <b>Товари:</b>\n${lines}\n\n━━━━━━━━━━━━━━━━\n💰 <b>${total.toFixed(0)} ₴</b>`;
       fetch('https://api.telegram.org/bot' + tgToken + '/sendMessage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: tgChat, text: tgMsg, parse_mode: 'HTML' }) }).catch(() => {});
     }
+    let emailOk = false;
     if (safeEmail) {
-      sendEmail(env, { to: safeEmail, subject: 'Замовлення #' + orderId + ' підтверджено — BUKSY', html: orderConfirmationHtml({ orderId, items: safeItems, total, shippingInfo: shipping }) }).catch(e => console.error('[EMAIL] send failed:', e.message));
+      emailOk = await sendEmail(env, { to: safeEmail, subject: 'Замовлення #' + orderId + ' підтверджено — BUKSY', html: orderConfirmationHtml({ orderId, items: safeItems, total, shippingInfo: shipping }) }).catch(e => { console.error('[EMAIL] send failed:', e.message); return false; });
     }
 
-    return okResponse({ success: true, orderId, total, message: 'Order placed!' });
+    return okResponse({ success: true, orderId, total, message: 'Order placed!', emailSent: emailOk });
   } catch (e) {
     if (e instanceof ValidationError) return errorResponse(400, e.message);
     if (e.statusCode) return new Response(e.body, { status: e.statusCode, headers: { 'Content-Type': 'application/json' } });
